@@ -1,0 +1,4 @@
+global:
+    config:
+        as: 64512
+        router-id: 2001:db8:0:5::9

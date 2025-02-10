@@ -1,0 +1,134 @@
+
+services:
+  source:
+    build:
+      context: .
+      dockerfile: ./docker/source.Dockerfile
+    networks:
+      source:
+        ipv6_address: 2001:db8:0:1::2
+
+      control:
+        ipv6_address: 2001:db8:0:5::2
+
+  destination:
+    build:
+      context: .
+      dockerfile: ./docker/destination.Dockerfile
+    networks:
+      destination:
+        ipv6_address: 2001:db8:0:2::2
+
+      control:
+        ipv6_address: 2001:db8:0:5::3
+  middle-base:
+    build:
+      context: .
+      dockerfile: ./docker/middle.Dockerfile
+      tags:
+        - middle-base:latest
+    profiles:
+      - base
+  middle1:
+    image: middle-base:latest
+    networks:
+      middle1:
+        ipv6_address: 2001:db8:0:3::2
+      source:
+        ipv6_address: 2001:db8:0:1::3
+
+      control:
+        ipv6_address: 2001:db8:0:5::4
+    
+  middle2:
+    image: middle-base:latest
+    networks:
+      middle2:
+        ipv6_address: 2001:db8:0:4::2
+      source:
+        ipv6_address: 2001:db8:0:1::4
+      
+      control:
+        ipv6_address: 2001:db8:0:5::5
+  
+  middle3:
+    image: middle-base:latest
+    networks:
+      middle1:
+        ipv6_address: 2001:db8:0:3::3
+
+      control:
+        ipv6_address: 2001:db8:0:5::6
+      
+  middle4:
+    image: middle-base:latest
+    networks:
+      middle1:
+        ipv6_address: 2001:db8:0:3::4
+      middle2:
+        ipv6_address: 2001:db8:0:4::4
+      destination:
+        ipv6_address: 2001:db8:0:2::3
+
+      control:
+        ipv6_address: 2001:db8:0:5::7
+  
+  middle5:
+    image: middle-base:latest
+    networks:
+      middle2:
+        ipv6_address: 2001:db8:0:4::5
+      destination:
+        ipv6_address: 2001:db8:0:2::4
+
+      control:
+        ipv6_address: 2001:db8:0:5::8
+
+  control_plane:
+    build:
+      context: .
+      dockerfile: ./docker/control.Dockerfile
+    networks:
+      control:
+        ipv6_address: 2001:db8:0:5::9
+
+networks:
+  source:
+    driver: bridge
+    enable_ipv6: true
+    ipam:
+      driver: default
+      config:
+        - subnet: 2001:db8:0:1::/64
+
+  destination:
+    driver: bridge
+    enable_ipv6: true
+    ipam:
+      driver: default
+      config:
+        - subnet: 2001:db8:0:2::/64
+
+  middle1:
+    driver: bridge
+    enable_ipv6: true
+    ipam:
+      driver: default
+      config:
+        - subnet: 2001:db8:0:3::/64
+
+  middle2:
+    driver: bridge
+    enable_ipv6: true
+    ipam:
+      driver: default
+      config:
+        - subnet: 2001:db8:0:4::/64
+
+  control:
+    driver: bridge
+    enable_ipv6: true
+    ipam:
+      driver: default
+      config:
+        - subnet: 2001:db8:0:5::/64

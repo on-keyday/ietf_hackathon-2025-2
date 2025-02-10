@@ -1,10 +1,14 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"io"
+	"log"
+	"net"
 	"net/netip"
 	"os"
+	"sort"
 	"syscall"
 
 	"github.com/on-keyday/dplane_importer/client/routing"
@@ -62,11 +66,43 @@ type tcpConn struct {
 	sendSeqNum  uint32
 }
 
+type routingEntry struct {
+	dstNetwork netip.Prefix
+	nextHop    netip.Addr
+	dev        *Device
+}
+
+type RoutingTable struct {
+	entries []routingEntry
+}
+
+func (r *RoutingTable) Lookup(dst netip.Addr) *routingEntry {
+	for _, entry := range r.entries {
+		if entry.dstNetwork.Contains(dst) {
+			return &entry
+		}
+	}
+	return nil
+}
+
+func (r *RoutingTable) AddEntry(dst netip.Prefix, nextHop netip.Addr, dev *Device) {
+	r.entries = append(r.entries, routingEntry{
+		dstNetwork: dst,
+		nextHop:    nextHop,
+		dev:        dev,
+	})
+	// order by longest prefix match
+	sort.Slice(r.entries, func(i, j int) bool {
+		return r.entries[i].dstNetwork.Bits() > r.entries[j].dstNetwork.Bits()
+	})
+}
+
 type handler struct {
 	tcpConns  map[tcpTuple]*tcpConn
 	listening map[netip.AddrPort]struct{}
 	w         io.Writer
-	fd        int
+	devices   []*Device
+	routing   *RoutingTable
 }
 
 func (conn *tcpConn) addSegment(seqNum uint32, data []byte) {
@@ -172,12 +208,22 @@ func (h *handler) Listen(addr netip.AddrPort) {
 	h.listening[addr] = struct{}{}
 }
 
-func (h *handler) writeEthernet(data []byte) {
+func (h *handler) Connect(src, dst netip.AddrPort) {
+	h.tcpConns[tcpTuple{
+		src: src,
+		dst: dst,
+	}] = &tcpConn{
+		state: routing.Tcpstate_SynSent,
+	}
+	h.sendTCP(src, dst, flags(false, true), 0, 0, nil)
+}
+
+func (h *handler) writeEthernet(dst net.HardwareAddr, data []byte) {
 	eth := &routing.EthernetFrame{}
 	eth.EtherType = uint16(routing.EtherType_Ipv6)
+	eth.DstMac = [6]byte(dst)
 	eth.SetData(data)
-	enc := eth.MustEncode()
-	syscall.Write(h.fd, enc)
+
 }
 
 func (h *handler) writeIP(src, dst netip.Addr, proto routing.ProtocolNumber, data []byte) {
@@ -192,7 +238,12 @@ func (h *handler) writeIP(src, dst netip.Addr, proto routing.ProtocolNumber, dat
 	hdr.SetTrafficClass(0)
 	enc := hdr.MustEncode()
 	enc = append(enc, data...)
-	h.writeEthernet(enc)
+	et := h.routing.Lookup(dst)
+	if et == nil {
+		fmt.Fprintf(h.w, "no route to %v\n", dst)
+		return
+	}
+	h.writeEthernet(et.dev.addr, enc)
 }
 
 func (h *handler) parsePacket(p []byte) error {
@@ -224,6 +275,13 @@ func (h *handler) parsePacket(p []byte) error {
 			current := r.SegmentList[r.SegmentsLeft]
 			addr := netip.AddrFrom16(current)
 			fmt.Fprintf(h.w, "current address: %v\n", addr)
+		case routing.ProtocolNumber_Icmpv6:
+			r := &routing.Icmpv6Packet{}
+			read, err := r.Decode(data)
+			if err != nil {
+				return fmt.Errorf("failed to decode ICMPv6 packet: %v", err)
+			}
+			data = data[read:]
 		case routing.ProtocolNumber_Tcp:
 			tcp := &routing.Tcpheader{}
 			read, err := tcp.Decode(data)
@@ -237,34 +295,100 @@ func (h *handler) parsePacket(p []byte) error {
 	return nil
 }
 
-func NewHandler(fd int, w io.Writer) *handler {
-	return &handler{
-		fd:        fd,
+type Device struct {
+	fd    int
+	addr  net.HardwareAddr
+	addrs []netip.Addr
+}
+
+func NewHandler(devices []*Device, w io.Writer) *handler {
+	h := &handler{
+		devices:   devices,
 		tcpConns:  make(map[tcpTuple]*tcpConn),
 		listening: make(map[netip.AddrPort]struct{}),
 		w:         w,
+		routing:   &RoutingTable{},
 	}
+	return h
 }
 
+var isServer = flag.Bool("server", false, "run as server")
+var connectTo = flag.String("connect", "", "connect to address")
+
 func main() {
-	fd, err := createRawSocket(1)
+	flag.Parse()
+	ifaces, err := net.Interfaces()
 	if err != nil {
-		fmt.Println("failed to create raw socket:", err)
+		fmt.Println("failed to get interfaces:", err)
 		return
 	}
-	defer syscall.Close(fd)
+	epoll, err := syscall.EpollCreate1(0)
+	if err != nil {
+		fmt.Println("failed to create epoll instance:", err)
+		return
+	}
+	defer syscall.Close(epoll)
+	var devs []*Device
+	for _, iface := range ifaces {
+		fd, err := createRawSocket(iface.Index)
+		if err != nil {
+			fmt.Println("failed to create raw socket:", err)
+			return
+		}
+		defer syscall.Close(fd)
+		event := syscall.EpollEvent{
+			Events: syscall.EPOLLIN,
+			Fd:     int32(fd),
+		}
+		err = syscall.EpollCtl(epoll, syscall.EPOLL_CTL_ADD, fd, &event)
+		if err != nil {
+			fmt.Println("failed to add socket to epoll:", err)
+			return
+		}
+		addr, err := iface.Addrs()
+		devs = append(devs, &Device{
+			fd:   fd,
+			addr: iface.HardwareAddr,
+		})
+		for _, a := range addr {
+			addr, err := netip.ParsePrefix(a.String())
+			if err != nil {
+				fmt.Println("failed to parse address:", err)
+				return
+			}
+			devs[len(devs)-1].addrs = append(devs[len(devs)-1].addrs, addr.Addr())
+		}
+	}
+	log.Println("starting")
 	buf := make([]byte, 65536)
-	handler := NewHandler(fd, os.Stdout)
+	handler := NewHandler(devs, os.Stdout)
+	if *isServer {
+		handler.Listen(netip.AddrPortFrom(netip.IPv6Unspecified(), routing.BgpPort))
+	} else {
+		to, err := netip.ParseAddrPort(*connectTo)
+		if err != nil {
+			fmt.Println("failed to parse address:", err)
+			return
+		}
+		handler.Connect(netip.AddrPortFrom(netip.IPv6Loopback(), routing.BgpPort), to)
+	}
 	for {
+		events := make([]syscall.EpollEvent, 1)
+		_, err := syscall.EpollWait(epoll, events, -1)
+		if err != nil {
+			fmt.Println("failed to wait for events:", err)
+			return
+		}
+		fd := int(events[0].Fd)
 		n, _, err := syscall.Recvfrom(fd, buf, 0)
 		if err != nil {
 			fmt.Println("failed to receive packet:", err)
-			return
+			continue
 		}
 		err = handler.parsePacket(buf[:n])
 		if err != nil {
 			fmt.Println("failed to parse packet:", err)
-			return
+			continue
 		}
 	}
 }

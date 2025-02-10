@@ -1,0 +1,49 @@
+digraph DockerNetwork {
+    rankdir=LR;
+    
+    subgraph cluster_source {
+        label = "source network";
+        style=dashed;
+        Source;
+        Middle1;
+        Middle2;
+    }
+
+    subgraph cluster_destination {
+        label = "destination network";
+        style=dashed;
+        Destination;
+        Middle4;
+        Middle5;
+    }
+
+    subgraph cluster_middle1 {
+        label = "middle1 network";
+        style=dashed;
+        Middle1;
+        Middle3;
+        Middle4;
+    }
+
+    subgraph cluster_middle2 {
+        label = "middle2 network";
+        style=dashed;
+        Middle2;
+        Middle4;
+        Middle5;
+    }
+
+    Source -> Middle1 [label="source network"];
+    Source -> Middle2 [label="source network"];
+    
+    Middle1 -> Middle3 [label="middle1 network"];
+    Middle1 -> Middle4 [label="middle1 network"];
+    
+    Middle2 -> Middle4 [label="middle2 network"];
+    Middle2 -> Middle5 [label="middle2 network"];
+
+    Middle3 -> Middle4 [label="middle1 network"];
+
+    Middle4 -> Destination [label="destination network"];
+    Middle5 -> Destination [label="destination network"];
+} 
