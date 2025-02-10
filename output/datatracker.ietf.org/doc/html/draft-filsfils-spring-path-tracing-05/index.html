@@ -1,0 +1,2284 @@
+
+<!DOCTYPE html>
+
+
+
+
+
+
+
+<html data-bs-theme="auto" lang="en">
+    <head>
+        
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>
+            
+                draft-filsfils-spring-path-tracing-05
+            
+        </title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://static.ietf.org/fonts/inter/import.css" rel="stylesheet">
+        <link href="https://static.ietf.org/fonts/noto-sans-mono/import.css" rel="stylesheet">
+        
+            <link rel="stylesheet" href="https://static.ietf.org/dt/12.35.0/ietf/css/document_html_referenced.css">
+            
+                <link rel="stylesheet" href="https://static.ietf.org/dt/12.35.0/ietf/css/document_html_txt.css">
+            
+            <script type="module" crossorigin="" src="https://static.ietf.org/dt/12.35.0/assets/embedded-86412faf.js"></script>
+<link href="https://static.ietf.org/dt/12.35.0/assets/create-pinia-singleton-2adb64ba.js" type="text/javascript" crossorigin="anonymous" rel="modulepreload" as="script" />
+<link href="https://static.ietf.org/dt/12.35.0/assets/Scrollbar-1895147a.js" type="text/javascript" crossorigin="anonymous" rel="modulepreload" as="script" />
+            <script src="https://static.ietf.org/dt/12.35.0/ietf/js/document_html.js"></script>
+            <script src="https://static.ietf.org/dt/12.35.0/ietf/js/theme.js"></script>
+        
+        <link rel="alternate" type="application/atom+xml" title="Document changes" href="/feed/document-changes/draft-filsfils-spring-path-tracing/">
+        <meta name="description"
+            
+                content="Path Tracing in SRv6 networks (Internet-Draft, 2023)"
+            >
+        
+
+<link rel="apple-touch-icon"
+      sizes="180x180"
+      href="https://static.ietf.org/dt/12.35.0/ietf/images/ietf-logo-nor-180.png">
+<link rel="icon"
+      sizes="32x32"
+      href="https://static.ietf.org/dt/12.35.0/ietf/images/ietf-logo-nor-32.png">
+<link rel="icon"
+      sizes="16x16"
+      href="https://static.ietf.org/dt/12.35.0/ietf/images/ietf-logo-nor-16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon"
+      href="https://static.ietf.org/dt/12.35.0/ietf/images/ietf-logo-nor-mask.svg"
+      color="#ffffff">
+<meta name="msapplication-TileColor"
+      content="#ffffff">
+<meta name="theme-color"
+      content="#ffffff">
+        
+
+
+
+
+<meta property="og:title" content="Path Tracing in SRv6 networks">
+<meta property="og:url" content="https://datatracker.ietf.org/doc/html/draft-filsfils-spring-path-tracing-05">
+<link rel="canonical" href="https://datatracker.ietf.org/doc/html/draft-filsfils-spring-path-tracing-05">
+<meta property="og:site_name" content="IETF Datatracker">
+<meta property="og:description" content="Path Tracing provides a record of the packet path as a sequence of interface ids. In addition, it provides a record of end-to-end delay, per-hop delay, and load on each egress interface along the packet delivery path. Path Tracing allows to trace 14 hops with only a 40-bytes IPv6 Hop- by-Hop extension header. Path Tracing supports fine grained timestamp. It has been designed for linerate hardware implementation in the base pipeline.">
+<meta property="og:type" content="article">
+
+<meta property="article:section" content="Individual Internet-Draft">
+
+<meta property="article:author" content="Clarence Filsfils">
+<meta property="article:author" content="Ahmed Abdelsalam">
+<meta property="article:author" content="Pablo Camarillo">
+<meta property="article:author" content="Mark Yufit">
+<meta property="article:author" content="Thomas Graf">
+<meta property="article:author" content="Yuanchao Su">
+<meta property="article:author" content="Satoru Matsushima">
+<meta property="article:author" content="Mike Valentine">
+<meta property="article:author" content="Amit Dhamija">
+
+
+
+        
+        <style>
+            
+            .diff-form .select2-selection__rendered {
+                direction: rtl;
+                text-align: left;
+            }
+        </style>
+    </head>
+    <body>
+        
+        <noscript><iframe class="status" title="Site status" src="/status/latest"></iframe></noscript>
+<div class="vue-embed" data-component="Status"></div>
+        <div class="btn-toolbar sidebar-toolbar position-fixed top-0 end-0 m-2 m-lg-3 d-print-none">
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary btn-sm me-1 dropdown-toggle d-flex align-items-center"
+                    id="bd-theme" type="button" aria-expanded="false" data-bs-toggle="dropdown"
+                    aria-label="Toggle theme">
+                        <i class="theme-icon-active bi bi-circle-half"></i>
+                </button>
+
+                <ul class="dropdown-menu" aria-labelledby="bd-theme">
+                    <li>
+                        <button type="button" class="dropdown-item d-flex align-items-center"
+                            data-bs-theme-value="light" aria-pressed="false">
+                            <i class="me-2 opacity-50 theme-icon bi bi-sun-fill"></i>
+                            Light<i class="bi bi-check2 ms-auto d-none"></i>
+                        </button>
+                    </li>
+                    <li>
+                        <button type="button" class="dropdown-item d-flex align-items-center"
+                            data-bs-theme-value="dark" aria-pressed="false">
+                            <i class="me-2 opacity-50 theme-icon bi bi-moon-stars-fill"></i>
+                            Dark<i class="bi bi-check2 ms-auto d-none"></i>
+                        </button>
+                    </li>
+                    <li>
+                        <button type="button" class="dropdown-item d-flex align-items-center active"
+                            data-bs-theme-value="auto" aria-pressed="true">
+                            <i class="me-2 opacity-50 theme-icon bi bi-circle-half"></i>
+                            Auto<i class="bi bi-check2 ms-auto d-none"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            <button class="btn btn-outline-secondary btn-sm sidebar-toggle"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#sidebar"
+                    aria-expanded="true"
+                    aria-controls="sidebar"
+                    aria-label="Toggle metadata sidebar"
+                    title="Toggle metadata sidebar">
+            <i class="bi bi-arrow-bar-left sidebar-shown"></i>
+            <i class="bi bi-arrow-bar-right sidebar-collapsed"></i>
+            </button>
+        </div>
+        <nav class="navbar bg-light-subtle px-1 fixed-top d-print-none d-md-none">
+            <a class="nav-link ps-1"
+               href="/doc/draft-filsfils-spring-path-tracing/">
+                 
+                    draft-filsfils-spring-path-tracing-05
+                
+                <br class="d-sm-none">
+
+                <span class="ms-sm-3 badge rounded-pill badge-draft">
+                    
+                        None
+                    
+                </span>
+            </a>
+            <button class="navbar-toggler p-1"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#docinfo-collapse"
+                    aria-controls="docinfo-collapse"
+                    aria-expanded="false"
+                    aria-label="Show document information">
+                <span class="navbar-toggler-icon small"></span>
+            </button>
+            <div class="navbar-nav navbar-nav-scroll overscroll-none collapse pt-1" id="docinfo-collapse">
+                <div class="bg-light-subtle p-0">
+                    <table class="table table-sm table-borderless small">
+                        <tbody class="meta align-top">
+                            <tr>
+                                <th scope="row"></th>
+                                <th scope="row">Title</th>
+                                <td class="edit"></td>
+                                <td>Path Tracing in SRv6 networks</td>
+                            </tr>
+                        </tbody>
+                        
+
+
+
+
+
+
+
+<tbody class="meta align-top ">
+    <tr>
+        <th scope="row">Document</th>
+        <th scope="row">Document type</th>
+        <td class="edit"></td>
+        <td>
+            
+
+
+
+
+
+
+
+    <span class="text-danger">Replaced Internet-Draft</span>
+    (individual)
+    
+
+            
+            
+                <div class="badge rounded-pill text-bg-warning">
+                    Expired &amp; archived
+                </div>
+            
+            
+                
+
+
+
+
+    <div class="alert alert-warning small p-2 mt-2" role="alert">
+        This document is an Internet-Draft (I-D).
+        Anyone may submit an I-D to the IETF.
+        This I-D is <strong>not endorsed by the IETF</strong> and has <strong>no formal standing</strong> in the
+        <a href="/doc/rfc2026/">IETF standards process</a>.
+    </div>
+
+            
+        </td>
+    </tr>
+    
+        <tr>
+            <td></td>
+            <th scope="row">Select version</th>
+            <td class="edit"></td>
+            <td>
+                
+
+
+
+    <ul class="revision-list pagination pagination-sm text-center flex-wrap my-0">
+        
+            
+                 
+                    <li class="page-item ">
+                        <a class="page-link"
+                        href="/doc/html/draft-filsfils-spring-path-tracing-00"
+                        >
+                            00
+                        </a>
+                    </li>
+                
+            
+                 
+                    <li class="page-item ">
+                        <a class="page-link"
+                        href="/doc/html/draft-filsfils-spring-path-tracing-01"
+                        rel="nofollow">
+                            01
+                        </a>
+                    </li>
+                
+            
+                 
+                    <li class="page-item ">
+                        <a class="page-link"
+                        href="/doc/html/draft-filsfils-spring-path-tracing-02"
+                        rel="nofollow">
+                            02
+                        </a>
+                    </li>
+                
+            
+                 
+                    <li class="page-item ">
+                        <a class="page-link"
+                        href="/doc/html/draft-filsfils-spring-path-tracing-03"
+                        rel="nofollow">
+                            03
+                        </a>
+                    </li>
+                
+            
+                 
+                    <li class="page-item ">
+                        <a class="page-link"
+                        href="/doc/html/draft-filsfils-spring-path-tracing-04"
+                        rel="nofollow">
+                            04
+                        </a>
+                    </li>
+                
+            
+                 
+                    <li class="page-item active">
+                        <a class="page-link"
+                        href="/doc/html/draft-filsfils-spring-path-tracing-05"
+                        >
+                            05
+                        </a>
+                    </li>
+                
+            
+            
+        
+    </ul>
+
+            </td>
+        </tr>
+        
+            <tr>
+                <td></td>
+                <th scope="row">Compare versions</th>
+                <td class="edit"></td>
+                <td>
+                    
+
+
+
+<form class="form-horizontal diff-form"
+      action="https://author-tools.ietf.org/iddiff"
+      method="get"
+      target="_blank">
+
+            <select class="form-select form-select-sm mb-1 select2-field"
+                    data-max-entries="1"
+                    data-width="resolve"
+                    data-allow-clear="false"
+                    data-minimum-input-length="0"
+                    aria-label="From revision"
+                    name="url1">
+                
+                    <option value="draft-filsfils-spring-path-tracing-05">
+                        draft-filsfils-spring-path-tracing-05
+                        
+                    </option>
+                
+                    <option value="draft-filsfils-spring-path-tracing-04" selected>
+                        draft-filsfils-spring-path-tracing-04
+                        
+                    </option>
+                
+                    <option value="draft-filsfils-spring-path-tracing-03">
+                        draft-filsfils-spring-path-tracing-03
+                        
+                    </option>
+                
+                    <option value="draft-filsfils-spring-path-tracing-02">
+                        draft-filsfils-spring-path-tracing-02
+                        
+                    </option>
+                
+                    <option value="draft-filsfils-spring-path-tracing-01">
+                        draft-filsfils-spring-path-tracing-01
+                        
+                    </option>
+                
+                    <option value="draft-filsfils-spring-path-tracing-00">
+                        draft-filsfils-spring-path-tracing-00
+                        
+                    </option>
+                
+                
+            </select>
+
+            <select class="form-select form-select-sm mb-1 select2-field"
+                    data-max-entries="1"
+                    data-width="resolve"
+                    data-allow-clear="false"
+                    data-minimum-input-length="0"
+                    aria-label="To revision"
+                    name="url2">
+                
+                    <option value="draft-filsfils-spring-path-tracing-05" selected>
+                        draft-filsfils-spring-path-tracing-05
+                        
+                    </option>
+                
+                    <option value="draft-filsfils-spring-path-tracing-04">
+                        draft-filsfils-spring-path-tracing-04
+                        
+                    </option>
+                
+                    <option value="draft-filsfils-spring-path-tracing-03">
+                        draft-filsfils-spring-path-tracing-03
+                        
+                    </option>
+                
+                    <option value="draft-filsfils-spring-path-tracing-02">
+                        draft-filsfils-spring-path-tracing-02
+                        
+                    </option>
+                
+                    <option value="draft-filsfils-spring-path-tracing-01">
+                        draft-filsfils-spring-path-tracing-01
+                        
+                    </option>
+                
+                    <option value="draft-filsfils-spring-path-tracing-00">
+                        draft-filsfils-spring-path-tracing-00
+                        
+                    </option>
+                
+                
+            </select>
+
+            <button type="submit"
+                    class="btn btn-primary btn-sm"
+                    value="--html"
+                    name="difftype">
+                Side-by-side
+            </button>
+            
+            <button type="submit"
+                    class="btn btn-primary btn-sm"
+                    value="--hwdiff"
+                    name="difftype">
+                Inline
+            </button>
+
+</form>
+                </td>
+            </tr>
+        
+    
+    <tr>
+        <td></td>
+        <th scope="row">Authors</th>
+        <td class="edit">
+            
+        </td>
+        <td>
+            
+            
+                <span ><a 
+           title="Datatracker profile of Clarence Filsfils"
+            href="/person/cfilsfil@cisco.com" >Clarence Filsfils</a> <a 
+               href="mailto:cfilsfil%40cisco.com"
+               aria-label="Compose email to cfilsfil@cisco.com"
+               title="Compose email to cfilsfil@cisco.com">
+                <i class="bi bi-envelope"></i></a></span>,
+            
+                <span ><a 
+           title="Datatracker profile of Ahmed Abdelsalam"
+            href="/person/ahabdels@cisco.com" >Ahmed Abdelsalam</a> <a 
+               href="mailto:ahabdels%40cisco.com"
+               aria-label="Compose email to ahabdels@cisco.com"
+               title="Compose email to ahabdels@cisco.com">
+                <i class="bi bi-envelope"></i></a></span>,
+            
+                <span ><a 
+           title="Datatracker profile of Pablo Camarillo"
+            href="/person/pcamaril@cisco.com" >Pablo Camarillo</a> <a 
+               href="mailto:pcamaril%40cisco.com"
+               aria-label="Compose email to pcamaril@cisco.com"
+               title="Compose email to pcamaril@cisco.com">
+                <i class="bi bi-envelope"></i></a></span>,
+            
+                <span ><a 
+           title="Datatracker profile of Mark Yufit"
+            href="/person/mark.yufit@broadcom.com" >Mark Yufit</a> <a 
+               href="mailto:mark.yufit%40broadcom.com"
+               aria-label="Compose email to mark.yufit@broadcom.com"
+               title="Compose email to mark.yufit@broadcom.com">
+                <i class="bi bi-envelope"></i></a></span>,
+            
+                <span ><a 
+           title="Datatracker profile of Thomas Graf"
+            href="/person/thomas.graf@swisscom.com" >Thomas Graf</a> <a 
+               href="mailto:thomas.graf%40swisscom.com"
+               aria-label="Compose email to thomas.graf@swisscom.com"
+               title="Compose email to thomas.graf@swisscom.com">
+                <i class="bi bi-envelope"></i></a></span>,
+            
+                <span ><a 
+           title="Datatracker profile of Yuanchao Su"
+            href="/person/yuasu@cisco.com" >Yuanchao Su</a> <a 
+               href="mailto:yuasu%40cisco.com"
+               aria-label="Compose email to yuasu@cisco.com"
+               title="Compose email to yuasu@cisco.com">
+                <i class="bi bi-envelope"></i></a></span>,
+            
+                <span ><a 
+           title="Datatracker profile of Satoru Matsushima"
+            href="/person/satoru.matsushima@gmail.com" >Satoru Matsushima</a> <a 
+               href="mailto:satoru.matsushima%40gmail.com"
+               aria-label="Compose email to satoru.matsushima@gmail.com"
+               title="Compose email to satoru.matsushima@gmail.com">
+                <i class="bi bi-envelope"></i></a></span>,
+            
+                <span ><a 
+           title="Datatracker profile of Mike Valentine"
+            href="/person/michael.j.valentine@gs.com" >Mike Valentine</a> <a 
+               href="mailto:michael.j.valentine%40gs.com"
+               aria-label="Compose email to michael.j.valentine@gs.com"
+               title="Compose email to michael.j.valentine@gs.com">
+                <i class="bi bi-envelope"></i></a></span>,
+            
+                <span ><a 
+           title="Datatracker profile of Amit Dhamija"
+            href="/person/amitd@arrcus.com" >Amit Dhamija</a> <a 
+               href="mailto:amitd%40arrcus.com"
+               aria-label="Compose email to amitd@arrcus.com"
+               title="Compose email to amitd@arrcus.com">
+                <i class="bi bi-envelope"></i></a></span>
+            
+            
+                <br>
+                <a class="btn btn-primary btn-sm mt-1" href="mailto:draft-filsfils-spring-path-tracing@ietf.org?subject=draft-filsfils-spring-path-tracing" title="Send email to the document authors">Email authors</a>
+            
+        </td>
+    </tr>
+    
+    
+        
+        
+            <tr>
+                <td></td>
+                <th scope="row">
+                    Replaced by
+                </th>
+                <td class="edit">
+                </td>
+                <td>
+                    
+                        <a href="/doc/html/draft-filsfils-ippm-path-tracing" title="Path Tracing in SRv6 networks">draft-filsfils-ippm-path-tracing</a>
+                    
+                </td>
+            </tr>
+        
+        
+    
+    <tr>
+        <td></td>
+        <th scope="row">
+            RFC stream
+        </th>
+        <td class="edit">
+            
+        </td>
+        <td class="text-body-secondary">
+            
+                (None)
+            
+        </td>
+    </tr>
+    
+        <tr>
+            <td></td>
+            <th scope="row">
+                Intended RFC status
+            </th>
+            <td class="edit">
+                
+            </td>
+            <td>
+                
+                    <span class="text-body-secondary">
+                        (None)
+                    </span>
+                
+            </td>
+        </tr>
+    
+    <tr>
+        <td></td>
+        <th scope="row">
+            Other formats
+        </th>
+        <td class="edit">
+        </td>
+        <td>
+            
+                
+    <div class="buttonlist">
+    
+        
+        <a class="btn btn-primary btn-sm"
+          
+          target="_blank"
+          href="https://www.ietf.org/archive/id/draft-filsfils-spring-path-tracing-05.txt">
+            
+                <i class="bi bi-file-text"></i> txt
+            
+        </a>
+        
+    
+        
+        <a class="btn btn-primary btn-sm"
+          
+          target="_blank"
+          href="https://www.ietf.org/archive/id/draft-filsfils-spring-path-tracing-05.html">
+            
+                <i class="bi bi-file-code"></i> html
+            
+        </a>
+        
+    
+        
+        <a class="btn btn-primary btn-sm"
+          
+          target="_blank"
+          href="https://www.ietf.org/archive/id/draft-filsfils-spring-path-tracing-05.xml">
+            
+                <i class="bi bi-file-code"></i> xml
+            
+        </a>
+        
+    
+        
+    
+        
+        <a class="btn btn-primary btn-sm"
+          
+          target="_blank"
+          href="/doc/draft-filsfils-spring-path-tracing/05/bibtex/">
+            
+                <i class="bi bi-file-ruled"></i> bibtex
+            
+        </a>
+        
+    
+        
+        <a class="btn btn-primary btn-sm"
+          
+          target="_blank"
+          href="/doc/bibxml3/draft-filsfils-spring-path-tracing-05.xml">
+            
+                <i class="bi bi-file-code"></i> bibxml
+            
+        </a>
+        
+    
+</div>
+
+            
+        </td>
+    </tr>
+    
+    
+        
+    
+</tbody>
+                        <tr>
+                            <th scope="row"></th>
+                            <th scope="row"></th>
+                            <td class="edit"></td>
+                            <td>
+                                <a class="btn btn-sm btn-warning mb-3"
+                                target="_blank"
+                                href="https://github.com/ietf-tools/datatracker/issues/new/choose">
+                                    Report a bug
+                                    <i class="bi bi-bug"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </nav>
+        <div class="row g-0">
+            <div class="col-md-9 d-flex justify-content-center lh-sm"
+                 data-bs-spy="scroll"
+                 data-bs-target="#toc-nav"
+                 data-bs-smooth-scroll="true"
+                 tabindex="0"
+                 id="content">
+                
+                    <div class="rfchtml">
+                        <br class="noprint">
+                        <div class="xml2rfc">
+<table class="ears">
+<thead><tr>
+<td class="left">Internet-Draft</td>
+<td class="center">Path Tracing</td>
+<td class="right">October 2023</td>
+</tr></thead>
+<tfoot><tr>
+<td class="left">Filsfils, et al.</td>
+<td class="center">Expires 25 April 2024</td>
+<td class="right">[Page]</td>
+</tr></tfoot>
+</table>
+<div id="external-metadata" class="document-information"></div>
+<div id="internal-metadata" class="document-information">
+<dl id="identifiers">
+<dt class="label-workgroup">Workgroup:</dt>
+<dd class="workgroup">SPRING</dd>
+<dt class="label-internet-draft">Internet-Draft:</dt>
+<dd class="internet-draft">draft-filsfils-spring-path-tracing-05</dd>
+<dt class="label-published">Published:</dt>
+<dd class="published">
+<time datetime="2023-10-23" class="published">23 October 2023</time>
+    </dd>
+<dt class="label-intended-status">Intended Status:</dt>
+<dd class="intended-status">Standards Track</dd>
+<dt class="label-expires">Expires:</dt>
+<dd class="expires"><time datetime="2024-04-25">25 April 2024</time></dd>
+<dt class="label-authors">Authors:</dt>
+<dd class="authors">
+<div class="author">
+      <div class="author-name">C. Filsfils</div>
+<div class="org">Cisco Systems, Inc.</div>
+</div>
+<div class="author">
+      <div class="author-name">A. Abdelsalam, <span class="editor">Ed.</span>
+</div>
+<div class="org">Cisco Systems, Inc.</div>
+</div>
+<div class="author">
+      <div class="author-name">P. Camarillo, <span class="editor">Ed.</span>
+</div>
+<div class="org">Cisco Systems, Inc.</div>
+</div>
+<div class="author">
+      <div class="author-name">M. Yufit</div>
+<div class="org">Broadcom</div>
+</div>
+<div class="author">
+      <div class="author-name">T. Graf</div>
+<div class="org">Swisscom</div>
+</div>
+<div class="author">
+      <div class="author-name">Y. Su</div>
+<div class="org">Alibaba, Inc</div>
+</div>
+<div class="author">
+      <div class="author-name">S. Matsushima</div>
+<div class="org">SoftBank</div>
+</div>
+<div class="author">
+      <div class="author-name">M. Valentine</div>
+<div class="org">Goldman Sachs</div>
+</div>
+<div class="author">
+      <div class="author-name">A. Dhamija</div>
+<div class="org">Arrcus</div>
+</div>
+</dd>
+</dl>
+</div>
+<h1 id="title">Path Tracing in SRv6 networks</h1>
+<section id="section-abstract">
+      <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
+<p id="section-abstract-1">Path Tracing provides a record of the packet path as a sequence of interface ids. In addition, it provides a record of end-to-end delay, per-hop delay, and load on each egress interface along the packet delivery path.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-2">Path Tracing allows to trace 14 hops with only a 40-bytes IPv6 Hop-by-Hop extension header.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+<p id="section-abstract-3">Path Tracing supports fine grained timestamp. It has been designed for linerate hardware implementation in the base pipeline.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
+</section>
+<div id="status-of-memo">
+<section id="section-boilerplate.1">
+        <h2 id="name-status-of-this-memo">
+<a href="#name-status-of-this-memo" class="section-name selfRef">Status of This Memo</a>
+        </h2>
+<p id="section-boilerplate.1-1">
+        This Internet-Draft is submitted in full conformance with the
+        provisions of BCP 78 and BCP 79.<a href="#section-boilerplate.1-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-2">
+        Internet-Drafts are working documents of the Internet Engineering Task
+        Force (IETF). Note that other groups may also distribute working
+        documents as Internet-Drafts. The list of current Internet-Drafts is
+        at <span><a href="https://datatracker.ietf.org/drafts/current/">https://datatracker.ietf.org/drafts/current/</a></span>.<a href="#section-boilerplate.1-2" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-3">
+        Internet-Drafts are draft documents valid for a maximum of six months
+        and may be updated, replaced, or obsoleted by other documents at any
+        time. It is inappropriate to use Internet-Drafts as reference
+        material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-4">
+        This Internet-Draft will expire on 25 April 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="copyright">
+<section id="section-boilerplate.2">
+        <h2 id="name-copyright-notice">
+<a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
+        </h2>
+<p id="section-boilerplate.2-1">
+            Copyright (c) 2023 IETF Trust and the persons identified as the
+            document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.2-2">
+            This document is subject to BCP 78 and the IETF Trust's Legal
+            Provisions Relating to IETF Documents
+            (<span><a href="https://trustee.ietf.org/license-info">https://trustee.ietf.org/license-info</a></span>) in effect on the date of
+            publication of this document. Please review these documents
+            carefully, as they describe your rights and restrictions with
+            respect to this document. Code Components extracted from this
+            document must include Revised BSD License text as described in
+            Section 4.e of the Trust Legal Provisions and are provided without
+            warranty as described in the Revised BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="toc">
+<section id="section-toc.1">
+        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
+<a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
+        </h2>
+<nav class="toc"><ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
+            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="auto internal xref">1</a>.  <a href="#name-introduction" class="internal xref">Introduction</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
+            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-terminology" class="internal xref">Terminology</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.1">
+                <p id="section-toc.1-1.2.2.1.1" class="keepWithNext"><a href="#section-2.1" class="auto internal xref">2.1</a>.  <a href="#name-requirements-language" class="internal xref">Requirements Language</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-midpoint-compressed-data" class="internal xref">Midpoint Compressed Data</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-timestamp-requirements" class="internal xref">Timestamp requirements</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
+                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-timestamp-format" class="internal xref">Timestamp format</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
+                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-time-synchronization" class="internal xref">Time synchronization</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-pt-probing-instance" class="internal xref">PT Probing Instance</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-pt-source-node-dataplane-be" class="internal xref">PT Source Node Dataplane Behavior</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-pt-midpoint-node-dataplane-" class="internal xref">PT Midpoint Node Dataplane Behavior</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-pt-sink-node-dataplane-beha" class="internal xref">PT Sink Node Dataplane Behavior</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-pt-headers" class="internal xref">PT Headers</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1">
+                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="auto internal xref">9.1</a>.  <a href="#name-ipv6-hop-by-hop-option-for-" class="internal xref">IPv6 Hop-by-Hop Option for Path Tracing (HbH-PT)</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.2">
+                <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="auto internal xref">9.2</a>.  <a href="#name-ipv6-destination-option-for" class="internal xref">IPv6 Destination Option for Path Tracing (DOH-PT)</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-benefits" class="internal xref">Benefits</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
+            <p id="section-toc.1-1.11.1"><a href="#section-11" class="auto internal xref">11</a>. <a href="#name-implementation-status" class="internal xref">Implementation Status</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
+            <p id="section-toc.1-1.12.1"><a href="#section-12" class="auto internal xref">12</a>. <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
+            <p id="section-toc.1-1.13.1"><a href="#section-13" class="auto internal xref">13</a>. <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
+            <p id="section-toc.1-1.14.1"><a href="#section-14" class="auto internal xref">14</a>. <a href="#name-acknowledgements" class="internal xref">Acknowledgements</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15">
+            <p id="section-toc.1-1.15.1"><a href="#section-15" class="auto internal xref">15</a>. <a href="#name-references" class="internal xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.1">
+                <p id="section-toc.1-1.15.2.1.1"><a href="#section-15.1" class="auto internal xref">15.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.2">
+                <p id="section-toc.1-1.15.2.2.1"><a href="#section-15.2" class="auto internal xref">15.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.16">
+            <p id="section-toc.1-1.16.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-contributors" class="internal xref">Contributors</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.17">
+            <p id="section-toc.1-1.17.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+</li>
+        </ul>
+</nav>
+</section>
+</div>
+<div id="introduction">
+<section id="section-1">
+      <h2 id="name-introduction">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
+      </h2>
+<p id="section-1-1">Path Tracing provides a record of the packet path as a sequence of interface ids. In addition, it provides a record of end-to-end delay, per-hop delay, and load on each egress interface along the packet delivery path.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">Path Tracing allows to trace 14 hops with only a 40 bytes IPv6 Hop-by-Hop header. The overhead is lower than <span>[<a href="#INT" class="cite xref">INT</a>]</span>, <span>[<a href="#RFC9197" class="cite xref">RFC9197</a>]</span>, <span>[<a href="#I-D.song-opsawg-ifit-framework" class="cite xref">I-D.song-opsawg-ifit-framework</a>]</span>, and <span>[<a href="#I-D.kumar-ippm-ifa" class="cite xref">I-D.kumar-ippm-ifa</a>]</span>.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">Path Tracing supports fine-grained timestamps. It has been designed for linerate hardware implementation in the base pipeline.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">Path Tracing is applicable to both SR-MPLS <span>[<a href="#RFC8660" class="cite xref">RFC8660</a>]</span>, as well as SRv6 <span>[<a href="#RFC8986" class="cite xref">RFC8986</a>]</span>. This document defines the Path Tracing specification for the SRv6 dataplane. The SR-MPLS dataplane will be detailed in a separate document.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-5">The specification proposed in this document has been implemented successfully in different interoperable hardware platforms at linerate (<a href="#sec-implementation" class="auto internal xref">Section 11</a>).<a href="#section-1-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="terminology">
+<section id="section-2">
+      <h2 id="name-terminology">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-terminology" class="section-name selfRef">Terminology</a>
+      </h2>
+<p id="section-2-1">The following terms used within this document are defined in <span>[<a href="#RFC8402" class="cite xref">RFC8402</a>]</span>, <span>[<a href="#RFC8754" class="cite xref">RFC8754</a>]</span> and <span>[<a href="#RFC8986" class="cite xref">RFC8986</a>]</span>: Segment Routing (SR), SR Domain, Segment ID (SID), SRv6, SRv6 SID, SR Policy, Segment Routing Header (SRH), SR source node, transit node, SR Endpoint, SA, DA.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-2">The following terms are used in this document as defined below:<a href="#section-2-2" class="pilcrow">¶</a></p>
+<p id="section-2-3">PT: Path Tracing<a href="#section-2-3" class="pilcrow">¶</a></p>
+<p id="section-2-4">MCD: Midpoint Compressed Data (MCD). Information that every transit router adds to the packet for PT purposes. Defined in <a href="#sec-mcd" class="auto internal xref">Section 3</a> of this document.<a href="#section-2-4" class="pilcrow">¶</a></p>
+<p id="section-2-5">HbH-PT: IPv6 Hop-by-Hop Option <span>[<a href="#RFC8200" class="cite xref">RFC8200</a>]</span> for Path Tracing. It contains a stack of MCDs. It is defined in <a href="#sec-hbh-pt" class="auto internal xref">Section 9.1</a> of this document<a href="#section-2-5" class="pilcrow">¶</a></p>
+<p id="section-2-6">DOH-PT: IPv6 Destination Option <span>[<a href="#RFC8200" class="cite xref">RFC8200</a>]</span> for Path Tracing. It is defined in <a href="#sec-doh-pt" class="auto internal xref">Section 9.2</a> of this document.<a href="#section-2-6" class="pilcrow">¶</a></p>
+<p id="section-2-7">PT Source: A Source node that starts a PT Probing Instance (defined in <a href="#sec-pt-probing-instance" class="auto internal xref">Section 5</a>) and generates PT probes.<a href="#section-2-7" class="pilcrow">¶</a></p>
+<p id="section-2-8">PT Midpoint: A transit node that performs plain IPv6 forwarding (or SR Endpoint processing) and in addition records PT information in the HbH-PT.<a href="#section-2-8" class="pilcrow">¶</a></p>
+<p id="section-2-9">PT Sink: A node that receives PT probes sent from the SRC containing the information recorded by every PT Midpoint along the path, and forwards them to a regional collector after recording its PT information.<a href="#section-2-9" class="pilcrow">¶</a></p>
+<p id="section-2-10">RC: Regional collector that receives PT probes, parses, and stores them in TimeSeries Database. It uses the information in the HBH-PT and the DOH-PT to construct the packet delivery path as well as the timestamp at each node.<a href="#section-2-10" class="pilcrow">¶</a></p>
+<div id="requirements-language">
+<section id="section-2.1">
+        <h3 id="name-requirements-language">
+<a href="#section-2.1" class="section-number selfRef">2.1. </a><a href="#name-requirements-language" class="section-name selfRef">Requirements Language</a>
+        </h3>
+<p id="section-2.1-1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they appear in all capitals, as shown here.<a href="#section-2.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="sec-mcd">
+<section id="section-3">
+      <h2 id="name-midpoint-compressed-data">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-midpoint-compressed-data" class="section-name selfRef">Midpoint Compressed Data</a>
+      </h2>
+<p id="section-3-1">Every PT Midpoint along the packet delivery path -from Source to Sink- records its PT information into the HbH-PT header. This information is known as Midpoint Compressed Data (MCD). It contains the following information:<a href="#section-3-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3-2.1">
+          <p id="section-3-2.1.1">MCD.OIF (Outgoing Interface ID): An 8-bit or 12-bit interface ID associated with the egress physical interface of the router<a href="#section-3-2.1.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3-2.1.2.1">
+              <p id="section-3-2.1.2.1.1">The interface ID is assigned by an operator. The Interface IDs are not globally unique across the entire network. Indeed the same Interface ID may be repeated multiple times in the network as long as the end-to-end path can be deterministically inferred based on the chain of Interface IDs.<a href="#section-3-2.1.2.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-3-2.1.2.2">
+              <p id="section-3-2.1.2.2.1">The programming of the Interface ID in the device may be done by CLI/NETCONF or any other means, and it is out of the scope of this document.<a href="#section-3-2.1.2.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-3-2.1.2.3">
+              <p id="section-3-2.1.2.3.1">The usage of an 8-bit or 12-bit Interface ID is an operator choice, but the Interface ID size MUST be consistent across the entire network.<a href="#section-3-2.1.2.3.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-3-2.1.2.4">
+              <p id="section-3-2.1.2.4.1">In case of Link Aggregation Groups (LAG/bundle) <span>[<a href="#LAG" class="cite xref">LAG</a>]</span>, each one of the members is configured with a different interface ID.<a href="#section-3-2.1.2.4.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+</li>
+        <li class="normal" id="section-3-2.2">
+          <p id="section-3-2.2.1">MCD.OIL (Outgoing Interface Load): A 4-bit representation of the egress interface load (i.e., current throughout relative to the interface bandwidth).<a href="#section-3-2.2.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3-2.2.2.1">
+              <p id="section-3-2.2.2.1.1">The load is represented using a 4-bit value in logarithmic scale. This allows more granular information as the load is higher.<a href="#section-3-2.2.2.1.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+</li>
+        <li class="normal" id="section-3-2.3">
+          <p id="section-3-2.3.1">MCD.TTS (Truncated Timestamp): An 8-bit timestamp encoding the time at which the packet egress the router.<a href="#section-3-2.3.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3-2.3.2.1">
+              <p id="section-3-2.3.2.1.1">Each egress interface in the device is configured with a TTS template.<a href="#section-3-2.3.2.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-3-2.3.2.2">
+              <p id="section-3-2.3.2.2.1">The TTS template defines the position of 8-bits to be selected from the egress timestamp. <a href="#sec-ts-req" class="auto internal xref">Section 4</a> of this document discusses the timestamp format used in path tracing.<a href="#section-3-2.3.2.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-3-2.3.2.3">
+              <p id="section-3-2.3.2.3.1">A Path Tracing Midpoint implementation MAY support one or more TTS templates. Each TTS template provides a different time precision.<a href="#section-3-2.3.2.3.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-3-2.3.2.4">
+              <p id="section-3-2.3.2.4.1">An operator configures an egress interface with a single TTS template. The choice of the TTS template for a given interface is based on the type of the link connected to that interface. For example, an interface connected to DC link will have a different TTS Template from an interface connected to intercontinental or WAN link, as they have different precision requirements.<a href="#section-3-2.3.2.4.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+</li>
+      </ul>
+</section>
+</div>
+<div id="sec-ts-req">
+<section id="section-4">
+      <h2 id="name-timestamp-requirements">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-timestamp-requirements" class="section-name selfRef">Timestamp requirements</a>
+      </h2>
+<div id="timestamp-format">
+<section id="section-4.1">
+        <h3 id="name-timestamp-format">
+<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-timestamp-format" class="section-name selfRef">Timestamp format</a>
+        </h3>
+<p id="section-4.1-1">Path Tracing uses a 64-bit timestamp format. <span>[<a href="#RFC8877" class="cite xref">RFC8877</a>]</span> recommends two 64-bit timestamp formats: 64-bit Truncated PTP timestamp format and NTP 64-bit timestamp format. Path Tracing can work with both formats indifferently.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="time-synchronization">
+<section id="section-4.2">
+        <h3 id="name-time-synchronization">
+<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-time-synchronization" class="section-name selfRef">Time synchronization</a>
+        </h3>
+<p id="section-4.2-1">All routers across the network MUST have time-synchronization. PTP <span>[<a href="#IEEE1588" class="cite xref">IEEE1588</a>]</span> and NTP <span>[<a href="#RFC5905" class="cite xref">RFC5905</a>]</span> are example protocols that can be used for time-synchronization.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="sec-pt-probing-instance">
+<section id="section-5">
+      <h2 id="name-pt-probing-instance">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-pt-probing-instance" class="section-name selfRef">PT Probing Instance</a>
+      </h2>
+<p id="section-5-1">The controller configures a PT Probing Instance at the source node. A PT Probing Instance is configured with the following parameters:<a href="#section-5-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5-2.1">
+          <p id="section-5-2.1.1">SA: the source address of the PT probe. Typically, it is the loopback address of the PT SRC.<a href="#section-5-2.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-5-2.2">
+          <p id="section-5-2.2.1">Session ID: A 16-bit value.<a href="#section-5-2.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-5-2.3">
+          <p id="section-5-2.3.1">Probe-rate: Number of probes per second to generate as part of this PT Probing Instance. The probe-rate is the aggregate of the probes generated across all the sweeping ranges.<a href="#section-5-2.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-5-2.4">
+          <p id="section-5-2.4.1">SRv6 SID List: The SRv6 SID list associated with the packet. The last SID is the Sink node.<a href="#section-5-2.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-5-2.5">
+          <p id="section-5-2.5.1">DSCP value<a href="#section-5-2.5.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-5-2.6">
+          <p id="section-5-2.6.1">Hop-limit Value<a href="#section-5-2.6.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-5-2.7">
+          <p id="section-5-2.7.1">IPv6 Flow-Label sweeping range:<a href="#section-5-2.7.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5-2.7.2.1">
+              <p id="section-5-2.7.2.1.1">If set, different Flow-Label values must be used in the probe packets. It may be specified as a range of specific Flow-Label values to enumerate, or it may be specified as the number of different random Flow-Label values to use in a round-robin.<a href="#section-5-2.7.2.1.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+</li>
+        <li class="normal" id="section-5-2.8">
+          <p id="section-5-2.8.1">HbH-PT size<a href="#section-5-2.8.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-5-2.9">
+          <p id="section-5-2.9.1">MTU sweeping range:<a href="#section-5-2.9.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5-2.9.2.1">
+              <p id="section-5-2.9.2.1.1">If set, payload must be included at the end of the packet to test different packet sizes.<a href="#section-5-2.9.2.1.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+</li>
+      </ul>
+</section>
+</div>
+<div id="pt-source-node-dataplane-behavior">
+<section id="section-6">
+      <h2 id="name-pt-source-node-dataplane-be">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-pt-source-node-dataplane-be" class="section-name selfRef">PT Source Node Dataplane Behavior</a>
+      </h2>
+<p id="section-6-1">For each configured PT Probing Instance, according to the probe-rate, the PT SRC generates a PT probe packet as follows:<a href="#section-6-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-6-2">
+<pre>
+S01. Generate a new IPv6 packet
+S02. Set the IPv6 SA as per PT Probing Instance configuration
+S03. Set the IPv6 DA to the first SID from the SRv6 SID List
+S04. Set the IPv6 Next Header field to zero (HbH)
+S05. Set the DSCP and Flow Label values as per
+        PT Probing Instance configuration
+S06. Append an IPv6 Hop-by-Hop header with HbH-PT
+S07. Set all bits of the HbH-PT MCD Stack to zero
+S08. IF SID List has more than one SID
+S09.    Append an SRH
+S10.    Set the Next Header field to 60 (IPv6 Destinations Options
+           header)
+S11.    Write the remaining SIDs of the SID list in the SRH
+S12. Append an IPv6 Destinations Option header with DOH-PT
+S13. Set the Next Header field of the IPv6 Destinations Options
+        Header to 59 (IPv6 No Next Header)
+S14. Add padding bytes after the IPv6 Destinations Option header to
+        reach the desired packet size as per the MTU sweeping range
+        configuration
+S15. Set the session ID field of the DOH-PT as per
+       PT Probing Instance configuration
+S16. Perform an IPv6 FIB lookup to determine the Outgoing
+       Interface (IFACE-OUT) on which packet will be forwarded
+S17. Record Transmit 64-bit timestamp (SRC.T64) in the T64 field
+       of the DOH-PT
+S18. Record IFACE-OUT ID (SRC.OIF) in the IF_ID field
+       of the DOH-PT
+S19. Record IFACE-OUT Load (SRC.OIL) in the IF_LD field
+       of the DOH-PT
+S20. Forward the packet via IFACE-OUT
+</pre><a href="#section-6-2" class="pilcrow">¶</a>
+</div>
+<p id="section-6-3">Notes:<a href="#section-6-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6-4.1">
+          <p id="section-6-4.1.1">The pseudocode describes local processing at a node. An implementation of the pseudocode is compliant as long as the externally observable wire protocol is as described in the pseudocode.<a href="#section-6-4.1.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+</section>
+</div>
+<div id="sec-pt-midpoint">
+<section id="section-7">
+      <h2 id="name-pt-midpoint-node-dataplane-">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-pt-midpoint-node-dataplane-" class="section-name selfRef">PT Midpoint Node Dataplane Behavior</a>
+      </h2>
+<p id="section-7-1">When a midpoint node receives an IPv6 packet that contains an IPv6 HbH-PT option, the node processes the HbH-PT as follows:<a href="#section-7-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-7-2">
+<pre>
+S01. When processing HbH-PT option {
+S02.    Compute the MCD information as per Section 3
+S03.    HbH-PT.MCD_Stack[MCD_Size:HbH-PT.OPT_Data_Len-1] =
+           HbH-PT.MCD_Stack[0:HbH-PT.OPT_Data_Len-(MCD_Size+1)]
+           //Shift HbH-PT MCD Stack to the right by MCD_Size bytes
+S04.    HbH-PT.MCD_Stack[0:MCD_Size-1] = MCD[0:MCD_Size-1]
+        //Push the MCD at the beginning of the Stack
+S05. }
+</pre><a href="#section-7-2" class="pilcrow">¶</a>
+</div>
+<p id="section-7-3">Notes:<a href="#section-7-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7-4.1">
+          <p id="section-7-4.1.1">The PT Midpoint behavior MUST be implemented in the normal pipeline to experience the regular datapath (i.e., linerate with full PPS and full BW). Offloading the processing of this option to either the slow-path or a co-processors is not acceptable and yields invalid results.<a href="#section-7-4.1.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+</section>
+</div>
+<div id="pt-sink-node-dataplane-behavior">
+<section id="section-8">
+      <h2 id="name-pt-sink-node-dataplane-beha">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-pt-sink-node-dataplane-beha" class="section-name selfRef">PT Sink Node Dataplane Behavior</a>
+      </h2>
+<p id="section-8-1">We define a new SRv6 Endpoint Behavior called "Endpoint Behavior bound to an SRv6 Policy with Timestamp, Encapsulation and Forward" ("End.B6.TEF" for short).<a href="#section-8-1" class="pilcrow">¶</a></p>
+<p id="section-8-2">It is a Binding SID instantiated, at Sink nodes, that encapsulates the packet with a new IPv6 header, an SRH that contains the SID list associated to End.B6.TEF SID, and an IPv6 Destinations Option header with DOH-PT that is used to carry Path Tracing information of Sink node.<a href="#section-8-2" class="pilcrow">¶</a></p>
+<p id="section-8-3">When N receives a packet whose IPv6 DA is S and S is a local End.B6.TEF SID, N does the following:<a href="#section-8-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-8-4">
+<pre>
+S01. Record Rx 64-bit timestamp (SNK.T64)
+S02. Record incoming interface ID (SNK.IIF)
+S03. Record incoming interface Load (SNK.IIL)
+S04. Push a new IPv6 header
+S05. Set the IPv6 SA to the Sink node loopback
+S06. Set the IPv6 DA to the first SID in the SRv6 SID List
+S07. IF SID List has more than one SID
+S08.    Append an SRH
+S09.    Set the SRH Next Header field to 60 (IPv6 Destinations
+           Options header)
+S10.    Write the remaining SIDs of the SID list in the SRH
+S11. Append an IPv6 Destinations Option header with DOH-PT
+S12. Set the Next Header field of the IPv6 Destinations Options
+        Header to 41 (IPv6 header)
+S13. Set the session ID field of the DOH-PT to zero
+S14. Write SNK.T64 in the T64 field of the DOH-PT
+S15. Write SNK.IIF in the IF_ID field of the DOH-PT
+S16. Write SNK.IIL in the IF_LD field of the DPH-PT
+S17. Submit the packet to the egress IPv6 FIB lookup for
+        transmission to the new destination
+</pre><a href="#section-8-4" class="pilcrow">¶</a>
+</div>
+<p id="section-8-5">Notes:<a href="#section-8-5" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-8-6.1">
+          <p id="section-8-6.1.1">The pseudocode describes local processing at a node. An implementation of the pseudocode is compliant as long as the externally observable wire protocol is as described in the pseudocode.<a href="#section-8-6.1.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+</section>
+</div>
+<div id="pt-headers">
+<section id="section-9">
+      <h2 id="name-pt-headers">
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-pt-headers" class="section-name selfRef">PT Headers</a>
+      </h2>
+<div id="sec-hbh-pt">
+<section id="section-9.1">
+        <h3 id="name-ipv6-hop-by-hop-option-for-">
+<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-ipv6-hop-by-hop-option-for-" class="section-name selfRef">IPv6 Hop-by-Hop Option for Path Tracing (HbH-PT)</a>
+        </h3>
+<p id="section-9.1-1">This document defines a new IPv6 Option for Path Tracing to be carried in the IPv6 Hop-by-Hop Header. The option has the following format:<a href="#section-9.1-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-9.1-2">
+<pre>
+                                +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+                                |  Option Type  |  Opt Data Len |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+~                          MCD  Stack                           ~
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+    Figure 1: IPv6 Hop-by-Hop Option for Path Tracing (HbH-PT)
+</pre><a href="#section-9.1-2" class="pilcrow">¶</a>
+</div>
+<p id="section-9.1-3">Where:<a href="#section-9.1-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-9.1-4.1">
+            <p id="section-9.1-4.1.1">Option Type: TBA1-1<a href="#section-9.1-4.1.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-9.1-4.1.2.1">
+                <p id="section-9.1-4.1.2.1.1">The 3 high-order bits of the option must be set to 001<a href="#section-9.1-4.1.2.1.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-9.1-4.1.2.1.2.1">
+                    <p id="section-9.1-4.1.2.1.2.1.1">00: Skip HbH for nodes that don't support the HbH-PT Option Type<a href="#section-9.1-4.1.2.1.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-9.1-4.1.2.1.2.2">
+                    <p id="section-9.1-4.1.2.1.2.2.1">1: update HbH-PT for nodes that support the HbH-PT Option Type<a href="#section-9.1-4.1.2.1.2.2.1" class="pilcrow">¶</a></p>
+</li>
+                </ul>
+</li>
+            </ul>
+</li>
+          <li class="normal" id="section-9.1-4.2">
+            <p id="section-9.1-4.2.1">Opt Data Len: the length of the MCD stack in bytes.<a href="#section-9.1-4.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.1-4.3">
+            <p id="section-9.1-4.3.1">MCD Stack: metadata scratchpad where PT Midpoints record their MCDs<a href="#section-9.1-4.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-9.1-5">Note: The HbH-PT has a variable length.  It is RECOMMENDED that implementations support a 38-octet HbH-PT Option. The operator, upon configuring the Source node behavior, MUST select an option length that is supported by all the routers in the network.<a href="#section-9.1-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="sec-doh-pt">
+<section id="section-9.2">
+        <h3 id="name-ipv6-destination-option-for">
+<a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-ipv6-destination-option-for" class="section-name selfRef">IPv6 Destination Option for Path Tracing (DOH-PT)</a>
+        </h3>
+<p id="section-9.2-1">This document defines a new IPv6 Option for Path Tracing to be carried in the IPv6 Destination Options Header. The option has the following format:<a href="#section-9.2-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-9.2-2">
+<pre>
+                                +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+                                |  Option Type  |  Opt Data Len |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
++                             T64                               +
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|         Session ID            |        IF_ID          | IF_LD |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+  Figure 2: IPv6 Destination Option for Path Tracing (DOH-PT)
+</pre><a href="#section-9.2-2" class="pilcrow">¶</a>
+</div>
+<p id="section-9.2-3">Where:<a href="#section-9.2-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-9.2-4.1">
+            <p id="section-9.2-4.1.1">Option Type: TBA1-2<a href="#section-9.2-4.1.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-9.2-4.1.2.1">
+                <p id="section-9.2-4.1.2.1.1">The 3 high-order bits of the option must be set to 000<a href="#section-9.2-4.1.2.1.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-9.2-4.1.2.1.2.1">
+                    <p id="section-9.2-4.1.2.1.2.1.1">00: Skip the IPv6 Destination Options header for nodes that don't support the DOH-PT Option Type<a href="#section-9.2-4.1.2.1.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-9.2-4.1.2.1.2.2">
+                    <p id="section-9.2-4.1.2.1.2.2.1">0: DOH-PT cannot be changed enroute<a href="#section-9.2-4.1.2.1.2.2.1" class="pilcrow">¶</a></p>
+</li>
+                </ul>
+</li>
+            </ul>
+</li>
+          <li class="normal" id="section-9.2-4.2">
+            <p id="section-9.2-4.2.1">Opt Data Len: the length of the DOH-PT in bytes (12).<a href="#section-9.2-4.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.2-4.3">
+            <p id="section-9.2-4.3.1">T64: 64-bit Timestamp<a href="#section-9.2-4.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.2-4.4">
+            <p id="section-9.2-4.4.1">Session ID: Session identifier set by SRC node generating the probes. Used to co-relate probes of the same session. Value of zero means unset.<a href="#section-9.2-4.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.2-4.5">
+            <p id="section-9.2-4.5.1">IF_ID: 12-bit Interface ID<a href="#section-9.2-4.5.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.2-4.6">
+            <p id="section-9.2-4.6.1">IF_LD: 4-bit Interface Load<a href="#section-9.2-4.6.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-9.2-5">Note: The DOH-PT is generated by both the PT SRC and the PT SNK. When used at the PT SNK node, the Session ID field MUST be set to zero.<a href="#section-9.2-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="benefits">
+<section id="section-10">
+      <h2 id="name-benefits">
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-benefits" class="section-name selfRef">Benefits</a>
+      </h2>
+<ul class="normal">
+<li class="normal" id="section-10-1.1">
+          <p id="section-10-1.1.1">Low overhead:<a href="#section-10-1.1.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-10-1.1.2.1">
+              <p id="section-10-1.1.2.1.1">A 40Byte Hop-By-Hop header allows for 14 hops path measurements: 1 at the PT SRC, 12 at PT Midpoint routers and 1 at the PT SNK<a href="#section-10-1.1.2.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-10-1.1.2.2">
+              <p id="section-10-1.1.2.2.1">PT has the lowest MTU overhead compared to alternative solutions such as <span>[<a href="#INT" class="cite xref">INT</a>]</span>, <span>[<a href="#RFC9197" class="cite xref">RFC9197</a>]</span>, <span>[<a href="#I-D.song-opsawg-ifit-framework" class="cite xref">I-D.song-opsawg-ifit-framework</a>]</span>, and <span>[<a href="#I-D.kumar-ippm-ifa" class="cite xref">I-D.kumar-ippm-ifa</a>]</span>.<a href="#section-10-1.1.2.2.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+</li>
+        <li class="normal" id="section-10-1.2">
+          <p id="section-10-1.2.1">Linerate and HW friendliness:<a href="#section-10-1.2.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-10-1.2.2.1">
+              <p id="section-10-1.2.2.1.1">Implemented at linerate in current hardware, using the regular forwarding pipeline. No offloading to co-processors or slow-path whose databases might defer from forwarding pipeline.<a href="#section-10-1.2.2.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-10-1.2.2.2">
+              <p id="section-10-1.2.2.2.1">Leverages mature hardware capabilities (basic shift operation); no packet resizing at every node along the path<a href="#section-10-1.2.2.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-10-1.2.2.3">
+              <p id="section-10-1.2.2.3.1">High number of diverse linerate interoperable hardware Implementations (see <a href="#sec-implementation" class="auto internal xref">Section 11</a>)<a href="#section-10-1.2.2.3.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+</li>
+        <li class="normal" id="section-10-1.3">
+          <p id="section-10-1.3.1">Scalable Fine-grained Timestamp:<a href="#section-10-1.3.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-10-1.3.2.1">
+              <p id="section-10-1.3.2.1.1">64bit at PT SRC and PT SNK<a href="#section-10-1.3.2.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-10-1.3.2.2">
+              <p id="section-10-1.3.2.2.1">8bit at PT Midpoint leveraging flexible per-outgoing-link template allowing diverse link types in the same measurement (e.g., DC, metro, WAN)<a href="#section-10-1.3.2.2.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+</li>
+        <li class="normal" id="section-10-1.4">
+          <p id="section-10-1.4.1">Scalable Load measurement<a href="#section-10-1.4.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+</section>
+</div>
+<div id="sec-implementation">
+<section id="section-11">
+      <h2 id="name-implementation-status">
+<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-implementation-status" class="section-name selfRef">Implementation Status</a>
+      </h2>
+<p id="section-11-1">Editorial note: Please remove this section prior publication.<a href="#section-11-1" class="pilcrow">¶</a></p>
+<p id="section-11-2">The following routing platforms have participated in an interop testing:<a href="#section-11-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-11-3.1">
+          <p id="section-11-3.1.1">Cisco 8802 (based on Cisco Silicon One Q200)<a href="#section-11-3.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-11-3.2">
+          <p id="section-11-3.2.1">Cisco ASR9904 with Lightspeed linecard<a href="#section-11-3.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-11-3.3">
+          <p id="section-11-3.3.1">Cisco NCS5508 (based on Broadcom Jericho2 platform)<a href="#section-11-3.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-11-3.4">
+          <p id="section-11-3.4.1">Cisco Nexus N3K-C3464C (based on Barefoot Tofino)<a href="#section-11-3.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-11-3.5">
+          <p id="section-11-3.5.1">SONiC Whitebox (based on Cisco Silicon One Q200)<a href="#section-11-3.5.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-11-3.6">
+          <p id="section-11-3.6.1">Marvell Prestera Falcon<a href="#section-11-3.6.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-11-3.7">
+          <p id="section-11-3.7.1">Keysight IxNetwork<a href="#section-11-3.7.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="section-11-4">The following open-source software networking stacks have also participated in the interop:<a href="#section-11-4" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-11-5.1">
+          <p id="section-11-5.1.1">FD.io VPP<a href="#section-11-5.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-11-5.2">
+          <p id="section-11-5.2.1">Linux Kernel<a href="#section-11-5.2.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="section-11-6">The following opensource applications also have extensions to support Path Tracing:<a href="#section-11-6" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-11-7.1">
+          <p id="section-11-7.1.1">Wireshark<a href="#section-11-7.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-11-7.2">
+          <p id="section-11-7.2.1">Tcpdump<a href="#section-11-7.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-11-7.3">
+          <p id="section-11-7.3.1">P4 implementation for software switch<a href="#section-11-7.3.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+</section>
+</div>
+<div id="security-considerations">
+<section id="section-12">
+      <h2 id="name-security-considerations">
+<a href="#section-12" class="section-number selfRef">12. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      </h2>
+<p id="section-12-1">The security considerations for Segment Routing are discussed in <span>[<a href="#RFC8402" class="cite xref">RFC8402</a>]</span>. Section 5 of <span>[<a href="#RFC8754" class="cite xref">RFC8754</a>]</span> describes the SR Deployment Model and the requirements for securing the SR Domain. The security considerations of <span>[<a href="#RFC8754" class="cite xref">RFC8754</a>]</span> also cover topics such as attack vectors and their mitigation mechanisms that also apply to the behaviors introduced in this document. Together, they describe the required security mechanisms that allow establishment of an SR domain of trust. Having such a well-defined trust boundary is necessary in order to operate SRv6-based services for internal traffic while preventing any external traffic from accessing or exploiting the SRv6-based services.<a href="#section-12-1" class="pilcrow">¶</a></p>
+<p id="section-12-2">This document defines the Path Tracing architecture, which is deployed on a secured SRv6-domain. As such, all the security considerations defined in <span>[<a href="#RFC8754" class="cite xref">RFC8754</a>]</span>, <span>[<a href="#RFC8402" class="cite xref">RFC8402</a>]</span>, and <span>[<a href="#RFC8986" class="cite xref">RFC8986</a>]</span> are applicable.<a href="#section-12-2" class="pilcrow">¶</a></p>
+<p id="section-12-3">In addition, any border router in an SR Domain network where Path Tracing is enabled, MUST support the configuration of the following ACLs:<a href="#section-12-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-12-4.1">
+          <p id="section-12-4.1.1">If there is a packet coming from an external interface destined towards an internal interface that contains an IPv6 Hop-by-Hop header with a Path Tracing option, then such packet is silently dropped.<a href="#section-12-4.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-12-4.2">
+          <p id="section-12-4.2.1">If there is a packet coming from an internal interface destined towards an external interface that contains an IPv6 Hop-by-Hop header with a Path Tracing option, then such packet is silently dropped.<a href="#section-12-4.2.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="section-12-5">These ACLs SHOULD be enabled by default. An operator MAY disable them individually based on local configuration.<a href="#section-12-5" class="pilcrow">¶</a></p>
+<p id="section-12-6">The processing of IPv6 Hop-by-Hop headers could sometimes be used as an attack vector to overload the CPU of the router. As defined in <a href="#sec-pt-midpoint" class="auto internal xref">Section 7</a> of this document, the HBH-PT option MUST be processed in the router's fast path.  Therefore, there is no impact on the router's CPU.<a href="#section-12-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="iana-considerations">
+<section id="section-13">
+      <h2 id="name-iana-considerations">
+<a href="#section-13" class="section-number selfRef">13. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+      </h2>
+<p id="section-13-1">This document requests the following IPv6 Option Type assignments from the Destination Options and Hop-by-Hop Options sub-registry of Internet Protocol Version 6 (IPv6) Parameters.<a href="#section-13-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-13-2">
+<pre>
+Hex Value    Binary Value   Description     Reference
+             act chg rest
+---------------------------------------------------------
+ TBA1-1       00  1  TBA1     HbH-PT        [This.ID]
+ TBA1-2       00  0  TBA1     DOH-PT        [This.ID]
+</pre><a href="#section-13-2" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="acknowledgements">
+<section id="section-14">
+      <h2 id="name-acknowledgements">
+<a href="#section-14" class="section-number selfRef">14. </a><a href="#name-acknowledgements" class="section-name selfRef">Acknowledgements</a>
+      </h2>
+<p id="section-14-1">The authors of this document would like to thank the team that has collaborated on the design and implementation of the Path Tracing framework at Cisco, Broadcom, Marvel, Keysight, Swisscom, Alibaba, Softbank, University of Rome "Tor Vergata", and ETH Zurich. In particular: Eyal Dagan, Guy Caspary, Elad Naor, Aviran Kadosh, Eli Stein, Oren Yabo, Aviad Behar, Anand Sridharan, Anju Dey, John Bettink, Kamran Raza, Asif Islam, Yue Gao, Jakub Horn, Sam Kheirallah, Shelly Cadora, Kris Michielsen, Francois Clad, Stefano Salsano, Andrea Mayer, Paolo Lungaroni, Giulio Sidoretti, Leonardo Rodoni, Marco Tollini, Yuanwen Sun, Anirban Bhattacharya, Ajay Ramamurthy, Manomugdha Biswas, Kingshuk Mandal.<a href="#section-14-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<section id="section-15">
+      <h2 id="name-references">
+<a href="#section-15" class="section-number selfRef">15. </a><a href="#name-references" class="section-name selfRef">References</a>
+      </h2>
+<section id="section-15.1">
+        <h3 id="name-normative-references">
+<a href="#section-15.1" class="section-number selfRef">15.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+        </h3>
+<dl class="references">
+<dt id="RFC2119">[RFC2119]</dt>
+        <dd>
+<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2119">https://www.rfc-editor.org/info/rfc2119</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8174">[RFC8174]</dt>
+        <dd>
+<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8174">https://www.rfc-editor.org/info/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8200">[RFC8200]</dt>
+        <dd>
+<span class="refAuthor">Deering, S.</span> and <span class="refAuthor">R. Hinden</span>, <span class="refTitle">"Internet Protocol, Version 6 (IPv6) Specification"</span>, <span class="seriesInfo">STD 86</span>, <span class="seriesInfo">RFC 8200</span>, <span class="seriesInfo">DOI 10.17487/RFC8200</span>, <time datetime="2017-07" class="refDate">July 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8200">https://www.rfc-editor.org/info/rfc8200</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8754">[RFC8754]</dt>
+        <dd>
+<span class="refAuthor">Filsfils, C., Ed.</span>, <span class="refAuthor">Dukes, D., Ed.</span>, <span class="refAuthor">Previdi, S.</span>, <span class="refAuthor">Leddy, J.</span>, <span class="refAuthor">Matsushima, S.</span>, and <span class="refAuthor">D. Voyer</span>, <span class="refTitle">"IPv6 Segment Routing Header (SRH)"</span>, <span class="seriesInfo">RFC 8754</span>, <span class="seriesInfo">DOI 10.17487/RFC8754</span>, <time datetime="2020-03" class="refDate">March 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8754">https://www.rfc-editor.org/info/rfc8754</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8986">[RFC8986]</dt>
+      <dd>
+<span class="refAuthor">Filsfils, C., Ed.</span>, <span class="refAuthor">Camarillo, P., Ed.</span>, <span class="refAuthor">Leddy, J.</span>, <span class="refAuthor">Voyer, D.</span>, <span class="refAuthor">Matsushima, S.</span>, and <span class="refAuthor">Z. Li</span>, <span class="refTitle">"Segment Routing over IPv6 (SRv6) Network Programming"</span>, <span class="seriesInfo">RFC 8986</span>, <span class="seriesInfo">DOI 10.17487/RFC8986</span>, <time datetime="2021-02" class="refDate">February 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8986">https://www.rfc-editor.org/info/rfc8986</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+<section id="section-15.2">
+        <h3 id="name-informative-references">
+<a href="#section-15.2" class="section-number selfRef">15.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+        </h3>
+<dl class="references">
+<dt id="I-D.kumar-ippm-ifa">[I-D.kumar-ippm-ifa]</dt>
+        <dd>
+<span class="refAuthor">Kumar, J.</span>, <span class="refAuthor">Anubolu, S.</span>, <span class="refAuthor">Lemon, J.</span>, <span class="refAuthor">Manur, R.</span>, <span class="refAuthor">Holbrook, H.</span>, <span class="refAuthor">Ghanwani, A.</span>, <span class="refAuthor">Cai, D.</span>, <span class="refAuthor">Ou, H.</span>, <span class="refAuthor">Li, Y.</span>, and <span class="refAuthor">X. Wang</span>, <span class="refTitle">"Inband Flow Analyzer"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-kumar-ippm-ifa-07</span>, <time datetime="2023-09-07" class="refDate">7 September 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-kumar-ippm-ifa-07">https://datatracker.ietf.org/doc/html/draft-kumar-ippm-ifa-07</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.song-opsawg-ifit-framework">[I-D.song-opsawg-ifit-framework]</dt>
+        <dd>
+<span class="refAuthor">Song, H.</span>, <span class="refAuthor">Qin, F.</span>, <span class="refAuthor">Chen, H.</span>, <span class="refAuthor">Jin, J.</span>, and <span class="refAuthor">J. Shin</span>, <span class="refTitle">"Framework for In-situ Flow Information Telemetry"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-song-opsawg-ifit-framework-20</span>, <time datetime="2023-04-24" class="refDate">24 April 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-song-opsawg-ifit-framework-20">https://datatracker.ietf.org/doc/html/draft-song-opsawg-ifit-framework-20</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="IEEE1588">[IEEE1588]</dt>
+        <dd>
+<span class="refTitle">"IEEE Standard for a Precision Clock Synchronization Protocol for Networked Measurement and Control Systems"</span>, <span class="seriesInfo">IEEE </span>, <time datetime="2008" class="refDate">2008</time>, <span>&lt;<a href="https://doi.org/10.1109/IEEESTD.2008.4579760">https://doi.org/10.1109/IEEESTD.2008.4579760</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="INT">[INT]</dt>
+        <dd>
+<span class="refTitle">"In-band Network Telemetry (INT) Dataplane Specification"</span>, <time datetime="2020" class="refDate">2020</time>, <span>&lt;<a href="https://github.com/p4lang/p4-applications/blob/master/docs/INT_v2_1.pdf">https://github.com/p4lang/p4-applications/blob/master/docs/INT_v2_1.pdf</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="LAG">[LAG]</dt>
+        <dd>
+<span class="refTitle">"802.1AX-2014 - IEEE Standard for Local and metropolitan area networks -- Link Aggregation"</span>, <span class="seriesInfo">IEEE </span>, <time datetime="2014" class="refDate">2014</time>, <span>&lt;<a href="https://doi.org/10.1109/IEEESTD.2014.7055197">https://doi.org/10.1109/IEEESTD.2014.7055197</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC5905">[RFC5905]</dt>
+        <dd>
+<span class="refAuthor">Mills, D.</span>, <span class="refAuthor">Martin, J., Ed.</span>, <span class="refAuthor">Burbank, J.</span>, and <span class="refAuthor">W. Kasch</span>, <span class="refTitle">"Network Time Protocol Version 4: Protocol and Algorithms Specification"</span>, <span class="seriesInfo">RFC 5905</span>, <span class="seriesInfo">DOI 10.17487/RFC5905</span>, <time datetime="2010-06" class="refDate">June 2010</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc5905">https://www.rfc-editor.org/info/rfc5905</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8402">[RFC8402]</dt>
+        <dd>
+<span class="refAuthor">Filsfils, C., Ed.</span>, <span class="refAuthor">Previdi, S., Ed.</span>, <span class="refAuthor">Ginsberg, L.</span>, <span class="refAuthor">Decraene, B.</span>, <span class="refAuthor">Litkowski, S.</span>, and <span class="refAuthor">R. Shakir</span>, <span class="refTitle">"Segment Routing Architecture"</span>, <span class="seriesInfo">RFC 8402</span>, <span class="seriesInfo">DOI 10.17487/RFC8402</span>, <time datetime="2018-07" class="refDate">July 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8402">https://www.rfc-editor.org/info/rfc8402</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8660">[RFC8660]</dt>
+        <dd>
+<span class="refAuthor">Bashandy, A., Ed.</span>, <span class="refAuthor">Filsfils, C., Ed.</span>, <span class="refAuthor">Previdi, S.</span>, <span class="refAuthor">Decraene, B.</span>, <span class="refAuthor">Litkowski, S.</span>, and <span class="refAuthor">R. Shakir</span>, <span class="refTitle">"Segment Routing with the MPLS Data Plane"</span>, <span class="seriesInfo">RFC 8660</span>, <span class="seriesInfo">DOI 10.17487/RFC8660</span>, <time datetime="2019-12" class="refDate">December 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8660">https://www.rfc-editor.org/info/rfc8660</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8877">[RFC8877]</dt>
+        <dd>
+<span class="refAuthor">Mizrahi, T.</span>, <span class="refAuthor">Fabini, J.</span>, and <span class="refAuthor">A. Morton</span>, <span class="refTitle">"Guidelines for Defining Packet Timestamps"</span>, <span class="seriesInfo">RFC 8877</span>, <span class="seriesInfo">DOI 10.17487/RFC8877</span>, <time datetime="2020-09" class="refDate">September 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8877">https://www.rfc-editor.org/info/rfc8877</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9197">[RFC9197]</dt>
+      <dd>
+<span class="refAuthor">Brockners, F., Ed.</span>, <span class="refAuthor">Bhandari, S., Ed.</span>, and <span class="refAuthor">T. Mizrahi, Ed.</span>, <span class="refTitle">"Data Fields for In Situ Operations, Administration, and Maintenance (IOAM)"</span>, <span class="seriesInfo">RFC 9197</span>, <span class="seriesInfo">DOI 10.17487/RFC9197</span>, <time datetime="2022-05" class="refDate">May 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9197">https://www.rfc-editor.org/info/rfc9197</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+</section>
+<div id="contributors">
+<section id="appendix-A">
+      <h2 id="name-contributors">
+<a href="#name-contributors" class="section-name selfRef">Contributors</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Jisu Bhattacharya</span></div>
+<div dir="auto" class="left"><span class="org">Cisco Systems, Inc.</span></div>
+<div dir="auto" class="left"><span class="country-name">United States of America</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:jisu@cisco.com" class="email">jisu@cisco.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Rakesh Gandhi</span></div>
+<div dir="auto" class="left"><span class="org">Cisco Systems, Inc.</span></div>
+<div dir="auto" class="left"><span class="country-name">Canada</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:rgandhi@cisco.com" class="email">rgandhi@cisco.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Serguei Bezverkhi</span></div>
+<div dir="auto" class="left"><span class="org">Cisco Systems, Inc.</span></div>
+<div dir="auto" class="left"><span class="country-name">Italy</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:sbezverk@cisco.com" class="email">sbezverk@cisco.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Sonia Ben Ayed</span></div>
+<div dir="auto" class="left"><span class="org">Cisco Systems, Inc.</span></div>
+<div dir="auto" class="left"><span class="country-name">France</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:sbenayed@cisco.com" class="email">sbenayed@cisco.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Israel Meilik</span></div>
+<div dir="auto" class="left"><span class="org">Broadcom</span></div>
+<div dir="auto" class="left"><span class="country-name">Israel</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:israel.meilik@broadcom.com" class="email">israel.meilik@broadcom.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Shay Zadok</span></div>
+<div dir="auto" class="left"><span class="org">Broadcom</span></div>
+<div dir="auto" class="left"><span class="country-name">Israel</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:shay.zadok@broadcom.com" class="email">shay.zadok@broadcom.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Daniel Voyer</span></div>
+<div dir="auto" class="left"><span class="org">Bell Canada</span></div>
+<div dir="auto" class="left"><span class="country-name">Canada</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:daniel.voyer@bell.ca" class="email">daniel.voyer@bell.ca</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Weiqiang Cheng</span></div>
+<div dir="auto" class="left"><span class="org">China Mobile</span></div>
+<div dir="auto" class="left"><span class="country-name">China</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:chengweiqiang@chinamobile.com" class="email">chengweiqiang@chinamobile.com</a>
+</div>
+</address>
+</section>
+</div>
+<div id="authors-addresses">
+<section id="appendix-B">
+      <h2 id="name-authors-addresses">
+<a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Clarence Filsfils</span></div>
+<div dir="auto" class="left"><span class="org">Cisco Systems, Inc.</span></div>
+<div dir="auto" class="left"><span class="country-name">Belgium</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:cf@cisco.com" class="email">cf@cisco.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Ahmed Abdelsalam (<span class="role">editor</span>)</span></div>
+<div dir="auto" class="left"><span class="org">Cisco Systems, Inc.</span></div>
+<div dir="auto" class="left"><span class="country-name">Italy</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:ahabdels@cisco.com" class="email">ahabdels@cisco.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Pablo Camarillo Garvia (<span class="role">editor</span>)</span></div>
+<div dir="auto" class="left"><span class="org">Cisco Systems, Inc.</span></div>
+<div dir="auto" class="left"><span class="country-name">Spain</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:pcamaril@cisco.com" class="email">pcamaril@cisco.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Mark Yufit</span></div>
+<div dir="auto" class="left"><span class="org">Broadcom</span></div>
+<div dir="auto" class="left"><span class="country-name">Israel</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:mark.yufit@broadcom.com" class="email">mark.yufit@broadcom.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Thomas Graf</span></div>
+<div dir="auto" class="left"><span class="org">Swisscom</span></div>
+<div dir="auto" class="left"><span class="country-name">Switzerland</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:thomas.graf@swisscom.com" class="email">thomas.graf@swisscom.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Yuanchao Su</span></div>
+<div dir="auto" class="left"><span class="org">Alibaba, Inc</span></div>
+<div dir="auto" class="left"><span class="country-name">China</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:yitai.syc@alibaba-inc.com" class="email">yitai.syc@alibaba-inc.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Satoru Matsushima</span></div>
+<div dir="auto" class="left"><span class="org">SoftBank</span></div>
+<div dir="auto" class="left"><span class="country-name">Japan</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:satoru.matsushima@g.softbank.co.jp" class="email">satoru.matsushima@g.softbank.co.jp</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Mike Valentine</span></div>
+<div dir="auto" class="left"><span class="org">Goldman Sachs</span></div>
+<div dir="auto" class="left"><span class="country-name">United States of America</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:michael.j.valentine@gs.com" class="email">michael.j.valentine@gs.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Amit Dhamija</span></div>
+<div dir="auto" class="left"><span class="org">Arrcus</span></div>
+<div dir="auto" class="left"><span class="country-name">India</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:amitd@arrcus.com" class="email">amitd@arrcus.com</a>
+</div>
+</address>
+</section>
+</div>
+</div>
+
+                    </div>
+                
+            </div>
+            <div class="d-print-none col-md-3 bg-light-subtle collapse show" id="sidebar">
+                <div class="position-fixed border-start sidebar overflow-scroll overscroll-none no-scrollbar">
+                    <div class="d-flex flex-column vh-100 pt-2 pt-lg-3 ps-3 pl-md-2 pl-lg-3">
+                        <div>
+                            <a class="btn btn-primary btn-sm" href="/doc/draft-filsfils-spring-path-tracing/">Datatracker</a>
+                            <p class="fw-bold pt-2">
+                                
+                                    draft-filsfils-spring-path-tracing-05
+                                
+                                <br>
+                                
+
+
+
+
+
+
+
+    <span class="text-danger">Replaced Internet-Draft</span>
+    (individual)
+    
+
+                            </p>
+                        </div>
+                        
+                        <ul class="nav nav-tabs nav-fill small me-2" role="tablist">
+                            <li class="nav-item" role="presentation" title="Document information">
+                                <button class="nav-link px-2"
+                                        id="docinfo-tab"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#docinfo-tab-pane"
+                                        type="button"
+                                        role="tab"
+                                        aria-controls="docinfo-tab-pane"
+                                        aria-selected="true">
+                                    <i class="bi bi-info-circle"></i><span class="d-none d-md-block d-xl-inline ms-xl-1">Info</span>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation" title="Table of contents">
+                                <button class="nav-link px-2"
+                                        id="toc-tab"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#toc-tab-pane"
+                                        type="button"
+                                        role="tab"
+                                        aria-controls="toc-tab-pane"
+                                        aria-selected="false">
+                                    <i class="bi bi-list-ol"></i><span class="d-none d-md-block d-xl-inline ms-xl-1">Contents</span>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation" title="Preferences">
+                                <button class="nav-link px-2"
+                                        id="pref-tab"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#pref-tab-pane"
+                                        type="button"
+                                        role="tab"
+                                        aria-controls="pref-tab-pane"
+                                        aria-selected="false">
+                                    <i class="bi bi-gear"></i><span class="d-none d-md-block d-xl-inline ms-xl-1">Prefs</span>
+                                </button>
+                            </li>
+                        </ul>
+                        <div class="overflow-auto tab-content pt-2 me-2">
+                            <div class="tab-pane"
+                                 id="docinfo-tab-pane"
+                                 role="tabpanel"
+                                 aria-labelledby="docinfo-tab"
+                                 tabindex="0">
+                                <table class="table table-sm table-borderless">
+                                    
+
+
+
+
+
+
+
+<tbody class="meta align-top ">
+    <tr>
+        <th scope="row">Document</th>
+        <th scope="row">Document type</th>
+        <td class="edit"></td>
+        <td>
+            
+
+
+
+
+
+
+
+    <span class="text-danger">Replaced Internet-Draft</span>
+    (individual)
+    
+
+            
+            
+                <div class="badge rounded-pill text-bg-warning">
+                    Expired &amp; archived
+                </div>
+            
+            
+                
+
+
+
+
+    <div class="alert alert-warning small p-2 mt-2" role="alert">
+        This document is an Internet-Draft (I-D).
+        Anyone may submit an I-D to the IETF.
+        This I-D is <strong>not endorsed by the IETF</strong> and has <strong>no formal standing</strong> in the
+        <a href="/doc/rfc2026/">IETF standards process</a>.
+    </div>
+
+            
+        </td>
+    </tr>
+    
+        <tr>
+            <td></td>
+            <th scope="row">Select version</th>
+            <td class="edit"></td>
+            <td>
+                
+
+
+
+    <ul class="revision-list pagination pagination-sm text-center flex-wrap my-0">
+        
+            
+                 
+                    <li class="page-item ">
+                        <a class="page-link"
+                        href="/doc/html/draft-filsfils-spring-path-tracing-00"
+                        >
+                            00
+                        </a>
+                    </li>
+                
+            
+                 
+                    <li class="page-item ">
+                        <a class="page-link"
+                        href="/doc/html/draft-filsfils-spring-path-tracing-01"
+                        rel="nofollow">
+                            01
+                        </a>
+                    </li>
+                
+            
+                 
+                    <li class="page-item ">
+                        <a class="page-link"
+                        href="/doc/html/draft-filsfils-spring-path-tracing-02"
+                        rel="nofollow">
+                            02
+                        </a>
+                    </li>
+                
+            
+                 
+                    <li class="page-item ">
+                        <a class="page-link"
+                        href="/doc/html/draft-filsfils-spring-path-tracing-03"
+                        rel="nofollow">
+                            03
+                        </a>
+                    </li>
+                
+            
+                 
+                    <li class="page-item ">
+                        <a class="page-link"
+                        href="/doc/html/draft-filsfils-spring-path-tracing-04"
+                        rel="nofollow">
+                            04
+                        </a>
+                    </li>
+                
+            
+                 
+                    <li class="page-item active">
+                        <a class="page-link"
+                        href="/doc/html/draft-filsfils-spring-path-tracing-05"
+                        >
+                            05
+                        </a>
+                    </li>
+                
+            
+            
+        
+    </ul>
+
+            </td>
+        </tr>
+        
+            <tr>
+                <td></td>
+                <th scope="row">Compare versions</th>
+                <td class="edit"></td>
+                <td>
+                    
+
+
+
+<form class="form-horizontal diff-form"
+      action="https://author-tools.ietf.org/iddiff"
+      method="get"
+      target="_blank">
+
+            <select class="form-select form-select-sm mb-1 select2-field"
+                    data-max-entries="1"
+                    data-width="resolve"
+                    data-allow-clear="false"
+                    data-minimum-input-length="0"
+                    aria-label="From revision"
+                    name="url1">
+                
+                    <option value="draft-filsfils-spring-path-tracing-05">
+                        draft-filsfils-spring-path-tracing-05
+                        
+                    </option>
+                
+                    <option value="draft-filsfils-spring-path-tracing-04" selected>
+                        draft-filsfils-spring-path-tracing-04
+                        
+                    </option>
+                
+                    <option value="draft-filsfils-spring-path-tracing-03">
+                        draft-filsfils-spring-path-tracing-03
+                        
+                    </option>
+                
+                    <option value="draft-filsfils-spring-path-tracing-02">
+                        draft-filsfils-spring-path-tracing-02
+                        
+                    </option>
+                
+                    <option value="draft-filsfils-spring-path-tracing-01">
+                        draft-filsfils-spring-path-tracing-01
+                        
+                    </option>
+                
+                    <option value="draft-filsfils-spring-path-tracing-00">
+                        draft-filsfils-spring-path-tracing-00
+                        
+                    </option>
+                
+                
+            </select>
+
+            <select class="form-select form-select-sm mb-1 select2-field"
+                    data-max-entries="1"
+                    data-width="resolve"
+                    data-allow-clear="false"
+                    data-minimum-input-length="0"
+                    aria-label="To revision"
+                    name="url2">
+                
+                    <option value="draft-filsfils-spring-path-tracing-05" selected>
+                        draft-filsfils-spring-path-tracing-05
+                        
+                    </option>
+                
+                    <option value="draft-filsfils-spring-path-tracing-04">
+                        draft-filsfils-spring-path-tracing-04
+                        
+                    </option>
+                
+                    <option value="draft-filsfils-spring-path-tracing-03">
+                        draft-filsfils-spring-path-tracing-03
+                        
+                    </option>
+                
+                    <option value="draft-filsfils-spring-path-tracing-02">
+                        draft-filsfils-spring-path-tracing-02
+                        
+                    </option>
+                
+                    <option value="draft-filsfils-spring-path-tracing-01">
+                        draft-filsfils-spring-path-tracing-01
+                        
+                    </option>
+                
+                    <option value="draft-filsfils-spring-path-tracing-00">
+                        draft-filsfils-spring-path-tracing-00
+                        
+                    </option>
+                
+                
+            </select>
+
+            <button type="submit"
+                    class="btn btn-primary btn-sm"
+                    value="--html"
+                    name="difftype">
+                Side-by-side
+            </button>
+            
+            <button type="submit"
+                    class="btn btn-primary btn-sm"
+                    value="--hwdiff"
+                    name="difftype">
+                Inline
+            </button>
+
+</form>
+                </td>
+            </tr>
+        
+    
+    <tr>
+        <td></td>
+        <th scope="row">Authors</th>
+        <td class="edit">
+            
+        </td>
+        <td>
+            
+            
+                <span ><a 
+           title="Datatracker profile of Clarence Filsfils"
+            href="/person/cfilsfil@cisco.com" >Clarence Filsfils</a> <a 
+               href="mailto:cfilsfil%40cisco.com"
+               aria-label="Compose email to cfilsfil@cisco.com"
+               title="Compose email to cfilsfil@cisco.com">
+                <i class="bi bi-envelope"></i></a></span>,
+            
+                <span ><a 
+           title="Datatracker profile of Ahmed Abdelsalam"
+            href="/person/ahabdels@cisco.com" >Ahmed Abdelsalam</a> <a 
+               href="mailto:ahabdels%40cisco.com"
+               aria-label="Compose email to ahabdels@cisco.com"
+               title="Compose email to ahabdels@cisco.com">
+                <i class="bi bi-envelope"></i></a></span>,
+            
+                <span ><a 
+           title="Datatracker profile of Pablo Camarillo"
+            href="/person/pcamaril@cisco.com" >Pablo Camarillo</a> <a 
+               href="mailto:pcamaril%40cisco.com"
+               aria-label="Compose email to pcamaril@cisco.com"
+               title="Compose email to pcamaril@cisco.com">
+                <i class="bi bi-envelope"></i></a></span>,
+            
+                <span ><a 
+           title="Datatracker profile of Mark Yufit"
+            href="/person/mark.yufit@broadcom.com" >Mark Yufit</a> <a 
+               href="mailto:mark.yufit%40broadcom.com"
+               aria-label="Compose email to mark.yufit@broadcom.com"
+               title="Compose email to mark.yufit@broadcom.com">
+                <i class="bi bi-envelope"></i></a></span>,
+            
+                <span ><a 
+           title="Datatracker profile of Thomas Graf"
+            href="/person/thomas.graf@swisscom.com" >Thomas Graf</a> <a 
+               href="mailto:thomas.graf%40swisscom.com"
+               aria-label="Compose email to thomas.graf@swisscom.com"
+               title="Compose email to thomas.graf@swisscom.com">
+                <i class="bi bi-envelope"></i></a></span>,
+            
+                <span ><a 
+           title="Datatracker profile of Yuanchao Su"
+            href="/person/yuasu@cisco.com" >Yuanchao Su</a> <a 
+               href="mailto:yuasu%40cisco.com"
+               aria-label="Compose email to yuasu@cisco.com"
+               title="Compose email to yuasu@cisco.com">
+                <i class="bi bi-envelope"></i></a></span>,
+            
+                <span ><a 
+           title="Datatracker profile of Satoru Matsushima"
+            href="/person/satoru.matsushima@gmail.com" >Satoru Matsushima</a> <a 
+               href="mailto:satoru.matsushima%40gmail.com"
+               aria-label="Compose email to satoru.matsushima@gmail.com"
+               title="Compose email to satoru.matsushima@gmail.com">
+                <i class="bi bi-envelope"></i></a></span>,
+            
+                <span ><a 
+           title="Datatracker profile of Mike Valentine"
+            href="/person/michael.j.valentine@gs.com" >Mike Valentine</a> <a 
+               href="mailto:michael.j.valentine%40gs.com"
+               aria-label="Compose email to michael.j.valentine@gs.com"
+               title="Compose email to michael.j.valentine@gs.com">
+                <i class="bi bi-envelope"></i></a></span>,
+            
+                <span ><a 
+           title="Datatracker profile of Amit Dhamija"
+            href="/person/amitd@arrcus.com" >Amit Dhamija</a> <a 
+               href="mailto:amitd%40arrcus.com"
+               aria-label="Compose email to amitd@arrcus.com"
+               title="Compose email to amitd@arrcus.com">
+                <i class="bi bi-envelope"></i></a></span>
+            
+            
+                <br>
+                <a class="btn btn-primary btn-sm mt-1" href="mailto:draft-filsfils-spring-path-tracing@ietf.org?subject=draft-filsfils-spring-path-tracing" title="Send email to the document authors">Email authors</a>
+            
+        </td>
+    </tr>
+    
+    
+        
+        
+            <tr>
+                <td></td>
+                <th scope="row">
+                    Replaced by
+                </th>
+                <td class="edit">
+                </td>
+                <td>
+                    
+                        <a href="/doc/html/draft-filsfils-ippm-path-tracing" title="Path Tracing in SRv6 networks">draft-filsfils-ippm-path-tracing</a>
+                    
+                </td>
+            </tr>
+        
+        
+    
+    <tr>
+        <td></td>
+        <th scope="row">
+            RFC stream
+        </th>
+        <td class="edit">
+            
+        </td>
+        <td class="text-body-secondary">
+            
+                (None)
+            
+        </td>
+    </tr>
+    
+        <tr>
+            <td></td>
+            <th scope="row">
+                Intended RFC status
+            </th>
+            <td class="edit">
+                
+            </td>
+            <td>
+                
+                    <span class="text-body-secondary">
+                        (None)
+                    </span>
+                
+            </td>
+        </tr>
+    
+    <tr>
+        <td></td>
+        <th scope="row">
+            Other formats
+        </th>
+        <td class="edit">
+        </td>
+        <td>
+            
+                
+    <div class="buttonlist">
+    
+        
+        <a class="btn btn-primary btn-sm"
+          
+          target="_blank"
+          href="https://www.ietf.org/archive/id/draft-filsfils-spring-path-tracing-05.txt">
+            
+                <i class="bi bi-file-text"></i> txt
+            
+        </a>
+        
+    
+        
+        <a class="btn btn-primary btn-sm"
+          
+          target="_blank"
+          href="https://www.ietf.org/archive/id/draft-filsfils-spring-path-tracing-05.html">
+            
+                <i class="bi bi-file-code"></i> html
+            
+        </a>
+        
+    
+        
+        <a class="btn btn-primary btn-sm"
+          
+          target="_blank"
+          href="https://www.ietf.org/archive/id/draft-filsfils-spring-path-tracing-05.xml">
+            
+                <i class="bi bi-file-code"></i> xml
+            
+        </a>
+        
+    
+        
+    
+        
+        <a class="btn btn-primary btn-sm"
+          
+          target="_blank"
+          href="/doc/draft-filsfils-spring-path-tracing/05/bibtex/">
+            
+                <i class="bi bi-file-ruled"></i> bibtex
+            
+        </a>
+        
+    
+        
+        <a class="btn btn-primary btn-sm"
+          
+          target="_blank"
+          href="/doc/bibxml3/draft-filsfils-spring-path-tracing-05.xml">
+            
+                <i class="bi bi-file-code"></i> bibxml
+            
+        </a>
+        
+    
+</div>
+
+            
+        </td>
+    </tr>
+    
+    
+        
+    
+</tbody>
+                                </table>
+                                <a class="btn btn-sm btn-warning mb-3"
+                                target="_blank"
+                                href="https://github.com/ietf-tools/datatracker/issues/new/choose">
+                                    Report a datatracker bug
+                                    <i class="bi bi-bug"></i>
+                                </a>
+                            </div>
+                            <div class="tab-pane mb-5"
+                                 id="toc-tab-pane"
+                                 role="tabpanel"
+                                 aria-labelledby="toc-tab"
+                                 tabindex="0">
+                                <nav class="nav nav-pills flex-column small" id="toc-nav">
+                                </nav>
+                            </div>
+                            <div class="tab-pane mb-5 small"
+                                 id="pref-tab-pane"
+                                 role="tabpanel"
+                                 aria-labelledby="pref-tab"
+                                 tabindex="0">
+                                <label class="form-label fw-bold mb-2">Show sidebar by default</label>
+                                <div class="btn-group-vertical btn-group-sm d-flex" role="group">
+                                    <input type="radio" class="btn-check" name="sidebar" id="on-radio">
+                                    <label class="btn btn-outline-primary" for="on-radio">Yes</label>
+                                    <input type="radio" class="btn-check" name="sidebar" id="off-radio">
+                                    <label class="btn btn-outline-primary" for="off-radio">No</label>
+                                </div>
+                                <label class="form-label fw-bold mt-4 mb-2">Tab to show by default</label>
+                                <div class="btn-group-vertical btn-group-sm d-flex" role="group">
+                                    <input type="radio" class="btn-check" name="deftab" id="docinfo-radio">
+                                    <label class="btn btn-outline-primary" for="docinfo-radio">
+                                        <i class="bi bi-info-circle me-1"></i>Info
+                                    </label>
+                                    <input type="radio" class="btn-check" name="deftab" id="toc-radio">
+                                    <label class="btn btn-outline-primary" for="toc-radio">
+                                        <i class="bi bi-list-ol me-1"></i>Contents
+                                    </label>
+                                </div>
+                                <label class="form-label fw-bold mt-4 mb-2">HTMLization configuration</label>
+                                <div class="btn-group-vertical btn-group-sm d-flex" role="group">
+                                    <input type="radio" class="btn-check" name="htmlconf" id="txt-radio">
+                                    <label class="btn btn-outline-primary" for="txt-radio" title="This is the traditional HTMLization method.">
+                                        <i class="bi bi-badge-sd me-1"></i>HTMLize the plaintext
+                                    </label>
+                                    <input type="radio" class="btn-check" name="htmlconf" id="html-radio">
+                                    <label class="btn btn-outline-primary" for="html-radio" title="This is the modern HTMLization method.">
+                                        <i class="bi bi-badge-hd me-1"></i>Plaintextify the HTML
+                                    </label>
+                                </div>
+                                <label class="form-label fw-bold mt-4 mb-2" for="ptsize">Maximum font size</label>
+                                <input type="range" class="form-range" min="7" max="16" id="ptsize" oninput="ptdemo.value = ptsize.value">
+                                <label class="form-label fw-bold mt-4 mb-2">Page dependencies</label>
+                                <div class="btn-group-vertical btn-group-sm d-flex" role="group">
+                                    <input type="radio" class="btn-check" name="pagedeps" id="inline-radio">
+                                    <label class="btn btn-outline-primary" for="inline-radio" title="Generate larger, standalone web pages that do not require network access to render.">
+                                        <i class="bi bi-box me-1"></i>Inline
+                                    </label>
+                                    <input type="radio" class="btn-check" name="pagedeps" id="reference-radio">
+                                    <label class="btn btn-outline-primary" for="reference-radio" title="Generate regular web pages that require network access to render.">
+                                        <i class="bi bi-link-45deg me-1"></i>Reference
+                                    </label>
+                                </div>
+                                <label class="form-label fw-bold mt-4 mb-2">Citation links</label>
+                                <div class="btn-group-vertical btn-group-sm d-flex" role="group">
+                                    <input type="radio" class="btn-check" name="reflinks" id="refsection-radio">
+                                    <label class="btn btn-outline-primary" for="refsection-radio" title="Citation links go to the reference section.">
+                                        <i class="bi bi-arrow-clockwise"></i> Go to reference section
+                                    </label>
+                                    <input type="radio" class="btn-check" name="reflinks" id="citation-radio">
+                                    <label class="btn btn-outline-primary" for="citation-radio" title="Citation links go directly to the cited document.">
+                                        <i class="bi bi-link-45deg me-1"></i>Go to linked document
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+<script type="text/javascript">
+  var _paq = window._paq || [];
+  
+  _paq.push(['disableCookies']);
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="//analytics.ietf.org/";
+    _paq.push(['setTrackerUrl', u+'matomo.php']);
+    _paq.push(['setSiteId', 7]);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<noscript><p><img src="//analytics.ietf.org/piwik.php?idsite=7" style="border:0;" alt="" /></p></noscript>
+
+    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'90f989b9bea3d755',t:'MTczOTE2MzY1Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

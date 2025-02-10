@@ -1,0 +1,2155 @@
+
+<!DOCTYPE html>
+
+
+
+
+
+
+
+<html data-bs-theme="auto" lang="en">
+    <head>
+        
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>
+            
+                draft-ietf-idr-ts-flowspec-srv6-policy-03
+            
+        </title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://static.ietf.org/fonts/inter/import.css" rel="stylesheet">
+        <link href="https://static.ietf.org/fonts/noto-sans-mono/import.css" rel="stylesheet">
+        
+            <link rel="stylesheet" href="https://static.ietf.org/dt/12.35.0/ietf/css/document_html_referenced.css">
+            
+                <link rel="stylesheet" href="https://static.ietf.org/dt/12.35.0/ietf/css/document_html_txt.css">
+            
+            <script type="module" crossorigin="" src="https://static.ietf.org/dt/12.35.0/assets/embedded-86412faf.js"></script>
+<link href="https://static.ietf.org/dt/12.35.0/assets/create-pinia-singleton-2adb64ba.js" type="text/javascript" crossorigin="anonymous" rel="modulepreload" as="script" />
+<link href="https://static.ietf.org/dt/12.35.0/assets/Scrollbar-1895147a.js" type="text/javascript" crossorigin="anonymous" rel="modulepreload" as="script" />
+            <script src="https://static.ietf.org/dt/12.35.0/ietf/js/document_html.js"></script>
+            <script src="https://static.ietf.org/dt/12.35.0/ietf/js/theme.js"></script>
+        
+        <link rel="alternate" type="application/atom+xml" title="Document changes" href="/feed/document-changes/draft-ietf-idr-ts-flowspec-srv6-policy/">
+        <meta name="description"
+            
+                content="Traffic Steering using BGP FlowSpec with SR Policy (Internet-Draft, 2024)"
+            >
+        
+
+<link rel="apple-touch-icon"
+      sizes="180x180"
+      href="https://static.ietf.org/dt/12.35.0/ietf/images/ietf-logo-nor-180.png">
+<link rel="icon"
+      sizes="32x32"
+      href="https://static.ietf.org/dt/12.35.0/ietf/images/ietf-logo-nor-32.png">
+<link rel="icon"
+      sizes="16x16"
+      href="https://static.ietf.org/dt/12.35.0/ietf/images/ietf-logo-nor-16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon"
+      href="https://static.ietf.org/dt/12.35.0/ietf/images/ietf-logo-nor-mask.svg"
+      color="#ffffff">
+<meta name="msapplication-TileColor"
+      content="#ffffff">
+<meta name="theme-color"
+      content="#ffffff">
+        
+
+
+
+
+<meta property="og:title" content="Traffic Steering using BGP FlowSpec with SR Policy">
+<meta property="og:url" content="https://datatracker.ietf.org/doc/html/draft-ietf-idr-ts-flowspec-srv6-policy-03">
+<link rel="canonical" href="https://datatracker.ietf.org/doc/html/draft-ietf-idr-ts-flowspec-srv6-policy-03">
+<meta property="og:site_name" content="IETF Datatracker">
+<meta property="og:description" content="BGP Flow Specification (FlowSpec) [RFC8955] and [RFC8956] has been proposed to distribute BGP [RFC4271] FlowSpec NLRI to FlowSpec clients to mitigate (distributed) denial-of-service attacks, and to provide traffic filtering in the context of a BGP/MPLS VPN service. Recently, traffic steering applications in the context of SR-MPLS and SRv6 using FlowSpec also attract attention. This document introduces the usage of BGP FlowSpec to steer packets into an SR Policy.">
+<meta property="og:type" content="article">
+
+<meta property="og:image" content="https://static.ietf.org/dt/12.35.0/ietf/images/ietf-logo-card.png">
+<meta property="og:image:alt" content="Logo of the IETF">
+<meta property="article:section" content="IETF - Internet Engineering Task Force">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+
+<meta property="article:author" content="Jiang Wenying">
+<meta property="article:author" content="Yisong Liu">
+<meta property="article:author" content="Shunwan Zhuang">
+<meta property="article:author" content="Gyan Mishra">
+<meta property="article:author" content="Shuanglong Chen">
+
+
+
+        
+        <style>
+            
+            .diff-form .select2-selection__rendered {
+                direction: rtl;
+                text-align: left;
+            }
+        </style>
+    </head>
+    <body>
+        
+        <noscript><iframe class="status" title="Site status" src="/status/latest"></iframe></noscript>
+<div class="vue-embed" data-component="Status"></div>
+        <div class="btn-toolbar sidebar-toolbar position-fixed top-0 end-0 m-2 m-lg-3 d-print-none">
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary btn-sm me-1 dropdown-toggle d-flex align-items-center"
+                    id="bd-theme" type="button" aria-expanded="false" data-bs-toggle="dropdown"
+                    aria-label="Toggle theme">
+                        <i class="theme-icon-active bi bi-circle-half"></i>
+                </button>
+
+                <ul class="dropdown-menu" aria-labelledby="bd-theme">
+                    <li>
+                        <button type="button" class="dropdown-item d-flex align-items-center"
+                            data-bs-theme-value="light" aria-pressed="false">
+                            <i class="me-2 opacity-50 theme-icon bi bi-sun-fill"></i>
+                            Light<i class="bi bi-check2 ms-auto d-none"></i>
+                        </button>
+                    </li>
+                    <li>
+                        <button type="button" class="dropdown-item d-flex align-items-center"
+                            data-bs-theme-value="dark" aria-pressed="false">
+                            <i class="me-2 opacity-50 theme-icon bi bi-moon-stars-fill"></i>
+                            Dark<i class="bi bi-check2 ms-auto d-none"></i>
+                        </button>
+                    </li>
+                    <li>
+                        <button type="button" class="dropdown-item d-flex align-items-center active"
+                            data-bs-theme-value="auto" aria-pressed="true">
+                            <i class="me-2 opacity-50 theme-icon bi bi-circle-half"></i>
+                            Auto<i class="bi bi-check2 ms-auto d-none"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            <button class="btn btn-outline-secondary btn-sm sidebar-toggle"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#sidebar"
+                    aria-expanded="true"
+                    aria-controls="sidebar"
+                    aria-label="Toggle metadata sidebar"
+                    title="Toggle metadata sidebar">
+            <i class="bi bi-arrow-bar-left sidebar-shown"></i>
+            <i class="bi bi-arrow-bar-right sidebar-collapsed"></i>
+            </button>
+        </div>
+        <nav class="navbar bg-light-subtle px-1 fixed-top d-print-none d-md-none">
+            <a class="nav-link ps-1"
+               href="/doc/draft-ietf-idr-ts-flowspec-srv6-policy/">
+                 
+                    draft-ietf-idr-ts-flowspec-srv6-policy-03
+                
+                <br class="d-sm-none">
+
+                <span class="ms-sm-3 badge rounded-pill badge-draft">
+                    
+                        Internet-Draft
+                    
+                </span>
+            </a>
+            <button class="navbar-toggler p-1"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#docinfo-collapse"
+                    aria-controls="docinfo-collapse"
+                    aria-expanded="false"
+                    aria-label="Show document information">
+                <span class="navbar-toggler-icon small"></span>
+            </button>
+            <div class="navbar-nav navbar-nav-scroll overscroll-none collapse pt-1" id="docinfo-collapse">
+                <div class="bg-light-subtle p-0">
+                    <table class="table table-sm table-borderless small">
+                        <tbody class="meta align-top">
+                            <tr>
+                                <th scope="row"></th>
+                                <th scope="row">Title</th>
+                                <td class="edit"></td>
+                                <td>Traffic Steering using BGP FlowSpec with SR Policy</td>
+                            </tr>
+                        </tbody>
+                        
+
+
+
+
+
+
+
+<tbody class="meta align-top ">
+    <tr>
+        <th scope="row">Document</th>
+        <th scope="row">Document type</th>
+        <td class="edit"></td>
+        <td>
+            
+
+
+
+
+
+
+
+    <div>This is an older version of an Internet-Draft whose latest revision state is "Active".</div>
+
+            
+            
+            
+                
+
+
+
+
+    
+
+            
+        </td>
+    </tr>
+    
+        <tr>
+            <td></td>
+            <th scope="row">Select version</th>
+            <td class="edit"></td>
+            <td>
+                
+
+
+
+    <ul class="revision-list pagination pagination-sm text-center flex-wrap my-0">
+        
+            
+                 
+                    <li class="page-item ">
+                        <a class="page-link"
+                        href="/doc/html/draft-ietf-idr-ts-flowspec-srv6-policy-00"
+                        >
+                            00
+                        </a>
+                    </li>
+                
+            
+                 
+                    <li class="page-item ">
+                        <a class="page-link"
+                        href="/doc/html/draft-ietf-idr-ts-flowspec-srv6-policy-01"
+                        rel="nofollow">
+                            01
+                        </a>
+                    </li>
+                
+            
+                 
+                    <li class="page-item ">
+                        <a class="page-link"
+                        href="/doc/html/draft-ietf-idr-ts-flowspec-srv6-policy-02"
+                        rel="nofollow">
+                            02
+                        </a>
+                    </li>
+                
+            
+                 
+                    <li class="page-item active">
+                        <a class="page-link"
+                        href="/doc/html/draft-ietf-idr-ts-flowspec-srv6-policy-03"
+                        rel="nofollow">
+                            03
+                        </a>
+                    </li>
+                
+            
+                 
+                    <li class="page-item ">
+                        <a class="page-link"
+                        href="/doc/html/draft-ietf-idr-ts-flowspec-srv6-policy-04"
+                        rel="nofollow">
+                            04
+                        </a>
+                    </li>
+                
+            
+                 
+                    <li class="page-item ">
+                        <a class="page-link"
+                        href="/doc/html/draft-ietf-idr-ts-flowspec-srv6-policy-05"
+                        >
+                            05
+                        </a>
+                    </li>
+                
+            
+            
+        
+    </ul>
+
+            </td>
+        </tr>
+        
+            <tr>
+                <td></td>
+                <th scope="row">Compare versions</th>
+                <td class="edit"></td>
+                <td>
+                    
+
+
+
+<form class="form-horizontal diff-form"
+      action="https://author-tools.ietf.org/iddiff"
+      method="get"
+      target="_blank">
+
+            <select class="form-select form-select-sm mb-1 select2-field"
+                    data-max-entries="1"
+                    data-width="resolve"
+                    data-allow-clear="false"
+                    data-minimum-input-length="0"
+                    aria-label="From revision"
+                    name="url1">
+                
+                    <option value="draft-ietf-idr-ts-flowspec-srv6-policy-05">
+                        draft-ietf-idr-ts-flowspec-srv6-policy-05
+                        
+                    </option>
+                
+                    <option value="draft-ietf-idr-ts-flowspec-srv6-policy-04" selected>
+                        draft-ietf-idr-ts-flowspec-srv6-policy-04
+                        
+                    </option>
+                
+                    <option value="draft-ietf-idr-ts-flowspec-srv6-policy-03">
+                        draft-ietf-idr-ts-flowspec-srv6-policy-03
+                        
+                    </option>
+                
+                    <option value="draft-ietf-idr-ts-flowspec-srv6-policy-02">
+                        draft-ietf-idr-ts-flowspec-srv6-policy-02
+                        
+                    </option>
+                
+                    <option value="draft-ietf-idr-ts-flowspec-srv6-policy-01">
+                        draft-ietf-idr-ts-flowspec-srv6-policy-01
+                        
+                    </option>
+                
+                    <option value="draft-ietf-idr-ts-flowspec-srv6-policy-00">
+                        draft-ietf-idr-ts-flowspec-srv6-policy-00
+                        
+                    </option>
+                
+                    <option value="draft-jiang-idr-ts-flowspec-srv6-policy-07">
+                        draft-jiang-idr-ts-flowspec-srv6-policy-07
+                        
+                    </option>
+                
+                    <option value="draft-jiang-idr-ts-flowspec-srv6-policy-06">
+                        draft-jiang-idr-ts-flowspec-srv6-policy-06
+                        
+                    </option>
+                
+                    <option value="draft-jiang-idr-ts-flowspec-srv6-policy-05">
+                        draft-jiang-idr-ts-flowspec-srv6-policy-05
+                        
+                    </option>
+                
+                    <option value="draft-jiang-idr-ts-flowspec-srv6-policy-04">
+                        draft-jiang-idr-ts-flowspec-srv6-policy-04
+                        
+                    </option>
+                
+                    <option value="draft-jiang-idr-ts-flowspec-srv6-policy-03">
+                        draft-jiang-idr-ts-flowspec-srv6-policy-03
+                        
+                    </option>
+                
+                    <option value="draft-jiang-idr-ts-flowspec-srv6-policy-02">
+                        draft-jiang-idr-ts-flowspec-srv6-policy-02
+                        
+                    </option>
+                
+                    <option value="draft-jiang-idr-ts-flowspec-srv6-policy-01">
+                        draft-jiang-idr-ts-flowspec-srv6-policy-01
+                        
+                    </option>
+                
+                    <option value="draft-jiang-idr-ts-flowspec-srv6-policy-00">
+                        draft-jiang-idr-ts-flowspec-srv6-policy-00
+                        
+                    </option>
+                
+                
+            </select>
+
+            <select class="form-select form-select-sm mb-1 select2-field"
+                    data-max-entries="1"
+                    data-width="resolve"
+                    data-allow-clear="false"
+                    data-minimum-input-length="0"
+                    aria-label="To revision"
+                    name="url2">
+                
+                    <option value="draft-ietf-idr-ts-flowspec-srv6-policy-05" selected>
+                        draft-ietf-idr-ts-flowspec-srv6-policy-05
+                        
+                    </option>
+                
+                    <option value="draft-ietf-idr-ts-flowspec-srv6-policy-04">
+                        draft-ietf-idr-ts-flowspec-srv6-policy-04
+                        
+                    </option>
+                
+                    <option value="draft-ietf-idr-ts-flowspec-srv6-policy-03">
+                        draft-ietf-idr-ts-flowspec-srv6-policy-03
+                        
+                    </option>
+                
+                    <option value="draft-ietf-idr-ts-flowspec-srv6-policy-02">
+                        draft-ietf-idr-ts-flowspec-srv6-policy-02
+                        
+                    </option>
+                
+                    <option value="draft-ietf-idr-ts-flowspec-srv6-policy-01">
+                        draft-ietf-idr-ts-flowspec-srv6-policy-01
+                        
+                    </option>
+                
+                    <option value="draft-ietf-idr-ts-flowspec-srv6-policy-00">
+                        draft-ietf-idr-ts-flowspec-srv6-policy-00
+                        
+                    </option>
+                
+                    <option value="draft-jiang-idr-ts-flowspec-srv6-policy-07">
+                        draft-jiang-idr-ts-flowspec-srv6-policy-07
+                        
+                    </option>
+                
+                    <option value="draft-jiang-idr-ts-flowspec-srv6-policy-06">
+                        draft-jiang-idr-ts-flowspec-srv6-policy-06
+                        
+                    </option>
+                
+                    <option value="draft-jiang-idr-ts-flowspec-srv6-policy-05">
+                        draft-jiang-idr-ts-flowspec-srv6-policy-05
+                        
+                    </option>
+                
+                    <option value="draft-jiang-idr-ts-flowspec-srv6-policy-04">
+                        draft-jiang-idr-ts-flowspec-srv6-policy-04
+                        
+                    </option>
+                
+                    <option value="draft-jiang-idr-ts-flowspec-srv6-policy-03">
+                        draft-jiang-idr-ts-flowspec-srv6-policy-03
+                        
+                    </option>
+                
+                    <option value="draft-jiang-idr-ts-flowspec-srv6-policy-02">
+                        draft-jiang-idr-ts-flowspec-srv6-policy-02
+                        
+                    </option>
+                
+                    <option value="draft-jiang-idr-ts-flowspec-srv6-policy-01">
+                        draft-jiang-idr-ts-flowspec-srv6-policy-01
+                        
+                    </option>
+                
+                    <option value="draft-jiang-idr-ts-flowspec-srv6-policy-00">
+                        draft-jiang-idr-ts-flowspec-srv6-policy-00
+                        
+                    </option>
+                
+                
+            </select>
+
+            <button type="submit"
+                    class="btn btn-primary btn-sm"
+                    value="--html"
+                    name="difftype">
+                Side-by-side
+            </button>
+            
+            <button type="submit"
+                    class="btn btn-primary btn-sm"
+                    value="--hwdiff"
+                    name="difftype">
+                Inline
+            </button>
+
+</form>
+                </td>
+            </tr>
+        
+    
+    <tr>
+        <td></td>
+        <th scope="row">Authors</th>
+        <td class="edit">
+            
+        </td>
+        <td>
+            
+            
+                <span ><a 
+           title="Datatracker profile of Jiang Wenying"
+            href="/person/jiangwenying@chinamobile.com" >Jiang Wenying</a> <a 
+               href="mailto:jiangwenying%40chinamobile.com"
+               aria-label="Compose email to jiangwenying@chinamobile.com"
+               title="Compose email to jiangwenying@chinamobile.com">
+                <i class="bi bi-envelope"></i></a></span>,
+            
+                <span ><a 
+           title="Datatracker profile of Yisong Liu"
+            href="/person/liuyisong@chinamobile.com" >Yisong Liu</a> <a 
+               href="mailto:liuyisong%40chinamobile.com"
+               aria-label="Compose email to liuyisong@chinamobile.com"
+               title="Compose email to liuyisong@chinamobile.com">
+                <i class="bi bi-envelope"></i></a></span>,
+            
+                <span ><a 
+           title="Datatracker profile of Shunwan Zhuang"
+            href="/person/zhuangshunwan@huawei.com" >Shunwan Zhuang</a> <a 
+               href="mailto:zhuangshunwan%40huawei.com"
+               aria-label="Compose email to zhuangshunwan@huawei.com"
+               title="Compose email to zhuangshunwan@huawei.com">
+                <i class="bi bi-envelope"></i></a></span>,
+            
+                <span ><a 
+           title="Datatracker profile of Gyan Mishra"
+            href="/person/gyan.s.mishra@verizon.com" >Gyan Mishra</a> <a 
+               href="mailto:gyan.s.mishra%40verizon.com"
+               aria-label="Compose email to gyan.s.mishra@verizon.com"
+               title="Compose email to gyan.s.mishra@verizon.com">
+                <i class="bi bi-envelope"></i></a></span>,
+            
+                <span ><a 
+           title="Datatracker profile of Shuanglong Chen"
+            href="/person/chenshuanglong@huawei.com" >Shuanglong Chen</a> <a 
+               href="mailto:chenshuanglong%40huawei.com"
+               aria-label="Compose email to chenshuanglong@huawei.com"
+               title="Compose email to chenshuanglong@huawei.com">
+                <i class="bi bi-envelope"></i></a></span>
+            
+            
+        </td>
+    </tr>
+    
+    
+        
+            <tr>
+                <td></td>
+                <th scope="row">Replaces</th>
+                <td class="edit">
+                    
+                </td>
+                <td>
+                    
+                        
+                            <a href="/doc/html/draft-jiang-idr-ts-flowspec-srv6-policy" title="Traffic Steering using BGP Flowspec with SRv6 Policy">draft-jiang-idr-ts-flowspec-srv6-policy</a>
+                        
+                    
+                </td>
+            </tr>
+        
+        
+        
+    
+    <tr>
+        <td></td>
+        <th scope="row">
+            RFC stream
+        </th>
+        <td class="edit">
+            
+        </td>
+        <td >
+            
+                
+                
+                    
+                        
+
+
+
+<img alt="IETF Logo"
+     class="d-lm-none w-25 mt-1"
+     
+     
+        
+             src="https://static.ietf.org/dt/12.35.0/ietf/images/ietf-logo-nor-white.svg"
+        
+     
+     >
+
+<img alt="IETF Logo"
+     class="d-dm-none w-25 mt-1"
+     
+     
+        
+             src="https://static.ietf.org/dt/12.35.0/ietf/images/ietf-logo-nor.svg"
+        
+     
+     >
+                    
+                
+                
+            
+        </td>
+    </tr>
+    
+    <tr>
+        <td></td>
+        <th scope="row">
+            Other formats
+        </th>
+        <td class="edit">
+        </td>
+        <td>
+            
+                
+    <div class="buttonlist">
+    
+        
+        <a class="btn btn-primary btn-sm"
+          
+          target="_blank"
+          href="https://www.ietf.org/archive/id/draft-ietf-idr-ts-flowspec-srv6-policy-03.txt">
+            
+                <i class="bi bi-file-text"></i> txt
+            
+        </a>
+        
+    
+        
+        <a class="btn btn-primary btn-sm"
+          
+          target="_blank"
+          href="https://www.ietf.org/archive/id/draft-ietf-idr-ts-flowspec-srv6-policy-03.html">
+            
+                <i class="bi bi-file-code"></i> html
+            
+        </a>
+        
+    
+        
+        <a class="btn btn-primary btn-sm"
+          
+          target="_blank"
+          href="https://www.ietf.org/archive/id/draft-ietf-idr-ts-flowspec-srv6-policy-03.xml">
+            
+                <i class="bi bi-file-code"></i> xml
+            
+        </a>
+        
+    
+        
+    
+        
+        <a class="btn btn-primary btn-sm"
+          
+          target="_blank"
+          href="/doc/draft-ietf-idr-ts-flowspec-srv6-policy/03/bibtex/">
+            
+                <i class="bi bi-file-ruled"></i> bibtex
+            
+        </a>
+        
+    
+        
+        <a class="btn btn-primary btn-sm"
+          
+          target="_blank"
+          href="/doc/bibxml3/draft-ietf-idr-ts-flowspec-srv6-policy-03.xml">
+            
+                <i class="bi bi-file-code"></i> bibxml
+            
+        </a>
+        
+    
+</div>
+
+            
+        </td>
+    </tr>
+    
+    
+        
+            <tr>
+                <td>
+                </td>
+                <th scope="row">
+                    Additional resources
+                </th>
+                <td class="edit">
+                    
+                </td>
+                <td>
+                    
+                        
+                        
+                            
+                                <a href="https://mailarchive.ietf.org/arch/browse/idr/?q=draft-ietf-idr-ts-flowspec-srv6-policy">
+                                    Mailing list discussion
+                                </a>
+                            
+                        
+                    
+                </td>
+            </tr>
+        
+    
+</tbody>
+                        <tr>
+                            <th scope="row"></th>
+                            <th scope="row"></th>
+                            <td class="edit"></td>
+                            <td>
+                                <a class="btn btn-sm btn-warning mb-3"
+                                target="_blank"
+                                href="https://github.com/ietf-tools/datatracker/issues/new/choose">
+                                    Report a bug
+                                    <i class="bi bi-bug"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </nav>
+        <div class="row g-0">
+            <div class="col-md-9 d-flex justify-content-center lh-sm"
+                 data-bs-spy="scroll"
+                 data-bs-target="#toc-nav"
+                 data-bs-smooth-scroll="true"
+                 tabindex="0"
+                 id="content">
+                
+                    <div class="rfchtml">
+                        <br class="noprint">
+                        <div class="xml2rfc">
+<table class="ears">
+<thead><tr>
+<td class="left">Internet-Draft</td>
+<td class="center">FlowSpec with SR Policy</td>
+<td class="right">June 2023</td>
+</tr></thead>
+<tfoot><tr>
+<td class="left">Jiang, et al.</td>
+<td class="center">Expires 19 December 2023</td>
+<td class="right">[Page]</td>
+</tr></tfoot>
+</table>
+<div id="external-metadata" class="document-information"></div>
+<div id="internal-metadata" class="document-information">
+<dl id="identifiers">
+<dt class="label-workgroup">Workgroup:</dt>
+<dd class="workgroup">Network Working Group</dd>
+<dt class="label-internet-draft">Internet-Draft:</dt>
+<dd class="internet-draft">draft-ietf-idr-ts-flowspec-srv6-policy-03</dd>
+<dt class="label-published">Published:</dt>
+<dd class="published">
+<time datetime="2023-06-17" class="published">17 June 2023</time>
+    </dd>
+<dt class="label-intended-status">Intended Status:</dt>
+<dd class="intended-status">Informational</dd>
+<dt class="label-expires">Expires:</dt>
+<dd class="expires"><time datetime="2023-12-19">19 December 2023</time></dd>
+<dt class="label-authors">Authors:</dt>
+<dd class="authors">
+<div class="author">
+      <div class="author-name">W. Jiang</div>
+<div class="org">China Mobile</div>
+</div>
+<div class="author">
+      <div class="author-name">Y. Liu</div>
+<div class="org">China Mobile</div>
+</div>
+<div class="author">
+      <div class="author-name">S. Zhuang</div>
+<div class="org">Huawei Technologies</div>
+</div>
+<div class="author">
+      <div class="author-name">G. Mishra</div>
+<div class="org">Verizon Communications Inc.</div>
+</div>
+<div class="author">
+      <div class="author-name">S. Chen</div>
+<div class="org">Huawei Technologies</div>
+</div>
+</dd>
+</dl>
+</div>
+<h1 id="title">Traffic Steering using BGP FlowSpec with SR Policy</h1>
+<section id="section-abstract">
+      <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
+<p id="section-abstract-1">BGP Flow Specification (FlowSpec) <span>[<a href="#RFC8955" class="cite xref">RFC8955</a>]</span> and <span>[<a href="#RFC8956" class="cite xref">RFC8956</a>]</span> has been proposed to distribute BGP <span>[<a href="#RFC4271" class="cite xref">RFC4271</a>]</span> FlowSpec NLRI to FlowSpec clients to mitigate
+      (distributed) denial-of-service attacks, and to provide traffic
+      filtering in the context of a BGP/MPLS VPN service. Recently, traffic
+      steering applications in the context of SR-MPLS and SRv6 using FlowSpec
+      also attract attention. This document introduces the usage of BGP
+      FlowSpec to steer packets into an SR Policy.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+</section>
+<section class="note" id="section-note.1">
+      <h2 id="name-requirements-language-6">
+<a href="#name-requirements-language-6" class="section-name selfRef">Requirements Language</a>
+      </h2>
+<p id="section-note.1-1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+      "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+      "OPTIONAL" in this document are to be interpreted as described in BCP 14
+      <span><a href="#RFC2119" class="internal xref">RFC 2119</a> [<a href="#RFC2119" class="cite xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when,
+      and only when, they appear in all capitals, as shown here.<a href="#section-note.1-1" class="pilcrow">¶</a></p>
+</section>
+<div id="status-of-memo">
+<section id="section-boilerplate.1">
+        <h2 id="name-status-of-this-memo-21">
+<a href="#name-status-of-this-memo-21" class="section-name selfRef">Status of This Memo</a>
+        </h2>
+<p id="section-boilerplate.1-1">
+        This Internet-Draft is submitted in full conformance with the
+        provisions of BCP 78 and BCP 79.<a href="#section-boilerplate.1-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-2">
+        Internet-Drafts are working documents of the Internet Engineering Task
+        Force (IETF). Note that other groups may also distribute working
+        documents as Internet-Drafts. The list of current Internet-Drafts is
+        at <span><a href="https://datatracker.ietf.org/drafts/current/">https://datatracker.ietf.org/drafts/current/</a></span>.<a href="#section-boilerplate.1-2" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-3">
+        Internet-Drafts are draft documents valid for a maximum of six months
+        and may be updated, replaced, or obsoleted by other documents at any
+        time. It is inappropriate to use Internet-Drafts as reference
+        material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-4">
+        This Internet-Draft will expire on 19 December 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="copyright">
+<section id="section-boilerplate.2">
+        <h2 id="name-copyright-notice-21">
+<a href="#name-copyright-notice-21" class="section-name selfRef">Copyright Notice</a>
+        </h2>
+<p id="section-boilerplate.2-1">
+            Copyright (c) 2023 IETF Trust and the persons identified as the
+            document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.2-2">
+            This document is subject to BCP 78 and the IETF Trust's Legal
+            Provisions Relating to IETF Documents
+            (<span><a href="https://trustee.ietf.org/license-info">https://trustee.ietf.org/license-info</a></span>) in effect on the date of
+            publication of this document. Please review these documents
+            carefully, as they describe your rights and restrictions with
+            respect to this document. Code Components extracted from this
+            document must include Revised BSD License text as described in
+            Section 4.e of the Trust Legal Provisions and are provided without
+            warranty as described in the Revised BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="toc">
+<section id="section-toc.1">
+        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents-21">
+<a href="#name-table-of-contents-21" class="section-name selfRef">Table of Contents</a>
+        </h2>
+<nav class="toc"><ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
+            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="auto internal xref">1</a>.  <a href="#name-introduction-21" class="internal xref">Introduction</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
+            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-definitions-and-acronyms-2" class="internal xref">Definitions and Acronyms</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
+            <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-operations" class="internal xref">Operations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-sr-mpls-application-example" class="internal xref">SR-MPLS Application Examples</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-srv6-application-examples" class="internal xref">SRv6 Application Examples</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-running-code" class="internal xref">Running Code</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
+                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-interop-test-status" class="internal xref">Interop-test Status</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
+                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-deployment-status" class="internal xref">Deployment Status</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-iana-considerations-19" class="internal xref">IANA Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-security-considerations-21" class="internal xref">Security Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-contributors-5" class="internal xref">Contributors</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-acknowledgements-15" class="internal xref">Acknowledgements</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
+            <p id="section-toc.1-1.11.1"><a href="#section-11" class="auto internal xref">11</a>. <a href="#name-references-18" class="internal xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.1">
+                <p id="section-toc.1-1.11.2.1.1"><a href="#section-11.1" class="auto internal xref">11.1</a>.  <a href="#name-normative-references-20" class="internal xref">Normative References</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.2">
+                <p id="section-toc.1-1.11.2.2.1"><a href="#section-11.2" class="auto internal xref">11.2</a>.  <a href="#name-informative-references-20" class="internal xref">Informative References</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
+            <p id="section-toc.1-1.12.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-authors-addresses-21" class="internal xref">Authors' Addresses</a></p>
+</li>
+        </ul>
+</nav>
+</section>
+</div>
+<section id="section-1">
+      <h2 id="name-introduction-21">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction-21" class="section-name selfRef">Introduction</a>
+      </h2>
+<p id="section-1-1">SR-MPLS <span>[<a href="#RFC8660" class="cite xref">RFC8660</a>]</span> forwards data packets using the
+      source routing model. The core idea of SR-MPLS is to divide a packet
+      forwarding path into different segments, allocate segment identifiers
+      (SIDs) to the segments, and encapsulate segment information into packets
+      at the ingress of the path to guide packet forwarding.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">Segment Routing IPv6 (SRv6) is a protocol designed to forward IPv6
+      data packets on a network using the source routing model. SRv6 enables
+      the ingress network device to add a segment routing header (SRH) <span>[<a href="#RFC8754" class="cite xref">RFC8754</a>]</span> to an IPv6 packet and push an explicit IPv6 address
+      stack into the SRH. After receiving the packet, each transit node
+      updates the IPv6 destination IP address in the packet and segment list
+      to implement hop-by-hop forwarding.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">SR Policy (includes SR-MPLS and SRv6 Policy) <span>[<a href="#RFC9256" class="cite xref">RFC9256</a>]</span>
+      is a tunneling technology based on SR-MPLS and SRv6. An SR Policy is a
+      set of candidate paths consisting of one or more segment lists, that is,
+      segment ID (SID) lists. Each SID list identifies an end-to-end path from
+      the source node to the destination node, instructing a network device to
+      forward traffic through the path rather than the shortest path computed
+      using an IGP. The header of a packet steered into an SR Policy is
+      augmented with an ordered list of segments associated with that SR
+      Policy, so that other devices on the network can execute the
+      instructions encapsulated into the list.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">The headend of an SR Policy may learn multiple candidate paths for an
+      SR Policy. Candidate paths may be learned via a number of different
+      mechanisms, e.g., CLI, NetConf, PCEP<span>[<a href="#I-D.ietf-pce-segment-routing-policy-cp" class="cite xref">I-D.ietf-pce-segment-routing-policy-cp</a>]</span>, or BGP<span>[<a href="#I-D.ietf-idr-segment-routing-te-policy" class="cite xref">I-D.ietf-idr-segment-routing-te-policy</a>]</span>.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-5"><span>[<a href="#RFC8955" class="cite xref">RFC8955</a>]</span> and <span>[<a href="#RFC8956" class="cite xref">RFC8956</a>]</span> define the BGP
+      <span>[<a href="#RFC4271" class="cite xref">RFC4271</a>]</span> Flow Specification (FlowSpec) that allows
+      conveying flow specifications and traffic Action/Rules associated (rate-
+      limiting, redirect, remark ...). BGP Flow specifications are encoded
+      within the MP_REACH_NLRI and MP_UNREACH_NLRI attributes<span>[<a href="#RFC4760" class="cite xref">RFC4760</a>]</span>. Rules (Actions associated) are encoded in
+      Extended Community attribute<span>[<a href="#RFC4360" class="cite xref">RFC4360</a>]</span>. The BGP
+      Flow Specification function allows BGP Flow Specification routes that
+      carry traffic policies to be transmitted to BGP Flow Specification peers
+      to steer traffic.<a href="#section-1-5" class="pilcrow">¶</a></p>
+<p id="section-1-6">This document proposes BGP flow specification usage that are used to
+      steer data flow into an SR Policy as well as to indicate Tailend
+      function for SRv6 scenarios. This work is helpful for promoting the
+      deployment of SR-MPLS and SRv6 networks.<a href="#section-1-6" class="pilcrow">¶</a></p>
+</section>
+<section id="section-2">
+      <h2 id="name-definitions-and-acronyms-2">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-definitions-and-acronyms-2" class="section-name selfRef">Definitions and Acronyms</a>
+      </h2>
+<ul class="normal">
+<li class="normal" id="section-2-1.1">FlowSpec: Flow Specification<a href="#section-2-1.1" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-2-1.2">SR: Segment Routing<a href="#section-2-1.2" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-2-1.3">SR-MPLS: SR over the MPLS data plane<a href="#section-2-1.3" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-2-1.4">SRv6: SR over the IPv6 data plane<a href="#section-2-1.4" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-2-1.5">SID: Segment Identifier<a href="#section-2-1.5" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-2-1.6">SRH: Segment Routing Header<a href="#section-2-1.6" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-2-1.7">TE: Traffic Engineering<a href="#section-2-1.7" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-2-1.8">USD: Ultimate Segment Decapsulation<a href="#section-2-1.8" class="pilcrow">¶</a>
+</li>
+      </ul>
+</section>
+<section id="section-3">
+      <h2 id="name-operations">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-operations" class="section-name selfRef">Operations</a>
+      </h2>
+<p id="section-3-1">An SR Policy <span>[<a href="#RFC9256" class="cite xref">RFC9256</a>]</span> is identified through the tuple
+      &lt;headend, color, endpoint&gt;. In the context of a specific headend,
+      one may identify an SR Policy by the &lt;color, endpoint&gt; tuple. The
+      headend is the node where the SR Policy is instantiated/implemented. The
+      headend is specified as an IPv4 or IPv6 address and is expected to be
+      unique in the domain. The endpoint indicates the destination of the SR
+      Policy. The endpoint is specified as an IPv4 or IPv6 address and is
+      expected to be unique in the domain. The color is a 32-bit unsigned
+      numerical value that associates with the SR policy, and it defines an
+      application-level network Service Level Agreement (SLA) policy or
+      intent.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-2">Assume one or multiple SR Policies are already setup/instantiated in
+      the SR HeadEnd device. In order to steer traffic into a specific SR
+      Policy at the Headend, one can use the SR Color Extended community <span>[<a href="#RFC9012" class="cite xref">RFC9012</a>]</span> and endpoint to map to a satisfying SR Policy, and
+      steer the traffic into this specific SR Policy.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<p id="section-3-3"><span>[<a href="#I-D.ietf-idr-flowspec-redirect-ip" class="cite xref">I-D.ietf-idr-flowspec-redirect-ip</a>]</span> defines the
+      redirect to IPv4 and IPv6 Next-hop action. The IPv4 next-hop address in
+      the Flow-spec Redirect to IPv4 Extended Community can be used to specify
+      the endpoint of the SR Policy, and the IPv6 next-hop address in the
+      Flow-spec Redirect to IPv6 Extended Community<span>[<a href="#RFC5701" class="cite xref">RFC5701</a>]</span>
+      can be used to specify the endpoint of the SRv6 Policy. When the packets
+      reach the TailEnd device, some specific function information identifiers
+      can be used to decide how to further process the flows in SRv6
+      scenarios. Several endpoint functions are already defined, e.g.,
+      End.DT6: Endpoint with decapsulation and IPv6 table lookup, and End.DX6:
+      Endpoint with decapsulation and IPv6 cross-connect. The BGP Prefix-SID
+      defined in <span>[<a href="#RFC8669" class="cite xref">RFC8669</a>]</span> is utilized to enable SRv6 VPN
+      services <span>[<a href="#RFC9252" class="cite xref">RFC9252</a>]</span>. SRv6 Services TLVs within the BGP
+      Prefix-SID Attribute can be used to indicate the endpoint functions.<a href="#section-3-3" class="pilcrow">¶</a></p>
+<p id="section-3-4">For SR-MPLS scenarios, this document proposes carrying the Color
+      Extended Community and the Flow-spec Redirect to IPv4 Extended Community
+      in the context of a Flowspec NLRI <span>[<a href="#RFC8955" class="cite xref">RFC8955</a>]</span> <span>[<a href="#RFC8956" class="cite xref">RFC8956</a>]</span> to an SR-MPLS Headend to steer traffic into one
+      SR-MPLS Policy.<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-5">For SRv6 scenarios, this document proposes carrying the Color
+      Extended Community, the Flow-spec Redirect to IPv6 Extended Community
+      and BGP Prefix-SID Attribute in the context of a Flowspec NLRI <span>[<a href="#RFC8955" class="cite xref">RFC8955</a>]</span> <span>[<a href="#RFC8956" class="cite xref">RFC8956</a>]</span> to an SRv6 Headend to steer
+      traffic into one SRv6 Policy, as well as to indicate specific Tailend
+      functions.<a href="#section-3-5" class="pilcrow">¶</a></p>
+<p id="section-3-6">For the case where a FlowSpec route carries multiple Color Extend
+      Communities, the Color Extended community with the highest numerical
+      value will be given higher preference per the description in Section
+      8.4.1 of <span>[<a href="#RFC9256" class="cite xref">RFC9256</a>]</span>.<a href="#section-3-6" class="pilcrow">¶</a></p>
+<p id="section-3-7"></p>
+<p id="section-3-8">The method proposed in this document supports load balancing to the
+      tailend device. To achieve that, the headend device CAN set up multiple
+      paths in one SR Policy, and use a FlowSpec route to indicate the
+      specific SR Policy.<a href="#section-3-8" class="pilcrow">¶</a></p>
+<p id="section-3-9"></p>
+</section>
+<section id="section-4">
+      <h2 id="name-sr-mpls-application-example">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-sr-mpls-application-example" class="section-name selfRef">SR-MPLS Application Examples</a>
+      </h2>
+<p id="section-4-1">In following scenario, BGP FlowSpec Controller signals the filter
+      rules, the Flow-spec Redirect to IPv4 action, and the policy color to
+      the SR-MPLS HeadEnd device.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4-2">
+<pre>
+   +------------+
+   |  BGP FS    |
+   | Controller |
+   +------------+
+      | FlowSpec route to HeadEnd:
+      |   NLRI: Filter Rules
+      |   Redirect to IPv4 Nexthop: TailEnd's Address
+      |   Policy Color: C0
+      |
+      |          .-----.
+      |         (       )
+      V     .--(         )--.
++-------+  (                 )  +-------+
+|       |_(  SR-MPLS Network  )_|       |
+|HeadEnd| ( ================&gt; ) |TailEnd|
++-------+  (SR List&lt;S1,S2,S3&gt;)  +-------+
+            '--(         )--'
+                (       )
+                 '-----'
+
+      Figure 1: Steering the Traffic Flow into SR-MPLS Policy
+
+</pre><a href="#section-4-2" class="pilcrow">¶</a>
+</div>
+<p id="section-4-3">When the SR-MPLS HeadEnd device (as a FlowSpec client) receives such
+      instructions from BGP FS Controller, it will steer the traffic flows
+      matching the criteria in the FlowSpec route into the SR-MPLS Policy
+      matching the tuple (Endpoint: TailEnd's Address, Color: C0). And the
+      packets of such traffic flows will be encapsulated with an MPLS stack
+      using the SR List &lt;S1, S2, S3&gt; in the HeadEnd device, then send
+      the packets to the TailEnd device along the path indicated by the SR
+      list.<a href="#section-4-3" class="pilcrow">¶</a></p>
+<p id="section-4-4"></p>
+</section>
+<section id="section-5">
+      <h2 id="name-srv6-application-examples">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-srv6-application-examples" class="section-name selfRef">SRv6 Application Examples</a>
+      </h2>
+<p id="section-5-1">In following scenario, BGP FlowSpec Controller signals the filter
+      rules, the redirect to IPv6 Nexthop action, the policy color and the
+      function information (SRv6 SID: Service_id_x) to the HeadEnd device.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5-2">
+<pre>
+   +------------+
+   |  BGP FS    |
+   | Controller |
+   +------------+
+      | FlowSpec route to HeadEnd:
+      |   NLRI: Filter Rules
+      |   Redirect to IPv6 Nexthop: TailEnd's Address
+      |   Policy Color: C1
+      |   PrefixSID: Service_id_x
+      |          .-----.
+      |         (       )
+      V     .--(         )--.
++-------+  (                 )  +-------+
+|       |_( SRv6 Core Network )_|       |
+|HeadEnd| ( ================&gt; ) |TailEnd|
++-------+  (SR List&lt;S1,S2,S3&gt;)  +-------+
+            '--(         )--'   Service SID: Service_id_x
+                (       )       (e.g.: End.DT4 or End.DT6 or others)
+                 '-----'
+
+      Figure 2: Steering the Traffic Flow into SRv6 Policy (Option 1)
+
+</pre><a href="#section-5-2" class="pilcrow">¶</a>
+</div>
+<p id="section-5-3">When the HeadEnd device (as a FlowSpec client) receives such
+      instructions from BGP FS Controller, it will steer the traffic flows
+      matching the criteria in the FlowSpec route into the SRv6 Policy
+      matching the tuple (Endpoint: TailEnd's Address, Color: C1). And the
+      packets of such traffic flows will be encapsulated with an SRH (Segment
+      Routing Header) using the SR List &lt;S1, S2, S3, Service_id_x&gt;. When
+      the packets reach to the TailEnd device, they will be further processed
+      per the function denoted by the Service_id_x.<a href="#section-5-3" class="pilcrow">¶</a></p>
+<p id="section-5-4">When the HeadEnd device determines (with the help of SRv6 SID
+      Structure) that the Service SID belongs to the same SRv6 Locator as the
+      last SRv6 SID of the TailEnd device in the SRv6 Policy segment list, it
+      MAY exclude that last SRv6 SID when steering the service flow. For
+      example, the effective segment list of the SRv6 Policy associated with
+      SID list &lt;S1, S2, S3&gt; would be replaced with &lt;S1, S2,
+      Service_id_x&gt;.<a href="#section-5-4" class="pilcrow">¶</a></p>
+<p id="section-5-5">If the last SRv6 SID (for example, we use S3 here) of the TailEnd
+      device in the SRv6 Policy segment list is USD-flavored, an SRv6 Service
+      SID (e.g., End.DT4 or End.DT6) is not required when a BGP FlowSpec
+      Controller sends the FlowSpec route to the HeadEnd device (as a FlowSpec
+      client).<a href="#section-5-5" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5-6">
+<pre>
+   +------------+
+   |  BGP FS    |
+   | Controller |
+   +------------+
+      | FlowSpec route to HeadEnd:
+      |   NLRI: Filter Rules
+      |   Redirect to IPv6 Nexthop: TailEnd's Address
+      |   Policy Color: C2
+      |          .-----.
+      |         (       )
+      V     .--(         )--.
++-------+  (                 )  +-------+
+|       |_( SRv6 Core Network )_|       |
+|HeadEnd| ( ================&gt; ) |TailEnd|
++-------+  (SR List&lt;S1,S2,S3&gt;)  +-------+
+            '--(         )--'
+                (       )
+                 '-----'
+Note: S3 MUST be a USD-flavored SRv6 SID of the TailEnd
+
+      Figure 3: Steering the Traffic Flow into SRv6 Policy (Option 2)
+
+</pre><a href="#section-5-6" class="pilcrow">¶</a>
+</div>
+<p id="section-5-7">When the HeadEnd device (as a FlowSpec client) receives such
+      instructions from a BGP FS Controller, it will steer the traffic flows
+      matching the criteria in the Flowspec route into the SRv6 Policy
+      matching the tuple (Endpoint: TailEnd's Address, Color: C2). And the
+      packets of such traffic flows will be encapsulated with an SRH (Segment
+      Routing Header) using the SR List &lt;S1, S2, S3&gt;. When the packets
+      reach to the TailEnd device, they will be further processed per the
+      function denoted by the USD-flavored SRv6 SID S3.<a href="#section-5-7" class="pilcrow">¶</a></p>
+<p id="section-5-8">For the cases of intra-AS and inter-AS traffic steering using this
+      method, the usages of Flowspec Color Extended Community with BGP prefix
+      SID are the same for both scenarios. The difference lies between the
+      local SRv6 policy configurations. For the inter-domain case, the
+      operator can configure an inter-domain SRv6 policy/path at the Headend
+      device. For the intra-domain case, the operator can configure an
+      intra-domain SRv6 policy/path at the Headend device.<a href="#section-5-8" class="pilcrow">¶</a></p>
+<p id="section-5-9"></p>
+</section>
+<section id="section-6">
+      <h2 id="name-running-code">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-running-code" class="section-name selfRef">Running Code</a>
+      </h2>
+<p id="section-6-1"></p>
+<section id="section-6.1">
+        <h3 id="name-interop-test-status">
+<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-interop-test-status" class="section-name selfRef">Interop-test Status</a>
+        </h3>
+<p id="section-6.1-1">This section records the status of known implementations of the
+        protocol defined by this specification at the time of posting of this
+        document. The description of implementations in this section is
+        intended to assist the IETF in its decision processes in progressing
+        drafts to RFCs. Please note that the listing of any individual
+        implementation here does not imply endorsement by the IETF.
+        Furthermore, no effort has been spent to verify the information
+        presented here that was supplied by IETF contributors. This is not
+        intended as, and must not be construed to be, a catalog of available
+        implementations or their features. Readers are advised to note that
+        other implementations may exist.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.1-2">The Traffic Steering using BGP FlowSpec with SR-MPLS / SRv6 Policy
+        mechanism has been implemented on the following hardware devices,
+        Network Operating System software, and SDN controllers. They have also
+        successfully participated in the series of joint interoperability
+        testing events hosted by China Mobile from July 2021 to October 2021.
+        The following hardware devices and Network Operating System software
+        had successfully passed the interoperability testing (in alphabetical
+        order).<a href="#section-6.1-2" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-6.1-3">
+<pre>Routers:
++---------+---------------+--------------------------------+
+| Vendors | Device Model  | Version                        |
++---------+---------------+--------------------------------+
+| Huawei  | NE40-X8A      | NE40E V800R021C00SPC091T       |
++---------+---------------+--------------------------------+
+| New H3C | CR16010H-FA   | Version 7.1.075, ESS 8305      |
++---------+---------------+--------------------------------+
+| Ruijie  | RG-N8010-R    | N8000-R_RGOS 12.8(1)B08T1      |
++---------+---------------+--------------------------------+
+| ZTE     | M6000-8S Plus | V5.00.10(5.60.5)               |
++---------+---------------+--------------------------------+
+
+Controllers:
++----------------+---------------+-------------------------+
+| Vendors        | Device Model  | Version                 |
++----------------+---------------+-------------------------+
+| China Unitechs | I-T-E SC      | V1.3.6P3                |
++----------------+---------------+-------------------------+
+| Huawei         | NCE-IP        | V100R021C00             |
++----------------+---------------+-------------------------+
+| Ruijie         | RG-ONC-AIO-H  | RG-ION-WAN-CLOUD_2.00T1 |
++----------------+---------------+-------------------------+
+| ZTE            | ZENIC ONE     | R22V16.21.20            |
++----------------+---------------+-------------------------+
+
+</pre><a href="#section-6.1-3" class="pilcrow">¶</a>
+</div>
+<p id="section-6.1-4"></p>
+</section>
+<section id="section-6.2">
+        <h3 id="name-deployment-status">
+<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-deployment-status" class="section-name selfRef">Deployment Status</a>
+        </h3>
+<p id="section-6.2-1">As of August 2022, this feature has been deployed on the IP
+        backbone network of China Mobile.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.2-2"></p>
+</section>
+</section>
+<div id="IANA">
+<section id="section-7">
+      <h2 id="name-iana-considerations-19">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-iana-considerations-19" class="section-name selfRef">IANA Considerations</a>
+      </h2>
+<p id="section-7-1">No IANA actions are required for this document.<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-7-2"></p>
+</section>
+</div>
+<div id="Security">
+<section id="section-8">
+      <h2 id="name-security-considerations-21">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-security-considerations-21" class="section-name selfRef">Security Considerations</a>
+      </h2>
+<p id="section-8-1">This document does not change the security properties of SRv6 and
+      BGP.<a href="#section-8-1" class="pilcrow">¶</a></p>
+<p id="section-8-2"></p>
+</section>
+</div>
+<section id="section-9">
+      <h2 id="name-contributors-5">
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-contributors-5" class="section-name selfRef">Contributors</a>
+      </h2>
+<p id="section-9-1">The following people made significant contributions to this
+      document:<a href="#section-9-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-9-2">
+<pre>Yunan Gu
+Huawei Technologies
+Email: guyunan@huawei.com
+
+Haibo Wang
+Huawei Technologies
+Email: rainsword.wang@huawei.com
+
+Jie Dong
+Huawei Technologies
+Email: jie.dong@huawei.com
+
+Xue Yang
+China Mobile
+Email: yangxuewl@chinamobile.com
+
+</pre><a href="#section-9-2" class="pilcrow">¶</a>
+</div>
+</section>
+<div id="Acknowledgements">
+<section id="section-10">
+      <h2 id="name-acknowledgements-15">
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-acknowledgements-15" class="section-name selfRef">Acknowledgements</a>
+      </h2>
+<p id="section-10-1">The authors would like to acknowledge the review and inputs from
+      Jeffrey Haas, Susan Hares, Weiqiang Cheng, Kaliraj Vairavakkalai, Robin
+      Li, Acee Lindem, Gunter Van De Velde, John Scudder, Rainbow Wu, Linda
+      Dunbar, Gang Yan, Feng Yang, Wim Henderickx, Robert Raszuk, Ketan
+      Talaulikar, Changwang Lin, Aijun Wang, Hao Li, Huaimo Chen, Sheng Fang,
+      Yuanxiang Qiu, Ran Chen, Cheng Li, Zheng Zhang, Xuewei Wang, Yanrong
+      Liang, Xuhui Cai, Haojie Wang, Lili Wang and Nan Geng.<a href="#section-10-1" class="pilcrow">¶</a></p>
+<p id="section-10-2">Special thanks to Nat Kao, who suggested adding SR-MPLS use cases to
+      this document.<a href="#section-10-2" class="pilcrow">¶</a></p>
+<p id="section-10-3">Special thanks to Donald E. Eastlake, 3rd, who thoroughly reviewed
+      the entire document and made many useful suggestions for
+      improvement.<a href="#section-10-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<section id="section-11">
+      <h2 id="name-references-18">
+<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-references-18" class="section-name selfRef">References</a>
+      </h2>
+<section id="section-11.1">
+        <h3 id="name-normative-references-20">
+<a href="#section-11.1" class="section-number selfRef">11.1. </a><a href="#name-normative-references-20" class="section-name selfRef">Normative References</a>
+        </h3>
+<dl class="references">
+<dt id="I-D.ietf-idr-flowspec-redirect-ip">[I-D.ietf-idr-flowspec-redirect-ip]</dt>
+        <dd>
+<span class="refAuthor">Uttaro, J.</span>, <span class="refAuthor">Haas, J.</span>, <span class="refAuthor">Texier, M.</span>, <span class="refAuthor">akarch@cisco.com</span>, <span class="refAuthor">Ray, S.</span>, <span class="refAuthor">Simpson, A.</span>, and <span class="refAuthor">W. Henderickx</span>, <span class="refTitle">"BGP Flow-Spec Redirect to IP Action"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-idr-flowspec-redirect-ip-02</span>, <time datetime="2015-02-05" class="refDate">5 February 2015</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-idr-flowspec-redirect-ip-02">https://datatracker.ietf.org/doc/html/draft-ietf-idr-flowspec-redirect-ip-02</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-idr-segment-routing-te-policy">[I-D.ietf-idr-segment-routing-te-policy]</dt>
+        <dd>
+<span class="refAuthor">Previdi, S.</span>, <span class="refAuthor">Filsfils, C.</span>, <span class="refAuthor">Talaulikar, K.</span>, <span class="refAuthor">Mattes, P.</span>, <span class="refAuthor">Jain, D.</span>, and <span class="refAuthor">S. Lin</span>, <span class="refTitle">"Advertising Segment Routing Policies in BGP"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-idr-segment-routing-te-policy-20</span>, <time datetime="2022-07-27" class="refDate">27 July 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-20">https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-20</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC2119">[RFC2119]</dt>
+        <dd>
+<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2119">https://www.rfc-editor.org/info/rfc2119</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC4271">[RFC4271]</dt>
+        <dd>
+<span class="refAuthor">Rekhter, Y., Ed.</span>, <span class="refAuthor">Li, T., Ed.</span>, and <span class="refAuthor">S. Hares, Ed.</span>, <span class="refTitle">"A Border Gateway Protocol 4 (BGP-4)"</span>, <span class="seriesInfo">RFC 4271</span>, <span class="seriesInfo">DOI 10.17487/RFC4271</span>, <time datetime="2006-01" class="refDate">January 2006</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc4271">https://www.rfc-editor.org/info/rfc4271</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC4360">[RFC4360]</dt>
+        <dd>
+<span class="refAuthor">Sangli, S.</span>, <span class="refAuthor">Tappan, D.</span>, and <span class="refAuthor">Y. Rekhter</span>, <span class="refTitle">"BGP Extended Communities Attribute"</span>, <span class="seriesInfo">RFC 4360</span>, <span class="seriesInfo">DOI 10.17487/RFC4360</span>, <time datetime="2006-02" class="refDate">February 2006</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc4360">https://www.rfc-editor.org/info/rfc4360</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC4760">[RFC4760]</dt>
+        <dd>
+<span class="refAuthor">Bates, T.</span>, <span class="refAuthor">Chandra, R.</span>, <span class="refAuthor">Katz, D.</span>, and <span class="refAuthor">Y. Rekhter</span>, <span class="refTitle">"Multiprotocol Extensions for BGP-4"</span>, <span class="seriesInfo">RFC 4760</span>, <span class="seriesInfo">DOI 10.17487/RFC4760</span>, <time datetime="2007-01" class="refDate">January 2007</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc4760">https://www.rfc-editor.org/info/rfc4760</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC5701">[RFC5701]</dt>
+        <dd>
+<span class="refAuthor">Rekhter, Y.</span>, <span class="refTitle">"IPv6 Address Specific BGP Extended Community Attribute"</span>, <span class="seriesInfo">RFC 5701</span>, <span class="seriesInfo">DOI 10.17487/RFC5701</span>, <time datetime="2009-11" class="refDate">November 2009</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc5701">https://www.rfc-editor.org/info/rfc5701</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8174">[RFC8174]</dt>
+        <dd>
+<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8174">https://www.rfc-editor.org/info/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8660">[RFC8660]</dt>
+        <dd>
+<span class="refAuthor">Bashandy, A., Ed.</span>, <span class="refAuthor">Filsfils, C., Ed.</span>, <span class="refAuthor">Previdi, S.</span>, <span class="refAuthor">Decraene, B.</span>, <span class="refAuthor">Litkowski, S.</span>, and <span class="refAuthor">R. Shakir</span>, <span class="refTitle">"Segment Routing with the MPLS Data Plane"</span>, <span class="seriesInfo">RFC 8660</span>, <span class="seriesInfo">DOI 10.17487/RFC8660</span>, <time datetime="2019-12" class="refDate">December 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8660">https://www.rfc-editor.org/info/rfc8660</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8669">[RFC8669]</dt>
+        <dd>
+<span class="refAuthor">Previdi, S.</span>, <span class="refAuthor">Filsfils, C.</span>, <span class="refAuthor">Lindem, A., Ed.</span>, <span class="refAuthor">Sreekantiah, A.</span>, and <span class="refAuthor">H. Gredler</span>, <span class="refTitle">"Segment Routing Prefix Segment Identifier Extensions for BGP"</span>, <span class="seriesInfo">RFC 8669</span>, <span class="seriesInfo">DOI 10.17487/RFC8669</span>, <time datetime="2019-12" class="refDate">December 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8669">https://www.rfc-editor.org/info/rfc8669</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8955">[RFC8955]</dt>
+        <dd>
+<span class="refAuthor">Loibl, C.</span>, <span class="refAuthor">Hares, S.</span>, <span class="refAuthor">Raszuk, R.</span>, <span class="refAuthor">McPherson, D.</span>, and <span class="refAuthor">M. Bacher</span>, <span class="refTitle">"Dissemination of Flow Specification Rules"</span>, <span class="seriesInfo">RFC 8955</span>, <span class="seriesInfo">DOI 10.17487/RFC8955</span>, <time datetime="2020-12" class="refDate">December 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8955">https://www.rfc-editor.org/info/rfc8955</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8956">[RFC8956]</dt>
+        <dd>
+<span class="refAuthor">Loibl, C., Ed.</span>, <span class="refAuthor">Raszuk, R., Ed.</span>, and <span class="refAuthor">S. Hares, Ed.</span>, <span class="refTitle">"Dissemination of Flow Specification Rules for IPv6"</span>, <span class="seriesInfo">RFC 8956</span>, <span class="seriesInfo">DOI 10.17487/RFC8956</span>, <time datetime="2020-12" class="refDate">December 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8956">https://www.rfc-editor.org/info/rfc8956</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9012">[RFC9012]</dt>
+        <dd>
+<span class="refAuthor">Patel, K.</span>, <span class="refAuthor">Van de Velde, G.</span>, <span class="refAuthor">Sangli, S.</span>, and <span class="refAuthor">J. Scudder</span>, <span class="refTitle">"The BGP Tunnel Encapsulation Attribute"</span>, <span class="seriesInfo">RFC 9012</span>, <span class="seriesInfo">DOI 10.17487/RFC9012</span>, <time datetime="2021-04" class="refDate">April 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9012">https://www.rfc-editor.org/info/rfc9012</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9252">[RFC9252]</dt>
+        <dd>
+<span class="refAuthor">Dawra, G., Ed.</span>, <span class="refAuthor">Talaulikar, K., Ed.</span>, <span class="refAuthor">Raszuk, R.</span>, <span class="refAuthor">Decraene, B.</span>, <span class="refAuthor">Zhuang, S.</span>, and <span class="refAuthor">J. Rabadan</span>, <span class="refTitle">"BGP Overlay Services Based on Segment Routing over IPv6 (SRv6)"</span>, <span class="seriesInfo">RFC 9252</span>, <span class="seriesInfo">DOI 10.17487/RFC9252</span>, <time datetime="2022-07" class="refDate">July 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9252">https://www.rfc-editor.org/info/rfc9252</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9256">[RFC9256]</dt>
+      <dd>
+<span class="refAuthor">Filsfils, C.</span>, <span class="refAuthor">Talaulikar, K., Ed.</span>, <span class="refAuthor">Voyer, D.</span>, <span class="refAuthor">Bogdanov, A.</span>, and <span class="refAuthor">P. Mattes</span>, <span class="refTitle">"Segment Routing Policy Architecture"</span>, <span class="seriesInfo">RFC 9256</span>, <span class="seriesInfo">DOI 10.17487/RFC9256</span>, <time datetime="2022-07" class="refDate">July 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9256">https://www.rfc-editor.org/info/rfc9256</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+<section id="section-11.2">
+        <h3 id="name-informative-references-20">
+<a href="#section-11.2" class="section-number selfRef">11.2. </a><a href="#name-informative-references-20" class="section-name selfRef">Informative References</a>
+        </h3>
+<dl class="references">
+<dt id="I-D.ietf-pce-segment-routing-policy-cp">[I-D.ietf-pce-segment-routing-policy-cp]</dt>
+        <dd>
+<span class="refAuthor">Koldychev, M.</span>, <span class="refAuthor">Sivabalan, S.</span>, <span class="refAuthor">Barth, C.</span>, <span class="refAuthor">Peng, S.</span>, and <span class="refAuthor">H. Bidgoli</span>, <span class="refTitle">"PCEP extension to support Segment Routing Policy Candidate Paths"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-pce-segment-routing-policy-cp-10</span>, <time datetime="2023-04-21" class="refDate">21 April 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-pce-segment-routing-policy-cp-10">https://datatracker.ietf.org/doc/html/draft-ietf-pce-segment-routing-policy-cp-10</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8754">[RFC8754]</dt>
+      <dd>
+<span class="refAuthor">Filsfils, C., Ed.</span>, <span class="refAuthor">Dukes, D., Ed.</span>, <span class="refAuthor">Previdi, S.</span>, <span class="refAuthor">Leddy, J.</span>, <span class="refAuthor">Matsushima, S.</span>, and <span class="refAuthor">D. Voyer</span>, <span class="refTitle">"IPv6 Segment Routing Header (SRH)"</span>, <span class="seriesInfo">RFC 8754</span>, <span class="seriesInfo">DOI 10.17487/RFC8754</span>, <time datetime="2020-03" class="refDate">March 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8754">https://www.rfc-editor.org/info/rfc8754</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+</section>
+<div id="authors-addresses">
+<section id="appendix-A">
+      <h2 id="name-authors-addresses-21">
+<a href="#name-authors-addresses-21" class="section-name selfRef">Authors' Addresses</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Wenying Jiang</span></div>
+<div dir="auto" class="left"><span class="org">China Mobile</span></div>
+<div dir="auto" class="left"><span class="street-address">No.32 XuanWuMen West Street</span></div>
+<div dir="auto" class="left"><span class="locality">Beijing</span></div>
+<div dir="auto" class="left"><span class="postal-code">100053</span></div>
+<div dir="auto" class="left"><span class="country-name">China</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:jiangwenying@chinamobile.com" class="email">jiangwenying@chinamobile.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Yisong Liu</span></div>
+<div dir="auto" class="left"><span class="org">China Mobile</span></div>
+<div dir="auto" class="left"><span class="street-address">No.32 XuanWuMen West Street</span></div>
+<div dir="auto" class="left"><span class="locality">Beijing</span></div>
+<div dir="auto" class="left"><span class="postal-code">100053</span></div>
+<div dir="auto" class="left"><span class="country-name">China</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:liuyisong@chinamobile.com" class="email">liuyisong@chinamobile.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Shunwan Zhuang</span></div>
+<div dir="auto" class="left"><span class="org">Huawei Technologies</span></div>
+<div dir="auto" class="left"><span class="street-address">Huawei Bld., No.156 Beiqing Rd.</span></div>
+<div dir="auto" class="left"><span class="locality">Beijing</span></div>
+<div dir="auto" class="left"><span class="postal-code">100095</span></div>
+<div dir="auto" class="left"><span class="country-name">China</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:zhuangshunwan@huawei.com" class="email">zhuangshunwan@huawei.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Gyan Mishra</span></div>
+<div dir="auto" class="left"><span class="org">Verizon Communications Inc.</span></div>
+<div dir="auto" class="left"><span class="street-address">13101 Columbia Pike</span></div>
+<div dir="auto" class="left">
+<span class="locality">Silver Spring, MD 20904</span>,  </div>
+<div dir="auto" class="left"><span class="country-name">United States of America</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:gyan.s.mishra@verizon.com" class="email">gyan.s.mishra@verizon.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Shuanglong Chen</span></div>
+<div dir="auto" class="left"><span class="org">Huawei Technologies</span></div>
+<div dir="auto" class="left"><span class="street-address">Huawei Bld., No.156 Beiqing Rd.</span></div>
+<div dir="auto" class="left"><span class="locality">Beijing</span></div>
+<div dir="auto" class="left"><span class="postal-code">100095</span></div>
+<div dir="auto" class="left"><span class="country-name">China</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:chenshuanglong@huawei.com" class="email">chenshuanglong@huawei.com</a>
+</div>
+</address>
+</section>
+</div>
+</div>
+
+                    </div>
+                
+            </div>
+            <div class="d-print-none col-md-3 bg-light-subtle collapse show" id="sidebar">
+                <div class="position-fixed border-start sidebar overflow-scroll overscroll-none no-scrollbar">
+                    <div class="d-flex flex-column vh-100 pt-2 pt-lg-3 ps-3 pl-md-2 pl-lg-3">
+                        <div>
+                            <a class="btn btn-primary btn-sm" href="/doc/draft-ietf-idr-ts-flowspec-srv6-policy/">Datatracker</a>
+                            <p class="fw-bold pt-2">
+                                
+                                    draft-ietf-idr-ts-flowspec-srv6-policy-03
+                                
+                                <br>
+                                
+
+
+
+
+
+
+
+    <div>This is an older version of an Internet-Draft whose latest revision state is "Active".</div>
+
+                            </p>
+                        </div>
+                        
+                        <ul class="nav nav-tabs nav-fill small me-2" role="tablist">
+                            <li class="nav-item" role="presentation" title="Document information">
+                                <button class="nav-link px-2"
+                                        id="docinfo-tab"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#docinfo-tab-pane"
+                                        type="button"
+                                        role="tab"
+                                        aria-controls="docinfo-tab-pane"
+                                        aria-selected="true">
+                                    <i class="bi bi-info-circle"></i><span class="d-none d-md-block d-xl-inline ms-xl-1">Info</span>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation" title="Table of contents">
+                                <button class="nav-link px-2"
+                                        id="toc-tab"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#toc-tab-pane"
+                                        type="button"
+                                        role="tab"
+                                        aria-controls="toc-tab-pane"
+                                        aria-selected="false">
+                                    <i class="bi bi-list-ol"></i><span class="d-none d-md-block d-xl-inline ms-xl-1">Contents</span>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation" title="Preferences">
+                                <button class="nav-link px-2"
+                                        id="pref-tab"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#pref-tab-pane"
+                                        type="button"
+                                        role="tab"
+                                        aria-controls="pref-tab-pane"
+                                        aria-selected="false">
+                                    <i class="bi bi-gear"></i><span class="d-none d-md-block d-xl-inline ms-xl-1">Prefs</span>
+                                </button>
+                            </li>
+                        </ul>
+                        <div class="overflow-auto tab-content pt-2 me-2">
+                            <div class="tab-pane"
+                                 id="docinfo-tab-pane"
+                                 role="tabpanel"
+                                 aria-labelledby="docinfo-tab"
+                                 tabindex="0">
+                                <table class="table table-sm table-borderless">
+                                    
+
+
+
+
+
+
+
+<tbody class="meta align-top ">
+    <tr>
+        <th scope="row">Document</th>
+        <th scope="row">Document type</th>
+        <td class="edit"></td>
+        <td>
+            
+
+
+
+
+
+
+
+    <div>This is an older version of an Internet-Draft whose latest revision state is "Active".</div>
+
+            
+            
+            
+                
+
+
+
+
+    
+
+            
+        </td>
+    </tr>
+    
+        <tr>
+            <td></td>
+            <th scope="row">Select version</th>
+            <td class="edit"></td>
+            <td>
+                
+
+
+
+    <ul class="revision-list pagination pagination-sm text-center flex-wrap my-0">
+        
+            
+                 
+                    <li class="page-item ">
+                        <a class="page-link"
+                        href="/doc/html/draft-ietf-idr-ts-flowspec-srv6-policy-00"
+                        >
+                            00
+                        </a>
+                    </li>
+                
+            
+                 
+                    <li class="page-item ">
+                        <a class="page-link"
+                        href="/doc/html/draft-ietf-idr-ts-flowspec-srv6-policy-01"
+                        rel="nofollow">
+                            01
+                        </a>
+                    </li>
+                
+            
+                 
+                    <li class="page-item ">
+                        <a class="page-link"
+                        href="/doc/html/draft-ietf-idr-ts-flowspec-srv6-policy-02"
+                        rel="nofollow">
+                            02
+                        </a>
+                    </li>
+                
+            
+                 
+                    <li class="page-item active">
+                        <a class="page-link"
+                        href="/doc/html/draft-ietf-idr-ts-flowspec-srv6-policy-03"
+                        rel="nofollow">
+                            03
+                        </a>
+                    </li>
+                
+            
+                 
+                    <li class="page-item ">
+                        <a class="page-link"
+                        href="/doc/html/draft-ietf-idr-ts-flowspec-srv6-policy-04"
+                        rel="nofollow">
+                            04
+                        </a>
+                    </li>
+                
+            
+                 
+                    <li class="page-item ">
+                        <a class="page-link"
+                        href="/doc/html/draft-ietf-idr-ts-flowspec-srv6-policy-05"
+                        >
+                            05
+                        </a>
+                    </li>
+                
+            
+            
+        
+    </ul>
+
+            </td>
+        </tr>
+        
+            <tr>
+                <td></td>
+                <th scope="row">Compare versions</th>
+                <td class="edit"></td>
+                <td>
+                    
+
+
+
+<form class="form-horizontal diff-form"
+      action="https://author-tools.ietf.org/iddiff"
+      method="get"
+      target="_blank">
+
+            <select class="form-select form-select-sm mb-1 select2-field"
+                    data-max-entries="1"
+                    data-width="resolve"
+                    data-allow-clear="false"
+                    data-minimum-input-length="0"
+                    aria-label="From revision"
+                    name="url1">
+                
+                    <option value="draft-ietf-idr-ts-flowspec-srv6-policy-05">
+                        draft-ietf-idr-ts-flowspec-srv6-policy-05
+                        
+                    </option>
+                
+                    <option value="draft-ietf-idr-ts-flowspec-srv6-policy-04" selected>
+                        draft-ietf-idr-ts-flowspec-srv6-policy-04
+                        
+                    </option>
+                
+                    <option value="draft-ietf-idr-ts-flowspec-srv6-policy-03">
+                        draft-ietf-idr-ts-flowspec-srv6-policy-03
+                        
+                    </option>
+                
+                    <option value="draft-ietf-idr-ts-flowspec-srv6-policy-02">
+                        draft-ietf-idr-ts-flowspec-srv6-policy-02
+                        
+                    </option>
+                
+                    <option value="draft-ietf-idr-ts-flowspec-srv6-policy-01">
+                        draft-ietf-idr-ts-flowspec-srv6-policy-01
+                        
+                    </option>
+                
+                    <option value="draft-ietf-idr-ts-flowspec-srv6-policy-00">
+                        draft-ietf-idr-ts-flowspec-srv6-policy-00
+                        
+                    </option>
+                
+                    <option value="draft-jiang-idr-ts-flowspec-srv6-policy-07">
+                        draft-jiang-idr-ts-flowspec-srv6-policy-07
+                        
+                    </option>
+                
+                    <option value="draft-jiang-idr-ts-flowspec-srv6-policy-06">
+                        draft-jiang-idr-ts-flowspec-srv6-policy-06
+                        
+                    </option>
+                
+                    <option value="draft-jiang-idr-ts-flowspec-srv6-policy-05">
+                        draft-jiang-idr-ts-flowspec-srv6-policy-05
+                        
+                    </option>
+                
+                    <option value="draft-jiang-idr-ts-flowspec-srv6-policy-04">
+                        draft-jiang-idr-ts-flowspec-srv6-policy-04
+                        
+                    </option>
+                
+                    <option value="draft-jiang-idr-ts-flowspec-srv6-policy-03">
+                        draft-jiang-idr-ts-flowspec-srv6-policy-03
+                        
+                    </option>
+                
+                    <option value="draft-jiang-idr-ts-flowspec-srv6-policy-02">
+                        draft-jiang-idr-ts-flowspec-srv6-policy-02
+                        
+                    </option>
+                
+                    <option value="draft-jiang-idr-ts-flowspec-srv6-policy-01">
+                        draft-jiang-idr-ts-flowspec-srv6-policy-01
+                        
+                    </option>
+                
+                    <option value="draft-jiang-idr-ts-flowspec-srv6-policy-00">
+                        draft-jiang-idr-ts-flowspec-srv6-policy-00
+                        
+                    </option>
+                
+                
+            </select>
+
+            <select class="form-select form-select-sm mb-1 select2-field"
+                    data-max-entries="1"
+                    data-width="resolve"
+                    data-allow-clear="false"
+                    data-minimum-input-length="0"
+                    aria-label="To revision"
+                    name="url2">
+                
+                    <option value="draft-ietf-idr-ts-flowspec-srv6-policy-05" selected>
+                        draft-ietf-idr-ts-flowspec-srv6-policy-05
+                        
+                    </option>
+                
+                    <option value="draft-ietf-idr-ts-flowspec-srv6-policy-04">
+                        draft-ietf-idr-ts-flowspec-srv6-policy-04
+                        
+                    </option>
+                
+                    <option value="draft-ietf-idr-ts-flowspec-srv6-policy-03">
+                        draft-ietf-idr-ts-flowspec-srv6-policy-03
+                        
+                    </option>
+                
+                    <option value="draft-ietf-idr-ts-flowspec-srv6-policy-02">
+                        draft-ietf-idr-ts-flowspec-srv6-policy-02
+                        
+                    </option>
+                
+                    <option value="draft-ietf-idr-ts-flowspec-srv6-policy-01">
+                        draft-ietf-idr-ts-flowspec-srv6-policy-01
+                        
+                    </option>
+                
+                    <option value="draft-ietf-idr-ts-flowspec-srv6-policy-00">
+                        draft-ietf-idr-ts-flowspec-srv6-policy-00
+                        
+                    </option>
+                
+                    <option value="draft-jiang-idr-ts-flowspec-srv6-policy-07">
+                        draft-jiang-idr-ts-flowspec-srv6-policy-07
+                        
+                    </option>
+                
+                    <option value="draft-jiang-idr-ts-flowspec-srv6-policy-06">
+                        draft-jiang-idr-ts-flowspec-srv6-policy-06
+                        
+                    </option>
+                
+                    <option value="draft-jiang-idr-ts-flowspec-srv6-policy-05">
+                        draft-jiang-idr-ts-flowspec-srv6-policy-05
+                        
+                    </option>
+                
+                    <option value="draft-jiang-idr-ts-flowspec-srv6-policy-04">
+                        draft-jiang-idr-ts-flowspec-srv6-policy-04
+                        
+                    </option>
+                
+                    <option value="draft-jiang-idr-ts-flowspec-srv6-policy-03">
+                        draft-jiang-idr-ts-flowspec-srv6-policy-03
+                        
+                    </option>
+                
+                    <option value="draft-jiang-idr-ts-flowspec-srv6-policy-02">
+                        draft-jiang-idr-ts-flowspec-srv6-policy-02
+                        
+                    </option>
+                
+                    <option value="draft-jiang-idr-ts-flowspec-srv6-policy-01">
+                        draft-jiang-idr-ts-flowspec-srv6-policy-01
+                        
+                    </option>
+                
+                    <option value="draft-jiang-idr-ts-flowspec-srv6-policy-00">
+                        draft-jiang-idr-ts-flowspec-srv6-policy-00
+                        
+                    </option>
+                
+                
+            </select>
+
+            <button type="submit"
+                    class="btn btn-primary btn-sm"
+                    value="--html"
+                    name="difftype">
+                Side-by-side
+            </button>
+            
+            <button type="submit"
+                    class="btn btn-primary btn-sm"
+                    value="--hwdiff"
+                    name="difftype">
+                Inline
+            </button>
+
+</form>
+                </td>
+            </tr>
+        
+    
+    <tr>
+        <td></td>
+        <th scope="row">Authors</th>
+        <td class="edit">
+            
+        </td>
+        <td>
+            
+            
+                <span ><a 
+           title="Datatracker profile of Jiang Wenying"
+            href="/person/jiangwenying@chinamobile.com" >Jiang Wenying</a> <a 
+               href="mailto:jiangwenying%40chinamobile.com"
+               aria-label="Compose email to jiangwenying@chinamobile.com"
+               title="Compose email to jiangwenying@chinamobile.com">
+                <i class="bi bi-envelope"></i></a></span>,
+            
+                <span ><a 
+           title="Datatracker profile of Yisong Liu"
+            href="/person/liuyisong@chinamobile.com" >Yisong Liu</a> <a 
+               href="mailto:liuyisong%40chinamobile.com"
+               aria-label="Compose email to liuyisong@chinamobile.com"
+               title="Compose email to liuyisong@chinamobile.com">
+                <i class="bi bi-envelope"></i></a></span>,
+            
+                <span ><a 
+           title="Datatracker profile of Shunwan Zhuang"
+            href="/person/zhuangshunwan@huawei.com" >Shunwan Zhuang</a> <a 
+               href="mailto:zhuangshunwan%40huawei.com"
+               aria-label="Compose email to zhuangshunwan@huawei.com"
+               title="Compose email to zhuangshunwan@huawei.com">
+                <i class="bi bi-envelope"></i></a></span>,
+            
+                <span ><a 
+           title="Datatracker profile of Gyan Mishra"
+            href="/person/gyan.s.mishra@verizon.com" >Gyan Mishra</a> <a 
+               href="mailto:gyan.s.mishra%40verizon.com"
+               aria-label="Compose email to gyan.s.mishra@verizon.com"
+               title="Compose email to gyan.s.mishra@verizon.com">
+                <i class="bi bi-envelope"></i></a></span>,
+            
+                <span ><a 
+           title="Datatracker profile of Shuanglong Chen"
+            href="/person/chenshuanglong@huawei.com" >Shuanglong Chen</a> <a 
+               href="mailto:chenshuanglong%40huawei.com"
+               aria-label="Compose email to chenshuanglong@huawei.com"
+               title="Compose email to chenshuanglong@huawei.com">
+                <i class="bi bi-envelope"></i></a></span>
+            
+            
+        </td>
+    </tr>
+    
+    
+        
+            <tr>
+                <td></td>
+                <th scope="row">Replaces</th>
+                <td class="edit">
+                    
+                </td>
+                <td>
+                    
+                        
+                            <a href="/doc/html/draft-jiang-idr-ts-flowspec-srv6-policy" title="Traffic Steering using BGP Flowspec with SRv6 Policy">draft-jiang-idr-ts-flowspec-srv6-policy</a>
+                        
+                    
+                </td>
+            </tr>
+        
+        
+        
+    
+    <tr>
+        <td></td>
+        <th scope="row">
+            RFC stream
+        </th>
+        <td class="edit">
+            
+        </td>
+        <td >
+            
+                
+                
+                    
+                        
+
+
+
+<img alt="IETF Logo"
+     class="d-lm-none w-25 mt-1"
+     
+     
+        
+             src="https://static.ietf.org/dt/12.35.0/ietf/images/ietf-logo-nor-white.svg"
+        
+     
+     >
+
+<img alt="IETF Logo"
+     class="d-dm-none w-25 mt-1"
+     
+     
+        
+             src="https://static.ietf.org/dt/12.35.0/ietf/images/ietf-logo-nor.svg"
+        
+     
+     >
+                    
+                
+                
+            
+        </td>
+    </tr>
+    
+    <tr>
+        <td></td>
+        <th scope="row">
+            Other formats
+        </th>
+        <td class="edit">
+        </td>
+        <td>
+            
+                
+    <div class="buttonlist">
+    
+        
+        <a class="btn btn-primary btn-sm"
+          
+          target="_blank"
+          href="https://www.ietf.org/archive/id/draft-ietf-idr-ts-flowspec-srv6-policy-03.txt">
+            
+                <i class="bi bi-file-text"></i> txt
+            
+        </a>
+        
+    
+        
+        <a class="btn btn-primary btn-sm"
+          
+          target="_blank"
+          href="https://www.ietf.org/archive/id/draft-ietf-idr-ts-flowspec-srv6-policy-03.html">
+            
+                <i class="bi bi-file-code"></i> html
+            
+        </a>
+        
+    
+        
+        <a class="btn btn-primary btn-sm"
+          
+          target="_blank"
+          href="https://www.ietf.org/archive/id/draft-ietf-idr-ts-flowspec-srv6-policy-03.xml">
+            
+                <i class="bi bi-file-code"></i> xml
+            
+        </a>
+        
+    
+        
+    
+        
+        <a class="btn btn-primary btn-sm"
+          
+          target="_blank"
+          href="/doc/draft-ietf-idr-ts-flowspec-srv6-policy/03/bibtex/">
+            
+                <i class="bi bi-file-ruled"></i> bibtex
+            
+        </a>
+        
+    
+        
+        <a class="btn btn-primary btn-sm"
+          
+          target="_blank"
+          href="/doc/bibxml3/draft-ietf-idr-ts-flowspec-srv6-policy-03.xml">
+            
+                <i class="bi bi-file-code"></i> bibxml
+            
+        </a>
+        
+    
+</div>
+
+            
+        </td>
+    </tr>
+    
+    
+        
+            <tr>
+                <td>
+                </td>
+                <th scope="row">
+                    Additional resources
+                </th>
+                <td class="edit">
+                    
+                </td>
+                <td>
+                    
+                        
+                        
+                            
+                                <a href="https://mailarchive.ietf.org/arch/browse/idr/?q=draft-ietf-idr-ts-flowspec-srv6-policy">
+                                    Mailing list discussion
+                                </a>
+                            
+                        
+                    
+                </td>
+            </tr>
+        
+    
+</tbody>
+                                </table>
+                                <a class="btn btn-sm btn-warning mb-3"
+                                target="_blank"
+                                href="https://github.com/ietf-tools/datatracker/issues/new/choose">
+                                    Report a datatracker bug
+                                    <i class="bi bi-bug"></i>
+                                </a>
+                            </div>
+                            <div class="tab-pane mb-5"
+                                 id="toc-tab-pane"
+                                 role="tabpanel"
+                                 aria-labelledby="toc-tab"
+                                 tabindex="0">
+                                <nav class="nav nav-pills flex-column small" id="toc-nav">
+                                </nav>
+                            </div>
+                            <div class="tab-pane mb-5 small"
+                                 id="pref-tab-pane"
+                                 role="tabpanel"
+                                 aria-labelledby="pref-tab"
+                                 tabindex="0">
+                                <label class="form-label fw-bold mb-2">Show sidebar by default</label>
+                                <div class="btn-group-vertical btn-group-sm d-flex" role="group">
+                                    <input type="radio" class="btn-check" name="sidebar" id="on-radio">
+                                    <label class="btn btn-outline-primary" for="on-radio">Yes</label>
+                                    <input type="radio" class="btn-check" name="sidebar" id="off-radio">
+                                    <label class="btn btn-outline-primary" for="off-radio">No</label>
+                                </div>
+                                <label class="form-label fw-bold mt-4 mb-2">Tab to show by default</label>
+                                <div class="btn-group-vertical btn-group-sm d-flex" role="group">
+                                    <input type="radio" class="btn-check" name="deftab" id="docinfo-radio">
+                                    <label class="btn btn-outline-primary" for="docinfo-radio">
+                                        <i class="bi bi-info-circle me-1"></i>Info
+                                    </label>
+                                    <input type="radio" class="btn-check" name="deftab" id="toc-radio">
+                                    <label class="btn btn-outline-primary" for="toc-radio">
+                                        <i class="bi bi-list-ol me-1"></i>Contents
+                                    </label>
+                                </div>
+                                <label class="form-label fw-bold mt-4 mb-2">HTMLization configuration</label>
+                                <div class="btn-group-vertical btn-group-sm d-flex" role="group">
+                                    <input type="radio" class="btn-check" name="htmlconf" id="txt-radio">
+                                    <label class="btn btn-outline-primary" for="txt-radio" title="This is the traditional HTMLization method.">
+                                        <i class="bi bi-badge-sd me-1"></i>HTMLize the plaintext
+                                    </label>
+                                    <input type="radio" class="btn-check" name="htmlconf" id="html-radio">
+                                    <label class="btn btn-outline-primary" for="html-radio" title="This is the modern HTMLization method.">
+                                        <i class="bi bi-badge-hd me-1"></i>Plaintextify the HTML
+                                    </label>
+                                </div>
+                                <label class="form-label fw-bold mt-4 mb-2" for="ptsize">Maximum font size</label>
+                                <input type="range" class="form-range" min="7" max="16" id="ptsize" oninput="ptdemo.value = ptsize.value">
+                                <label class="form-label fw-bold mt-4 mb-2">Page dependencies</label>
+                                <div class="btn-group-vertical btn-group-sm d-flex" role="group">
+                                    <input type="radio" class="btn-check" name="pagedeps" id="inline-radio">
+                                    <label class="btn btn-outline-primary" for="inline-radio" title="Generate larger, standalone web pages that do not require network access to render.">
+                                        <i class="bi bi-box me-1"></i>Inline
+                                    </label>
+                                    <input type="radio" class="btn-check" name="pagedeps" id="reference-radio">
+                                    <label class="btn btn-outline-primary" for="reference-radio" title="Generate regular web pages that require network access to render.">
+                                        <i class="bi bi-link-45deg me-1"></i>Reference
+                                    </label>
+                                </div>
+                                <label class="form-label fw-bold mt-4 mb-2">Citation links</label>
+                                <div class="btn-group-vertical btn-group-sm d-flex" role="group">
+                                    <input type="radio" class="btn-check" name="reflinks" id="refsection-radio">
+                                    <label class="btn btn-outline-primary" for="refsection-radio" title="Citation links go to the reference section.">
+                                        <i class="bi bi-arrow-clockwise"></i> Go to reference section
+                                    </label>
+                                    <input type="radio" class="btn-check" name="reflinks" id="citation-radio">
+                                    <label class="btn btn-outline-primary" for="citation-radio" title="Citation links go directly to the cited document.">
+                                        <i class="bi bi-link-45deg me-1"></i>Go to linked document
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+<script type="text/javascript">
+  var _paq = window._paq || [];
+  
+  _paq.push(['disableCookies']);
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="//analytics.ietf.org/";
+    _paq.push(['setTrackerUrl', u+'matomo.php']);
+    _paq.push(['setSiteId', 7]);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<noscript><p><img src="//analytics.ietf.org/piwik.php?idsite=7" style="border:0;" alt="" /></p></noscript>
+
+    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'90f989d49c1ce381',t:'MTczOTE2MzY1Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

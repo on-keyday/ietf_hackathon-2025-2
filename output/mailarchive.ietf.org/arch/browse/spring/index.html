@@ -1,0 +1,808 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Search IETF mail list archives">
+    <title>spring</title>
+
+    
+
+    <link rel="stylesheet" type="text/css" href="https://static.ietf.org/mailarchive/2.29.0/fontawesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="https://static.ietf.org/mailarchive/2.29.0/mlarchive/css/bootstrap_custom.css">
+    <link rel="stylesheet" type="text/css" href="https://static.ietf.org/mailarchive/2.29.0/mlarchive/css/styles.css">
+
+    
+
+    
+
+</head>
+
+<body>
+
+<!-- Container -->
+<div id="container">
+
+    <header class="navbar navbar-expand-md navbar-dark fixed-top px-3 py-0">
+        <div class="container-fluid">
+            <a class="navbar-brand p-0" href="/">
+                <img alt="IETF Logo" src="https://static.ietf.org/mailarchive/2.29.0/mlarchive/images/ietflogo-small-transparent.png">
+                <span class="navbar-text d-none d-md-inline-block">
+                
+                Mail Archive
+                
+                </span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-main" aria-controls="navbar-main" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            
+            <div id="navbar-main" class="navbar-header collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item d-none d-lg-inline">
+                        <a class="nav-link" href="https://www.ietf.org/search/">Search www.ietf.org</a>
+                    </li>
+                    <li class="nav-item d-none d-lg-inline">
+                        <a class="nav-link" href="https://datatracker.ietf.org">Search Datatracker</a>
+                    </li>
+		            <li class="nav-item d-none d-lg-inline navbar-text pipe"></li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbar-help" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Help</a>
+                        <div class="dropdown-menu" aria-labelledby="navbar-help">
+                            <a class="dropdown-item" href="/arch/help/">Search Syntax</a>
+                            <a class="dropdown-item" href="/docs/api-reference/">API Reference</a>
+                        </div>
+                    </li>
+
+                    
+                    
+                    
+                    
+                    
+                    <li class="nav-item dropdown me-2">
+                        <a id="nav-settings-anchor" class="nav-link dropdown-toggle" href="#" id="navbar-settings" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Settings</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbar-settings">
+                            <li><a id="toggle-static" class="dropdown-item" href="#">Turn Static Mode On</a></li>
+                        </ul>
+                    </li>
+                    
+
+                    
+                    <li class="nav-item">
+                        
+                            <a class="nav-link" href="/oidc/authenticate/" rel="nofollow">Sign in</a>
+                        
+                    </li>
+                    
+                </ul>
+            </div> <!-- navbar-header -->
+            
+        </div> <!-- container-fluid -->
+    </header>
+
+            <!-- 
+            <noscript>
+                <p class="navbar-text"><small>Enable Javascript for full functionality.</small></p>
+            </noscript>
+            -->
+
+        <!-- Django Messages -->
+        
+
+
+    <!-- Content -->
+    <div id="content">
+        
+
+    <div id="msg-container">
+        <div id="sidebar">
+            <div id="search-filters">
+                
+                    <p class="text-center">Viewing List:<br><span class="browse-list-name"><b>spring</b></span></p>
+                    <hr>
+                
+                <h5 class="mt-4">FILTER BY TIME</h5>
+                <ul class="filter-options" tabindex="-1">
+                  <li class="filter-item"><a class="selected" href="?">Anytime</a></li>
+                  <li class="filter-item"><a class="None" href="?qdr=d">Past day</a></li>
+                  <li class="filter-item"><a class="None" href="?qdr=w">Past week</a></li>
+                  <li class="filter-item"><a class="None" href="?qdr=m">Past month</a></li>
+                  <li class="filter-item"><a class="None" href="?qdr=y">Past year</a></li>
+                </ul>
+                <div id="filter-box" class="js-off">
+                    
+
+                    <h5 class="mt-4">FILTER BY FROM</h5>
+                    <div id="from-filter" class="filter" tabindex="-1">
+                        <form id="from-filter-form">
+                        <ul class="filter-options" tabindex="-1">
+                         
+                        </ul>
+                        </form>
+                    </div> <!-- from-filter -->
+                </div> <!-- filter-box -->
+            </div> <!-- search-filters -->
+            
+            <div id="message">
+              
+            </div>
+            
+            
+  <div class="footer">
+      <p class="small text-center">v2.29.0 | <a href="https://github.com/ietf-tools/mailarch/issues">Report a Bug</a> | <a href="mailto:tools-help@ietf.org">By Email</a> | <a href="https://status.ietf.org">System Status</a></p>
+  </div>
+
+
+        </div> <!-- sidebar -->
+
+        <div id="msg-components">
+        
+            <nav id="toolbar-left" class="navbar navbar-light bg-light rounded shadow-sm float-start toolbar">
+              <ul class="navbar-nav me-auto">
+                <li id="toggle-filters" class="nav-item">
+                  <a href="#" class="nav-link"><i class="fa fa-chevron-left toggle-pane" aria-hidden="true"></i></a>
+                </li>
+              </ul>
+            </nav>
+
+            <nav id="toolbar" class="navbar navbar-expand-md navbar-light bg-light rounded shadow-sm toolbar">
+                <div class="container-fluid">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#myNavbar" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse justify-content-stretch" id="myNavbar">
+                        <ul class="navbar-nav mx-2 flex-shrink-0">
+                            
+                            <!-- <li><a id="clear-sort" href="#">Clear Sort</a></li> -->
+                            
+                                <li class="nav-item"><a class="nav-link active" href="/arch/browse/spring/?">Date</a></li>
+                                <li class="nav-item"><a id="gbt-link" class="nav-link" href="/arch/browse/spring/?gbt=1">Thread</a></li>
+                            
+                        </ul>
+                        
+                        <form name="search-form" id="id_search_form" class="ms-3 my-auto flex-grow-1" method="get">
+                            <div class="input-group input-group-sm w-100">
+                                
+                                    <input type="search" name="q" spellcheck="false" placeholder="Search spring" class="form-control" id="id_q">
+                                
+                                <div class="input-group-append">
+                                    <button class="btn btn-secondary" type="submit">
+                                        <span class="fa fa-search" aria-hidden="true"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <ul class="navbar-nav">
+                            <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#export-modal">Export</a></li>
+                        </ul> <!-- nav navbar-nav -->
+
+                    </div> <!-- myNavbar -->
+                </div> <!-- container-fluid -->
+            </nav> <!-- toolbar -->
+    
+            
+            <div id="msg-panes">
+                <div id="list-pane">
+                    
+                    
+                        <div class="header sortable">
+                            <a id="sort-button-subject" class="unsorted sortbutton" href="#">Subject<i class="fa fa-sort" aria-hidden="true"></i></a>
+                        </div><div class="header sortable">
+                            <a id="sort-button-frm" class="unsorted sortbutton" href="#">From<i class="fa fa-sort" aria-hidden="true"></i></a>
+                        </div><div class="header sortable">
+                            <a id="sort-button-date" class="unsorted sortbutton" href="#">Date<i class="fa fa-sort" aria-hidden="true"></i></a>
+                        </div><div class="header sortable d-none">
+                            <a id="sort-button-email_list" class="unsorted sortbutton" href="#">List<i class="fa fa-sort" aria-hidden="true"></i></a>
+                        </div>
+                    
+
+                    <div id="msg-list" class="msg-list wrapper no-preview" tabindex="-1" data-results-per-page="" data-queryid="" data-queryset-offset="0" data-selected-offset="None" data-export-token="Uj7c2OLy5WopQgzx" data-browse-list="spring" data-gbt="" data-static-off-url="/arch/browse/spring/" data-static-on-url="/arch/browse/static/spring/">
+                        <div class="table msg-table xtable">
+                            <div class="xtbody">
+                                
+                                    
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-1">
+            <span>[spring] Re: Mahesh Jethanandani&#x27;s No Objection on draft-ietf-idr-sr-policy-safi-11: (with COMMENT)</span><a class="msg-detail" href="/arch/msg/spring/HbbYDLqNgiP56QvCOVmJQ-TxhBU/">[spring] Re: Mahesh Jethanandani&#x27;s No Objection on draft-ietf-idr-sr-policy-safi-11: (with COMMENT)</a>
+        </div>
+        <div class="xtd from-col">Mahesh Jethanandani</div>
+        <div class="xtd date-col">2025-02-08</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/HbbYDLqNgiP56QvCOVmJQ-TxhBU/</div>
+        <div class="xtd id-col d-none">3558097</div>
+        <div class="xtd thread-col d-none">2173064</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-0">
+            <span>[spring] Protocol Action: &#x27;Compressed SRv6 Segment List Encoding (CSID)&#x27; to Proposed Standard (draft-ietf-spring-srv6-srh-compression-23.txt)</span><a class="msg-detail" href="/arch/msg/spring/7m0HPgAcQJDXPYjfOHilHHEn_jg/">[spring] Protocol Action: &#x27;Compressed SRv6 Segment List Encoding (CSID)&#x27; to Proposed Standard (draft-ietf-spring-srv6-srh-compression-23.txt)</a>
+        </div>
+        <div class="xtd from-col">The IESG</div>
+        <div class="xtd date-col">2025-02-06</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/7m0HPgAcQJDXPYjfOHilHHEn_jg/</div>
+        <div class="xtd id-col d-none">3557362</div>
+        <div class="xtd thread-col d-none">2173263</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-1">
+            <span>[spring] Re: Fwd: Datatracker State Update Notice: &lt;draft-ietf-spring-srv6-srh-compression-23.txt&gt;</span><a class="msg-detail" href="/arch/msg/spring/XSrtadWao53lQLvyOdvVj4m-bKE/">[spring] Re: Fwd: Datatracker State Update Notice: &lt;draft-ietf-spring-srv6-srh-compression-23.txt&gt;</a>
+        </div>
+        <div class="xtd from-col">weiqiang cheng</div>
+        <div class="xtd date-col">2025-02-06</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/XSrtadWao53lQLvyOdvVj4m-bKE/</div>
+        <div class="xtd id-col d-none">3557211</div>
+        <div class="xtd thread-col d-none">2173180</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-3">
+            <span>[spring] Re: Extending WG last call for draft-ietf-spring-cs-sr-policy</span><a class="msg-detail" href="/arch/msg/spring/2_ATRrXHed0qJkeeYHZoKgIW4GI/">[spring] Re: Extending WG last call for draft-ietf-spring-cs-sr-policy</a>
+        </div>
+        <div class="xtd from-col">weiqiang cheng</div>
+        <div class="xtd date-col">2025-02-06</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/2_ATRrXHed0qJkeeYHZoKgIW4GI/</div>
+        <div class="xtd id-col d-none">3557205</div>
+        <div class="xtd thread-col d-none">2170511</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-0">
+            <span>[spring] Fwd: Datatracker State Update Notice: &lt;draft-ietf-spring-srv6-srh-compression-23.txt&gt;</span><a class="msg-detail" href="/arch/msg/spring/l-jcPH4u1IrXRwGUd-MpZwANPjY/">[spring] Fwd: Datatracker State Update Notice: &lt;draft-ietf-spring-srv6-srh-compression-23.txt&gt;</a>
+        </div>
+        <div class="xtd from-col">Joel Halpern</div>
+        <div class="xtd date-col">2025-02-06</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/l-jcPH4u1IrXRwGUd-MpZwANPjY/</div>
+        <div class="xtd id-col d-none">3557176</div>
+        <div class="xtd thread-col d-none">2173180</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-2">
+            <span>[spring] Extending WG last call for draft-ietf-spring-cs-sr-policy</span><a class="msg-detail" href="/arch/msg/spring/AVX88H4tetYOdbhgpmh34Ge_Esg/">[spring] Extending WG last call for draft-ietf-spring-cs-sr-policy</a>
+        </div>
+        <div class="xtd from-col">Joel Halpern</div>
+        <div class="xtd date-col">2025-02-06</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/AVX88H4tetYOdbhgpmh34Ge_Esg/</div>
+        <div class="xtd id-col d-none">3557118</div>
+        <div class="xtd thread-col d-none">2170511</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-0">
+            <span>[spring] Erik Kline&#x27;s No Objection on draft-ietf-spring-srv6-srh-compression-23: (with COMMENT)</span><a class="msg-detail" href="/arch/msg/spring/dqE5mqVnp3o3uh_lIhUzzKhvThw/">[spring] Erik Kline&#x27;s No Objection on draft-ietf-spring-srv6-srh-compression-23: (with COMMENT)</a>
+        </div>
+        <div class="xtd from-col">Erik Kline via Datatracker</div>
+        <div class="xtd date-col">2025-02-06</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/dqE5mqVnp3o3uh_lIhUzzKhvThw/</div>
+        <div class="xtd id-col d-none">3557091</div>
+        <div class="xtd thread-col d-none">2173132</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-0">
+            <span>[spring] John Scudder&#x27;s No Objection on draft-ietf-spring-srv6-srh-compression-23: (with COMMENT)</span><a class="msg-detail" href="/arch/msg/spring/nDlxXEsfWv_RK4bgLbCLmi6gA18/">[spring] John Scudder&#x27;s No Objection on draft-ietf-spring-srv6-srh-compression-23: (with COMMENT)</a>
+        </div>
+        <div class="xtd from-col">John Scudder via Datatracker</div>
+        <div class="xtd date-col">2025-02-06</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/nDlxXEsfWv_RK4bgLbCLmi6gA18/</div>
+        <div class="xtd id-col d-none">3557084</div>
+        <div class="xtd thread-col d-none">2173127</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-2">
+            <span>[spring] Re: John Scudder&#x27;s Discuss on draft-ietf-spring-srv6-srh-compression-20: (with DISCUSS and COMMENT)</span><a class="msg-detail" href="/arch/msg/spring/8bRjfhYsPMCbwSe4rMoR8z9M6lU/">[spring] Re: John Scudder&#x27;s Discuss on draft-ietf-spring-srv6-srh-compression-20: (with DISCUSS and COMMENT)</a>
+        </div>
+        <div class="xtd from-col">Francois Clad</div>
+        <div class="xtd date-col">2025-02-06</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/8bRjfhYsPMCbwSe4rMoR8z9M6lU/</div>
+        <div class="xtd id-col d-none">3557078</div>
+        <div class="xtd thread-col d-none">2172956</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-0">
+            <span>[spring] I-D Action: draft-ietf-spring-srv6-srh-compression-23.txt</span><a class="msg-detail" href="/arch/msg/spring/uUqRrVEDGRbJDgATc_WqgVtD4Sk/">[spring] I-D Action: draft-ietf-spring-srv6-srh-compression-23.txt</a>
+        </div>
+        <div class="xtd from-col">internet-drafts</div>
+        <div class="xtd date-col">2025-02-06</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/uUqRrVEDGRbJDgATc_WqgVtD4Sk/</div>
+        <div class="xtd id-col d-none">3557076</div>
+        <div class="xtd thread-col d-none">2173125</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-2">
+            <span>[spring] Re: Erik Kline&#x27;s Discuss on draft-ietf-spring-srv6-srh-compression-19: (with DISCUSS and COMMENT)</span><a class="msg-detail" href="/arch/msg/spring/sbTQeWQwbd7jDk0ympXfaHYTzf0/">[spring] Re: Erik Kline&#x27;s Discuss on draft-ietf-spring-srv6-srh-compression-19: (with DISCUSS and COMMENT)</a>
+        </div>
+        <div class="xtd from-col">Francois Clad</div>
+        <div class="xtd date-col">2025-02-06</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/sbTQeWQwbd7jDk0ympXfaHYTzf0/</div>
+        <div class="xtd id-col d-none">3557004</div>
+        <div class="xtd thread-col d-none">2172503</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-0">
+            <span>[spring] I-D Action: draft-ietf-spring-srv6-srh-compression-22.txt</span><a class="msg-detail" href="/arch/msg/spring/BkRziS9nr4mpGc6VUMgFQ1v1VK8/">[spring] I-D Action: draft-ietf-spring-srv6-srh-compression-22.txt</a>
+        </div>
+        <div class="xtd from-col">internet-drafts</div>
+        <div class="xtd date-col">2025-02-06</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/BkRziS9nr4mpGc6VUMgFQ1v1VK8/</div>
+        <div class="xtd id-col d-none">3557001</div>
+        <div class="xtd thread-col d-none">2173096</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-1">
+            <span>[spring] Re: John Scudder&#x27;s Discuss on draft-ietf-spring-srv6-srh-compression-20: (with DISCUSS and COMMENT)</span><a class="msg-detail" href="/arch/msg/spring/C7SvfkUuGBMsO1D4-IMdvDiSvDA/">[spring] Re: John Scudder&#x27;s Discuss on draft-ietf-spring-srv6-srh-compression-20: (with DISCUSS and COMMENT)</a>
+        </div>
+        <div class="xtd from-col">Francois Clad</div>
+        <div class="xtd date-col">2025-02-06</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/C7SvfkUuGBMsO1D4-IMdvDiSvDA/</div>
+        <div class="xtd id-col d-none">3556954</div>
+        <div class="xtd thread-col d-none">2172956</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-0">
+            <span>[spring] I-D Action: draft-ietf-spring-srv6-srh-compression-21.txt</span><a class="msg-detail" href="/arch/msg/spring/CWUWpdOMHz2SUbLvp_-fhPwpiwk/">[spring] I-D Action: draft-ietf-spring-srv6-srh-compression-21.txt</a>
+        </div>
+        <div class="xtd from-col">internet-drafts</div>
+        <div class="xtd date-col">2025-02-06</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/CWUWpdOMHz2SUbLvp_-fhPwpiwk/</div>
+        <div class="xtd id-col d-none">3556947</div>
+        <div class="xtd thread-col d-none">2173076</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-0">
+            <span>[spring] Re: Mahesh Jethanandani&#x27;s No Objection on draft-ietf-idr-sr-policy-safi-11: (with COMMENT)</span><a class="msg-detail" href="/arch/msg/spring/kY463d9k-2TwKZe5KaGpI9kD6AY/">[spring] Re: Mahesh Jethanandani&#x27;s No Objection on draft-ietf-idr-sr-policy-safi-11: (with COMMENT)</a>
+        </div>
+        <div class="xtd from-col">Ketan Talaulikar</div>
+        <div class="xtd date-col">2025-02-06</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/kY463d9k-2TwKZe5KaGpI9kD6AY/</div>
+        <div class="xtd id-col d-none">3556898</div>
+        <div class="xtd thread-col d-none">2173064</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-0">
+            <span>[spring] John Scudder&#x27;s Discuss on draft-ietf-spring-srv6-srh-compression-20: (with DISCUSS and COMMENT)</span><a class="msg-detail" href="/arch/msg/spring/jyluLMDPKC8C8NXe1FMm6F7gCnA/">[spring] John Scudder&#x27;s Discuss on draft-ietf-spring-srv6-srh-compression-20: (with DISCUSS and COMMENT)</a>
+        </div>
+        <div class="xtd from-col">John Scudder via Datatracker</div>
+        <div class="xtd date-col">2025-02-05</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/jyluLMDPKC8C8NXe1FMm6F7gCnA/</div>
+        <div class="xtd id-col d-none">3556651</div>
+        <div class="xtd thread-col d-none">2172956</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-2">
+            <span>[spring] Re: Éric Vyncke&#x27;s No Objection on draft-ietf-spring-srv6-srh-compression-19: (with COMMENT)</span><a class="msg-detail" href="/arch/msg/spring/CzcD0mmv7eHUTV5eK9uoo-HYpIk/">[spring] Re: Éric Vyncke&#x27;s No Objection on draft-ietf-spring-srv6-srh-compression-19: (with COMMENT)</a>
+        </div>
+        <div class="xtd from-col">Eric Vyncke (evyncke)</div>
+        <div class="xtd date-col">2025-02-05</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/CzcD0mmv7eHUTV5eK9uoo-HYpIk/</div>
+        <div class="xtd id-col d-none">3556565</div>
+        <div class="xtd thread-col d-none">2172621</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-0">
+            <span>[spring] Secdir last call review of draft-ietf-spring-bfd-12</span><a class="msg-detail" href="/arch/msg/spring/EEgl_pP-kKOneuTzlIdMVJJZzGA/">[spring] Secdir last call review of draft-ietf-spring-bfd-12</a>
+        </div>
+        <div class="xtd from-col">Stefan Santesson via Datatracker</div>
+        <div class="xtd date-col">2025-02-05</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/EEgl_pP-kKOneuTzlIdMVJJZzGA/</div>
+        <div class="xtd id-col d-none">3556338</div>
+        <div class="xtd thread-col d-none">2172860</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-4">
+            <span>[spring] Re: [Last-Call] Re: [RTG-DIR]Rtgdir last call review of draft-ietf-spring-bfd-12</span><a class="msg-detail" href="/arch/msg/spring/nlROkCrx-Qd2h4HbJWXFzjr1M84/">[spring] Re: [Last-Call] Re: [RTG-DIR]Rtgdir last call review of draft-ietf-spring-bfd-12</a>
+        </div>
+        <div class="xtd from-col">Greg Mirsky</div>
+        <div class="xtd date-col">2025-02-05</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/nlROkCrx-Qd2h4HbJWXFzjr1M84/</div>
+        <div class="xtd id-col d-none">3556332</div>
+        <div class="xtd thread-col d-none">2166716</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-1">
+            <span>[spring] Re: Fwd: IETF WG state changed for draft-ietf-spring-cs-sr-policy</span><a class="msg-detail" href="/arch/msg/spring/e8Gt3_oy6Y8yoI2mJ5W8WBXlh0A/">[spring] Re: Fwd: IETF WG state changed for draft-ietf-spring-cs-sr-policy</a>
+        </div>
+        <div class="xtd from-col">Shah, Himanshu</div>
+        <div class="xtd date-col">2025-02-04</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/e8Gt3_oy6Y8yoI2mJ5W8WBXlh0A/</div>
+        <div class="xtd id-col d-none">3556206</div>
+        <div class="xtd thread-col d-none">2170511</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-1">
+            <span>[spring] Re: Éric Vyncke&#x27;s No Objection on draft-ietf-spring-srv6-srh-compression-19: (with COMMENT)</span><a class="msg-detail" href="/arch/msg/spring/EBp37FvqV9BC4jZcvIEJq9L6aSQ/">[spring] Re: Éric Vyncke&#x27;s No Objection on draft-ietf-spring-srv6-srh-compression-19: (with COMMENT)</a>
+        </div>
+        <div class="xtd from-col">Francois Clad</div>
+        <div class="xtd date-col">2025-02-04</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/EBp37FvqV9BC4jZcvIEJq9L6aSQ/</div>
+        <div class="xtd id-col d-none">3556149</div>
+        <div class="xtd thread-col d-none">2172621</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-1">
+            <span>[spring] Re: Erik Kline&#x27;s Discuss on draft-ietf-spring-srv6-srh-compression-19: (with DISCUSS and COMMENT)</span><a class="msg-detail" href="/arch/msg/spring/Bup_dLZ6bLYkwaZ0rdKpBB7nJ5Q/">[spring] Re: Erik Kline&#x27;s Discuss on draft-ietf-spring-srv6-srh-compression-19: (with DISCUSS and COMMENT)</a>
+        </div>
+        <div class="xtd from-col">Francois Clad</div>
+        <div class="xtd date-col">2025-02-04</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/Bup_dLZ6bLYkwaZ0rdKpBB7nJ5Q/</div>
+        <div class="xtd id-col d-none">3556146</div>
+        <div class="xtd thread-col d-none">2172503</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-0">
+            <span>[spring] I-D Action: draft-ietf-spring-srv6-srh-compression-20.txt</span><a class="msg-detail" href="/arch/msg/spring/co9eCwvCV5gzeV_H2wzUevVPyVM/">[spring] I-D Action: draft-ietf-spring-srv6-srh-compression-20.txt</a>
+        </div>
+        <div class="xtd from-col">internet-drafts</div>
+        <div class="xtd date-col">2025-02-04</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/co9eCwvCV5gzeV_H2wzUevVPyVM/</div>
+        <div class="xtd id-col d-none">3556140</div>
+        <div class="xtd thread-col d-none">2172794</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-1">
+            <span>[spring] Re: Fwd: IETF WG state changed for draft-ietf-spring-cs-sr-policy</span><a class="msg-detail" href="/arch/msg/spring/4ZWUP2lsw-REB-1uayDRyjfUL60/">[spring] Re: Fwd: IETF WG state changed for draft-ietf-spring-cs-sr-policy</a>
+        </div>
+        <div class="xtd from-col">Rokui, Reza</div>
+        <div class="xtd date-col">2025-02-04</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/4ZWUP2lsw-REB-1uayDRyjfUL60/</div>
+        <div class="xtd id-col d-none">3555861</div>
+        <div class="xtd thread-col d-none">2170511</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-1">
+            <span>[spring] Re: Éric Vyncke&#x27;s No Objection on draft-ietf-spring-srv6-srh-compression-19: (with COMMENT)</span><a class="msg-detail" href="/arch/msg/spring/M7UkNI7KLqJnel9E1tMraUfM__4/">[spring] Re: Éric Vyncke&#x27;s No Objection on draft-ietf-spring-srv6-srh-compression-19: (with COMMENT)</a>
+        </div>
+        <div class="xtd from-col">Erik Kline</div>
+        <div class="xtd date-col">2025-02-03</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/M7UkNI7KLqJnel9E1tMraUfM__4/</div>
+        <div class="xtd id-col d-none">3555615</div>
+        <div class="xtd thread-col d-none">2172621</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-0">
+            <span>[spring] Éric Vyncke&#x27;s No Objection on draft-ietf-spring-srv6-srh-compression-19: (with COMMENT)</span><a class="msg-detail" href="/arch/msg/spring/oDi97_IwGDlKuM2bPA5GgdPeSDk/">[spring] Éric Vyncke&#x27;s No Objection on draft-ietf-spring-srv6-srh-compression-19: (with COMMENT)</a>
+        </div>
+        <div class="xtd from-col">Éric Vyncke via Datatracker</div>
+        <div class="xtd date-col">2025-02-03</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/oDi97_IwGDlKuM2bPA5GgdPeSDk/</div>
+        <div class="xtd id-col d-none">3555555</div>
+        <div class="xtd thread-col d-none">2172621</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-3">
+            <span>[spring] Re: [Last-Call] Re: [RTG-DIR]Rtgdir last call review of draft-ietf-spring-bfd-12</span><a class="msg-detail" href="/arch/msg/spring/HAfYXwF3yQVowRIPrh1NLMDXn9E/">[spring] Re: [Last-Call] Re: [RTG-DIR]Rtgdir last call review of draft-ietf-spring-bfd-12</a>
+        </div>
+        <div class="xtd from-col">Loa Andersson</div>
+        <div class="xtd date-col">2025-02-03</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/HAfYXwF3yQVowRIPrh1NLMDXn9E/</div>
+        <div class="xtd id-col d-none">3555477</div>
+        <div class="xtd thread-col d-none">2166716</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-1">
+            <span>[spring] Re: Request comments on draft-watal-spring-srv6-sfc-sr-aware-functions</span><a class="msg-detail" href="/arch/msg/spring/x8qS9V2BkULKRdT1Lu7c-Id69g8/">[spring] Re: Request comments on draft-watal-spring-srv6-sfc-sr-aware-functions</a>
+        </div>
+        <div class="xtd from-col">Wataru Mishima</div>
+        <div class="xtd date-col">2025-02-03</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/x8qS9V2BkULKRdT1Lu7c-Id69g8/</div>
+        <div class="xtd id-col d-none">3555409</div>
+        <div class="xtd thread-col d-none">2124524</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-0">
+            <span>[spring] Erik Kline&#x27;s Discuss on draft-ietf-spring-srv6-srh-compression-19: (with DISCUSS and COMMENT)</span><a class="msg-detail" href="/arch/msg/spring/gN0vK3TIgT5ql8f_rYGi2pu9l_o/">[spring] Erik Kline&#x27;s Discuss on draft-ietf-spring-srv6-srh-compression-19: (with DISCUSS and COMMENT)</a>
+        </div>
+        <div class="xtd from-col">Erik Kline via Datatracker</div>
+        <div class="xtd date-col">2025-02-03</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/gN0vK3TIgT5ql8f_rYGi2pu9l_o/</div>
+        <div class="xtd id-col d-none">3555341</div>
+        <div class="xtd thread-col d-none">2172503</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-1">
+            <span>[spring] Re: Tsvart last call review of draft-ietf-spring-bfd-12</span><a class="msg-detail" href="/arch/msg/spring/vJ3s2Yhp8ykcGWi8kCxp_fL7NZ0/">[spring] Re: Tsvart last call review of draft-ietf-spring-bfd-12</a>
+        </div>
+        <div class="xtd from-col">Greg Mirsky</div>
+        <div class="xtd date-col">2025-02-01</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/vJ3s2Yhp8ykcGWi8kCxp_fL7NZ0/</div>
+        <div class="xtd id-col d-none">3555112</div>
+        <div class="xtd thread-col d-none">2171539</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-2">
+            <span>[spring] Re: [RTG-DIR]Rtgdir last call review of draft-ietf-spring-bfd-12</span><a class="msg-detail" href="/arch/msg/spring/G_uJujT9sKte14TWwFu6Z8i7bMA/">[spring] Re: [RTG-DIR]Rtgdir last call review of draft-ietf-spring-bfd-12</a>
+        </div>
+        <div class="xtd from-col">Greg Mirsky</div>
+        <div class="xtd date-col">2025-02-01</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/G_uJujT9sKte14TWwFu6Z8i7bMA/</div>
+        <div class="xtd id-col d-none">3555107</div>
+        <div class="xtd thread-col d-none">2166716</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-1">
+            <span>[spring] Re: WGLC Chair review of draft-ietf-spring-bfd-12</span><a class="msg-detail" href="/arch/msg/spring/SYmrSzu9rUBVsrWTrmnsnhXM8ik/">[spring] Re: WGLC Chair review of draft-ietf-spring-bfd-12</a>
+        </div>
+        <div class="xtd from-col">Greg Mirsky</div>
+        <div class="xtd date-col">2025-02-01</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/SYmrSzu9rUBVsrWTrmnsnhXM8ik/</div>
+        <div class="xtd id-col d-none">3555106</div>
+        <div class="xtd thread-col d-none">2165703</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-2">
+            <span>[spring] Re: Fwd: IETF WG state changed for draft-ietf-spring-cs-sr-policy</span><a class="msg-detail" href="/arch/msg/spring/NScf8OSxCUvoMBl4Uga55EWApZI/">[spring] Re: Fwd: IETF WG state changed for draft-ietf-spring-cs-sr-policy</a>
+        </div>
+        <div class="xtd from-col">Zafar Ali (zali)</div>
+        <div class="xtd date-col">2025-02-01</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/NScf8OSxCUvoMBl4Uga55EWApZI/</div>
+        <div class="xtd id-col d-none">3555087</div>
+        <div class="xtd thread-col d-none">2170511</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-2">
+            <span>[spring] Re: Fwd: IETF WG state changed for draft-ietf-spring-cs-sr-policy</span><a class="msg-detail" href="/arch/msg/spring/oax6GiXzdwFCj5zX9gHvoTZ5q9I/">[spring] Re: Fwd: IETF WG state changed for draft-ietf-spring-cs-sr-policy</a>
+        </div>
+        <div class="xtd from-col">Mankamana Mishra (mankamis)</div>
+        <div class="xtd date-col">2025-02-01</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/oax6GiXzdwFCj5zX9gHvoTZ5q9I/</div>
+        <div class="xtd id-col d-none">3555083</div>
+        <div class="xtd thread-col d-none">2170511</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-0">
+            <span>[spring] No SRv6 Locator Available (draft-ietf-spring-dhc-distribute-srv6-locator-dhcp)</span><a class="msg-detail" href="/arch/msg/spring/DDdLC4Ab9DnnPRw7SUZ9b4pam-A/">[spring] No SRv6 Locator Available (draft-ietf-spring-dhc-distribute-srv6-locator-dhcp)</a>
+        </div>
+        <div class="xtd from-col">Alvaro Retana</div>
+        <div class="xtd date-col">2025-01-30</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/DDdLC4Ab9DnnPRw7SUZ9b4pam-A/</div>
+        <div class="xtd id-col d-none">3554441</div>
+        <div class="xtd thread-col d-none">2172054</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-4">
+            <span>[spring] Re: IETF WG state changed for draft-ietf-spring-cs-sr-policy</span><a class="msg-detail" href="/arch/msg/spring/PxtKq82V_qvjxC6MA-SHFG42DVE/">[spring] Re: IETF WG state changed for draft-ietf-spring-cs-sr-policy</a>
+        </div>
+        <div class="xtd from-col">Samuel Sidor (ssidor)</div>
+        <div class="xtd date-col">2025-01-30</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/PxtKq82V_qvjxC6MA-SHFG42DVE/</div>
+        <div class="xtd id-col d-none">3554323</div>
+        <div class="xtd thread-col d-none">2170511</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-2">
+            <span>[spring] Re: WGLC Status for draft-ietf-spring-bfd</span><a class="msg-detail" href="/arch/msg/spring/kEruIJsCtkbPBELjAx-NSf1sHNg/">[spring] Re: WGLC Status for draft-ietf-spring-bfd</a>
+        </div>
+        <div class="xtd from-col">Greg Mirsky</div>
+        <div class="xtd date-col">2025-01-29</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/kEruIJsCtkbPBELjAx-NSf1sHNg/</div>
+        <div class="xtd id-col d-none">3554108</div>
+        <div class="xtd thread-col d-none">2168448</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-1">
+            <span>[spring] Re: WGLC Status for draft-ietf-spring-bfd</span><a class="msg-detail" href="/arch/msg/spring/oiAuyfle1ABegwUG2ye8IylQmk0/">[spring] Re: WGLC Status for draft-ietf-spring-bfd</a>
+        </div>
+        <div class="xtd from-col">Alvaro Retana</div>
+        <div class="xtd date-col">2025-01-29</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/oiAuyfle1ABegwUG2ye8IylQmk0/</div>
+        <div class="xtd id-col d-none">3554065</div>
+        <div class="xtd thread-col d-none">2168448</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-3">
+            <span>[spring] Re: IETF WG state changed for draft-ietf-spring-cs-sr-policy</span><a class="msg-detail" href="/arch/msg/spring/PJVf4WfWdgGz4vt5wYyAaWMEl2M/">[spring] Re: IETF WG state changed for draft-ietf-spring-cs-sr-policy</a>
+        </div>
+        <div class="xtd from-col">Andrew Stone (Nokia)</div>
+        <div class="xtd date-col">2025-01-29</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/PJVf4WfWdgGz4vt5wYyAaWMEl2M/</div>
+        <div class="xtd id-col d-none">3554032</div>
+        <div class="xtd thread-col d-none">2170511</div>
+    </div>
+
+    <div class="xtr">
+        <div class="xtd subj-col depth-2">
+            <span>[spring] Re: [Idr] Re: WGLC for https://datatracker.ietf.org/doc/html/draft-ietf-bess-bgp-srv6-args-02 - extended till Jan 16, 2025</span><a class="msg-detail" href="/arch/msg/spring/yxFHcOn-Y0HIP-aJXzurOtg-oTM/">[spring] Re: [Idr] Re: WGLC for https://datatracker.ietf.org/doc/html/draft-ietf-bess-bgp-srv6-args-02 - extended till Jan 16, 2025</a>
+        </div>
+        <div class="xtd from-col">Gyan Mishra</div>
+        <div class="xtd date-col">2025-01-28</div>
+        <div class="xtd list-col d-none">spring</div>
+        <div class="xtd score-col d-none"></div>
+        <div class="xtd url-col d-none">/arch/msg/spring/yxFHcOn-Y0HIP-aJXzurOtg-oTM/</div>
+        <div class="xtd id-col d-none">3553651</div>
+        <div class="xtd thread-col d-none">2167785</div>
+    </div>
+
+                                
+                            </div>
+                        </div> <!-- msg-table -->
+                    </div> <!-- msg-list -->
+
+                    <div id="msg-list-controls">
+                        <div id="message-count" class="list-control">12047 Messages</div>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated w-100" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div class="list-control page-nav">
+                            
+                            <span class="current-page">Page 1 of 302</span>
+                            <a class="float-end" href="/arch/browse/spring/?page=2">Next</a>
+                        </div>
+                        <div id="toggle-preview"><a href="#"><i class="fa fa-chevron-down toggle-pane" aria-hidden="true"></i></a></div>
+                    </div> <!-- msg-list-controls -->
+                </div> <!-- list-pane -->
+                
+                <div id="splitter-pane" class="draggable js-off"></div>
+                
+                <div class="view-pane js-off"></div>
+            </div> <!-- msg-panes -->
+        </div> <!-- msg-components -->
+        <!-- debug_toolbar_here -->
+    </div> <!-- msg-container -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="export-modal" tabindex="-1" role="dialog" aria-labelledby="export-modal-title" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="export-modal-title">Archive Export</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            
+            <div class="export-text">
+              
+                <p>You must be logged in to export messages.</p>
+              
+            </div>
+            <div class="export-spinner">
+              <i class="fa fa-spinner fa-spin fa-3x"></i>
+            </div>
+          </div> <!-- modal-body -->
+          <div class="modal-footer">
+              <a class="btn btn-secondary export-link disabled" href="/arch/export/mbox/?email_list=spring&amp;token=Uj7c2OLy5WopQgzx">Mbox</a>
+              <a class="btn btn-secondary export-link disabled" href="/arch/export/maildir/?email_list=spring&amp;token=Uj7c2OLy5WopQgzx">Maildir</a>
+              <a class="btn btn-secondary export-link disabled" href="/arch/export/url/?email_list=spring&amp;token=Uj7c2OLy5WopQgzx">URLs</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    </div>
+    <!-- END Content -->
+
+
+    
+
+</div> <!-- END Container -->
+
+
+
+<script src="https://static.ietf.org/mailarchive/2.29.0/jquery/js/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+<script src="https://static.ietf.org/mailarchive/2.29.0/bootstrap-5.1.1-dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://static.ietf.org/mailarchive/2.29.0/jquery.cookie/jquery.cookie.js"></script>
+<script type="text/javascript" src="https://static.ietf.org/mailarchive/2.29.0/mlarchive/js/base.js"></script>
+
+<script type="text/javascript" src="https://static.ietf.org/mailarchive/2.29.0/jquery-ui/jquery-ui.min.js"></script>
+<script type="text/javascript" src="https://static.ietf.org/mailarchive/2.29.0/jquery.query/jquery.query.js"></script>
+<script type="text/javascript" src="https://static.ietf.org/mailarchive/2.29.0/mlarchive/js/mailarch.js"></script>
+
+
+<!-- debug_toolbar_here -->
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'90f989e7c90d8a86',t:'MTczOTE2MzY2MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

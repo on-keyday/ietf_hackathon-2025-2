@@ -1,0 +1,21 @@
+https://www.ietf.org/archive/id/draft-watal-spring-srv6-sfc-sr-aware-functions-00.html
+  https://www.rfc-editor.org/rfc/rfc5440
+  https://www.rfc-editor.org/rfc/rfc8402
+  https://www.rfc-editor.org/rfc/rfc8174
+  https://datatracker.ietf.org/doc/html/draft-filsfils-spring-path-tracing-05
+  https://www.rfc-editor.org/rfc/rfc8986
+  https://datatracker.ietf.org/doc/html/draft-ietf-idr-ts-flowspec-srv6-policy-03
+  https://mailarchive.ietf.org/arch/browse/spring/
+  https://datatracker.ietf.org/doc/html/draft-ietf-spring-sr-service-programming-09
+  https://datatracker.ietf.org/doc/html/draft-ietf-idr-bgp-ls-sr-service-segments-02
+  https://trustee.ietf.org/license-info
+  https://www.rfc-editor.org/rfc/rfc9256
+  https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-26
+  https://www.rfc-editor.org/rfc/rfc8955
+  https://www.rfc-editor.org/rfc/rfc8754
+  https://www.rfc-editor.org/rfc/rfc2119
+  https://www.rfc-editor.org/rfc/rfc7426
+  https://www.rfc-editor.org/rfc/rfc9315
+  https://www.rfc-editor.org/rfc/rfc9522
+  https://www.rfc-editor.org/rfc/rfc7665
+  https://datatracker.ietf.org/drafts/current/

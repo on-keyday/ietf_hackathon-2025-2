@@ -1,0 +1,2287 @@
+
+<!DOCTYPE html>
+
+
+
+
+
+
+
+<html data-bs-theme="auto" lang="en">
+    <head>
+        
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>
+            
+                RFC 6952 - Analysis of BGP, LDP, PCEP, and MSDP Issues According to the Keying and Authentication for Routing Protocols (KARP) Design Guide
+            
+        </title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://static.ietf.org/fonts/inter/import.css" rel="stylesheet">
+        <link href="https://static.ietf.org/fonts/noto-sans-mono/import.css" rel="stylesheet">
+        
+            <link rel="stylesheet" href="https://static.ietf.org/dt/12.35.0/ietf/css/document_html_referenced.css">
+            
+            <script type="module" crossorigin="" src="https://static.ietf.org/dt/12.35.0/assets/embedded-86412faf.js"></script>
+<link href="https://static.ietf.org/dt/12.35.0/assets/create-pinia-singleton-2adb64ba.js" type="text/javascript" crossorigin="anonymous" rel="modulepreload" as="script" />
+<link href="https://static.ietf.org/dt/12.35.0/assets/Scrollbar-1895147a.js" type="text/javascript" crossorigin="anonymous" rel="modulepreload" as="script" />
+            <script src="https://static.ietf.org/dt/12.35.0/ietf/js/document_html.js"></script>
+            <script src="https://static.ietf.org/dt/12.35.0/ietf/js/theme.js"></script>
+        
+        <link rel="alternate" type="application/atom+xml" title="Document changes" href="/feed/document-changes/rfc6952/">
+        <meta name="description"
+            
+                content="Analysis of BGP, LDP, PCEP, and MSDP Issues According to the Keying and Authentication for Routing Protocols (KARP) Design Guide (RFC 6952, )"
+            >
+        
+
+<link rel="apple-touch-icon"
+      sizes="180x180"
+      href="https://static.ietf.org/dt/12.35.0/ietf/images/ietf-logo-nor-180.png">
+<link rel="icon"
+      sizes="32x32"
+      href="https://static.ietf.org/dt/12.35.0/ietf/images/ietf-logo-nor-32.png">
+<link rel="icon"
+      sizes="16x16"
+      href="https://static.ietf.org/dt/12.35.0/ietf/images/ietf-logo-nor-16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon"
+      href="https://static.ietf.org/dt/12.35.0/ietf/images/ietf-logo-nor-mask.svg"
+      color="#ffffff">
+<meta name="msapplication-TileColor"
+      content="#ffffff">
+<meta name="theme-color"
+      content="#ffffff">
+        
+
+
+
+
+<meta property="og:title" content="RFC 6952: Analysis of BGP, LDP, PCEP, and MSDP Issues According to the Keying and Authentication for Routing Protocols (KARP) Design Guide">
+<meta property="og:url" content="https://datatracker.ietf.org/doc/html/rfc6952">
+<link rel="canonical" href="https://datatracker.ietf.org/doc/html/rfc6952">
+<meta property="og:site_name" content="IETF Datatracker">
+<meta property="og:description" content="This document analyzes TCP-based routing protocols, the Border Gateway Protocol (BGP), the Label Distribution Protocol (LDP), the Path Computation Element Communication Protocol (PCEP), and the Multicast Source Distribution Protocol (MSDP), according to guidelines set forth in Section 4.2 of &quot;Keying and Authentication for Routing Protocols Design Guidelines&quot;, RFC 6518.">
+<meta property="og:type" content="article">
+
+<meta property="og:image" content="https://static.ietf.org/dt/12.35.0/ietf/images/ietf-logo-card.png">
+<meta property="og:image:alt" content="Logo of the IETF">
+<meta property="article:section" content="IETF - Internet Engineering Task Force">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+
+<meta property="article:author" content="Mahesh Jethanandani">
+<meta property="article:author" content="Keyur Patel">
+<meta property="article:author" content="Lianshu Zheng">
+
+
+
+        
+        <style>
+            
+            .diff-form .select2-selection__rendered {
+                direction: rtl;
+                text-align: left;
+            }
+        </style>
+    </head>
+    <body>
+        
+        <noscript><iframe class="status" title="Site status" src="/status/latest"></iframe></noscript>
+<div class="vue-embed" data-component="Status"></div>
+        <div class="btn-toolbar sidebar-toolbar position-fixed top-0 end-0 m-2 m-lg-3 d-print-none">
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary btn-sm me-1 dropdown-toggle d-flex align-items-center"
+                    id="bd-theme" type="button" aria-expanded="false" data-bs-toggle="dropdown"
+                    aria-label="Toggle theme">
+                        <i class="theme-icon-active bi bi-circle-half"></i>
+                </button>
+
+                <ul class="dropdown-menu" aria-labelledby="bd-theme">
+                    <li>
+                        <button type="button" class="dropdown-item d-flex align-items-center"
+                            data-bs-theme-value="light" aria-pressed="false">
+                            <i class="me-2 opacity-50 theme-icon bi bi-sun-fill"></i>
+                            Light<i class="bi bi-check2 ms-auto d-none"></i>
+                        </button>
+                    </li>
+                    <li>
+                        <button type="button" class="dropdown-item d-flex align-items-center"
+                            data-bs-theme-value="dark" aria-pressed="false">
+                            <i class="me-2 opacity-50 theme-icon bi bi-moon-stars-fill"></i>
+                            Dark<i class="bi bi-check2 ms-auto d-none"></i>
+                        </button>
+                    </li>
+                    <li>
+                        <button type="button" class="dropdown-item d-flex align-items-center active"
+                            data-bs-theme-value="auto" aria-pressed="true">
+                            <i class="me-2 opacity-50 theme-icon bi bi-circle-half"></i>
+                            Auto<i class="bi bi-check2 ms-auto d-none"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            <button class="btn btn-outline-secondary btn-sm sidebar-toggle"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#sidebar"
+                    aria-expanded="true"
+                    aria-controls="sidebar"
+                    aria-label="Toggle metadata sidebar"
+                    title="Toggle metadata sidebar">
+            <i class="bi bi-arrow-bar-left sidebar-shown"></i>
+            <i class="bi bi-arrow-bar-right sidebar-collapsed"></i>
+            </button>
+        </div>
+        <nav class="navbar bg-light-subtle px-1 fixed-top d-print-none d-md-none">
+            <a class="nav-link ps-1"
+               href="/doc/rfc6952/">
+                
+                    RFC 6952
+                
+                <br class="d-sm-none">
+
+                <span class="ms-sm-3 badge rounded-pill badge-inf">
+                    
+                        Informational
+                    
+                </span>
+            </a>
+            <button class="navbar-toggler p-1"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#docinfo-collapse"
+                    aria-controls="docinfo-collapse"
+                    aria-expanded="false"
+                    aria-label="Show document information">
+                <span class="navbar-toggler-icon small"></span>
+            </button>
+            <div class="navbar-nav navbar-nav-scroll overscroll-none collapse pt-1" id="docinfo-collapse">
+                <div class="bg-light-subtle p-0">
+                    <table class="table table-sm table-borderless small">
+                        <tbody class="meta align-top">
+                            <tr>
+                                <th scope="row"></th>
+                                <th scope="row">Title</th>
+                                <td class="edit"></td>
+                                <td>Analysis of BGP, LDP, PCEP, and MSDP Issues According to the Keying and Authentication for Routing Protocols (KARP) Design Guide</td>
+                            </tr>
+                        </tbody>
+                        
+
+
+
+
+
+
+
+<tbody class="meta align-top ">
+    <tr>
+        <th scope="row">Document</th>
+        <th scope="row">Document type</th>
+        <td class="edit"></td>
+        <td>
+            
+
+
+
+
+
+<span class="text-success">RFC
+    
+    - Informational
+    
+</span>
+
+            
+                
+                    <br>May 2013
+                
+                <br>
+                
+                
+                    <a class="btn btn-sm btn-warning"
+                       title="Click to report an error in the document."
+                       href="https://www.rfc-editor.org/errata.php#reportnew"
+                       target="_blank">
+                        Report errata
+                    </a>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                    <div>
+                        Was
+                        <a href="/doc/draft-ietf-karp-routing-tcp-analysis/07/">draft-ietf-karp-routing-tcp-analysis</a>
+                        (<a href="/wg/karp/about/">karp WG</a>)
+                    </div>
+                
+            
+            
+            
+                
+
+
+
+
+    
+
+            
+        </td>
+    </tr>
+    
+        <tr>
+            <td></td>
+            <th scope="row">Select version</th>
+            <td class="edit"></td>
+            <td>
+                
+
+
+
+    <ul class="revision-list pagination pagination-sm text-center flex-wrap my-0">
+        
+            
+            
+                
+                    <li class="page-item">
+                        <a class="page-link"
+                        href="/doc/html/draft-ietf-karp-routing-tcp-analysis-00"
+                        rel="nofollow">
+                            00
+                        </a>
+                    </li>
+                
+                    <li class="page-item">
+                        <a class="page-link"
+                        href="/doc/html/draft-ietf-karp-routing-tcp-analysis-01"
+                        rel="nofollow">
+                            01
+                        </a>
+                    </li>
+                
+                    <li class="page-item">
+                        <a class="page-link"
+                        href="/doc/html/draft-ietf-karp-routing-tcp-analysis-02"
+                        rel="nofollow">
+                            02
+                        </a>
+                    </li>
+                
+                    <li class="page-item">
+                        <a class="page-link"
+                        href="/doc/html/draft-ietf-karp-routing-tcp-analysis-03"
+                        rel="nofollow">
+                            03
+                        </a>
+                    </li>
+                
+                    <li class="page-item">
+                        <a class="page-link"
+                        href="/doc/html/draft-ietf-karp-routing-tcp-analysis-04"
+                        rel="nofollow">
+                            04
+                        </a>
+                    </li>
+                
+                    <li class="page-item">
+                        <a class="page-link"
+                        href="/doc/html/draft-ietf-karp-routing-tcp-analysis-05"
+                        rel="nofollow">
+                            05
+                        </a>
+                    </li>
+                
+                    <li class="page-item">
+                        <a class="page-link"
+                        href="/doc/html/draft-ietf-karp-routing-tcp-analysis-06"
+                        rel="nofollow">
+                            06
+                        </a>
+                    </li>
+                
+                    <li class="page-item">
+                        <a class="page-link"
+                        href="/doc/html/draft-ietf-karp-routing-tcp-analysis-07"
+                        rel="nofollow">
+                            07
+                        </a>
+                    </li>
+                
+            
+            
+            <li class="page-item rfc active">
+                <a class="page-link"
+                href="/doc/html/rfc6952">
+                    RFC 6952
+                </a>
+            </li>
+        
+    </ul>
+
+            </td>
+        </tr>
+        
+            <tr>
+                <td></td>
+                <th scope="row">Compare versions</th>
+                <td class="edit"></td>
+                <td>
+                    
+
+
+
+<form class="form-horizontal diff-form"
+      action="https://author-tools.ietf.org/iddiff"
+      method="get"
+      target="_blank">
+
+            <select class="form-select form-select-sm mb-1 select2-field"
+                    data-max-entries="1"
+                    data-width="resolve"
+                    data-allow-clear="false"
+                    data-minimum-input-length="0"
+                    aria-label="From revision"
+                    name="url1">
+                
+                    <option value="rfc6952">
+                        RFC 6952
+                        
+                    </option>
+                
+                    <option value="draft-ietf-karp-routing-tcp-analysis-07" selected>
+                        draft-ietf-karp-routing-tcp-analysis-07
+                        
+                    </option>
+                
+                    <option value="draft-ietf-karp-routing-tcp-analysis-06">
+                        draft-ietf-karp-routing-tcp-analysis-06
+                        
+                    </option>
+                
+                    <option value="draft-ietf-karp-routing-tcp-analysis-05">
+                        draft-ietf-karp-routing-tcp-analysis-05
+                        
+                    </option>
+                
+                    <option value="draft-ietf-karp-routing-tcp-analysis-04">
+                        draft-ietf-karp-routing-tcp-analysis-04
+                        
+                    </option>
+                
+                    <option value="draft-ietf-karp-routing-tcp-analysis-03">
+                        draft-ietf-karp-routing-tcp-analysis-03
+                        
+                    </option>
+                
+                    <option value="draft-ietf-karp-routing-tcp-analysis-02">
+                        draft-ietf-karp-routing-tcp-analysis-02
+                        
+                    </option>
+                
+                    <option value="draft-ietf-karp-routing-tcp-analysis-01">
+                        draft-ietf-karp-routing-tcp-analysis-01
+                        
+                    </option>
+                
+                    <option value="draft-ietf-karp-routing-tcp-analysis-00">
+                        draft-ietf-karp-routing-tcp-analysis-00
+                        
+                    </option>
+                
+                
+            </select>
+
+            <select class="form-select form-select-sm mb-1 select2-field"
+                    data-max-entries="1"
+                    data-width="resolve"
+                    data-allow-clear="false"
+                    data-minimum-input-length="0"
+                    aria-label="To revision"
+                    name="url2">
+                
+                    <option value="rfc6952" selected>
+                        RFC 6952
+                        
+                    </option>
+                
+                    <option value="draft-ietf-karp-routing-tcp-analysis-07">
+                        draft-ietf-karp-routing-tcp-analysis-07
+                        
+                    </option>
+                
+                    <option value="draft-ietf-karp-routing-tcp-analysis-06">
+                        draft-ietf-karp-routing-tcp-analysis-06
+                        
+                    </option>
+                
+                    <option value="draft-ietf-karp-routing-tcp-analysis-05">
+                        draft-ietf-karp-routing-tcp-analysis-05
+                        
+                    </option>
+                
+                    <option value="draft-ietf-karp-routing-tcp-analysis-04">
+                        draft-ietf-karp-routing-tcp-analysis-04
+                        
+                    </option>
+                
+                    <option value="draft-ietf-karp-routing-tcp-analysis-03">
+                        draft-ietf-karp-routing-tcp-analysis-03
+                        
+                    </option>
+                
+                    <option value="draft-ietf-karp-routing-tcp-analysis-02">
+                        draft-ietf-karp-routing-tcp-analysis-02
+                        
+                    </option>
+                
+                    <option value="draft-ietf-karp-routing-tcp-analysis-01">
+                        draft-ietf-karp-routing-tcp-analysis-01
+                        
+                    </option>
+                
+                    <option value="draft-ietf-karp-routing-tcp-analysis-00">
+                        draft-ietf-karp-routing-tcp-analysis-00
+                        
+                    </option>
+                
+                
+            </select>
+
+            <button type="submit"
+                    class="btn btn-primary btn-sm"
+                    value="--html"
+                    name="difftype">
+                Side-by-side
+            </button>
+            
+            <button type="submit"
+                    class="btn btn-primary btn-sm"
+                    value="--hwdiff"
+                    name="difftype">
+                Inline
+            </button>
+
+</form>
+                </td>
+            </tr>
+        
+    
+    <tr>
+        <td></td>
+        <th scope="row">Authors</th>
+        <td class="edit">
+            
+        </td>
+        <td>
+            
+            
+                <span ><a 
+           title="Datatracker profile of Mahesh Jethanandani"
+            href="/person/mjethanandani@gmail.com" >Mahesh Jethanandani</a> <a 
+               href="mailto:mjethanandani%40gmail.com"
+               aria-label="Compose email to mjethanandani@gmail.com"
+               title="Compose email to mjethanandani@gmail.com">
+                <i class="bi bi-envelope"></i></a></span>,
+            
+                <span ><a 
+           title="Datatracker profile of Keyur Patel"
+            href="/person/keyur@arrcus.com" >Keyur Patel</a> <a 
+               href="mailto:keyur%40arrcus.com"
+               aria-label="Compose email to keyur@arrcus.com"
+               title="Compose email to keyur@arrcus.com">
+                <i class="bi bi-envelope"></i></a></span>,
+            
+                <span ><a 
+           title="Datatracker profile of Lianshu Zheng"
+            href="/person/vero.zheng@huawei.com" >Lianshu Zheng</a> <a 
+               href="mailto:vero.zheng%40huawei.com"
+               aria-label="Compose email to vero.zheng@huawei.com"
+               title="Compose email to vero.zheng@huawei.com">
+                <i class="bi bi-envelope"></i></a></span>
+            
+            
+                <br>
+                <a class="btn btn-primary btn-sm mt-1" href="mailto:rfc6952@ietf.org?subject=rfc6952" title="Send email to the document authors">Email authors</a>
+            
+        </td>
+    </tr>
+    
+    
+    <tr>
+        <td></td>
+        <th scope="row">
+            RFC stream
+        </th>
+        <td class="edit">
+            
+        </td>
+        <td >
+            
+                
+                
+                    
+                        
+
+
+
+<img alt="IETF Logo"
+     class="d-lm-none w-25 mt-1"
+     
+     
+        
+             src="https://static.ietf.org/dt/12.35.0/ietf/images/ietf-logo-nor-white.svg"
+        
+     
+     >
+
+<img alt="IETF Logo"
+     class="d-dm-none w-25 mt-1"
+     
+     
+        
+             src="https://static.ietf.org/dt/12.35.0/ietf/images/ietf-logo-nor.svg"
+        
+     
+     >
+                    
+                
+                
+            
+        </td>
+    </tr>
+    
+    <tr>
+        <td></td>
+        <th scope="row">
+            Other formats
+        </th>
+        <td class="edit">
+        </td>
+        <td>
+            
+                
+    <div class="buttonlist">
+    
+        
+        <a class="btn btn-primary btn-sm"
+          
+          target="_blank"
+          href="https://www.rfc-editor.org/rfc/rfc6952.txt">
+            
+                <i class="bi bi-file-text"></i> txt
+            
+        </a>
+        
+    
+        
+        <a class="btn btn-primary btn-sm"
+          
+          target="_blank"
+          href="https://www.rfc-editor.org/rfc/rfc6952.html">
+            
+                <i class="bi bi-file-code"></i> html
+            
+        </a>
+        
+    
+        
+        <a class="btn btn-primary btn-sm"
+          
+            download="rfc6952.pdf"
+          
+         
+          target="_blank"
+          href="https://www.rfc-editor.org/rfc/pdfrfc/rfc6952.txt.pdf">
+            
+                <i class="bi bi-file-pdf"></i> pdf
+            
+        </a>
+        
+    
+        
+    
+        
+        <a class="btn btn-primary btn-sm"
+          
+          target="_blank"
+          href="/doc/rfc6952/bibtex/">
+            
+                <i class="bi bi-file-ruled"></i> bibtex
+            
+        </a>
+        
+    
+</div>
+
+            
+        </td>
+    </tr>
+    
+    
+        
+            <tr>
+                <td>
+                </td>
+                <th scope="row">
+                    Additional resources
+                </th>
+                <td class="edit">
+                    
+                </td>
+                <td>
+                    
+                        
+                        
+                            
+                                <a href="https://mailarchive.ietf.org/arch/browse/karp?q=rfc6952 OR %22draft-ietf-karp-routing-tcp-analysis%22">
+                                    Mailing list discussion
+                                </a>
+                            
+                        
+                    
+                </td>
+            </tr>
+        
+    
+</tbody>
+                        <tr>
+                            <th scope="row"></th>
+                            <th scope="row"></th>
+                            <td class="edit"></td>
+                            <td>
+                                <a class="btn btn-sm btn-warning mb-3"
+                                target="_blank"
+                                href="https://github.com/ietf-tools/datatracker/issues/new/choose">
+                                    Report a bug
+                                    <i class="bi bi-bug"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </nav>
+        <div class="row g-0">
+            <div class="col-md-9 d-flex justify-content-center lh-sm"
+                 data-bs-spy="scroll"
+                 data-bs-target="#toc-nav"
+                 data-bs-smooth-scroll="true"
+                 tabindex="0"
+                 id="content">
+                
+                    <div class="rfcmarkup">
+                        <br class="noprint">
+                        <!-- [html-validate-disable-block attr-quotes, void-style, element-permitted-content, heading-level -- FIXME: rfcmarkup/rfc2html generates HTML with issues] -->
+                        <div class="rfcmarkup"><pre>Internet Engineering Task Force (IETF)                   M. Jethanandani
+Request for Comments: 6952                             Ciena Corporation
+Category: Informational                                         K. Patel
+ISSN: 2070-1721                                       Cisco Systems, Inc
+                                                                L. Zheng
+                                                     Huawei Technologies
+                                                                May 2013
+
+
+
+      <span class="h1">Analysis of BGP, LDP, PCEP, and MSDP Issues According to the</span>
+  <span class="h1">Keying and Authentication for Routing Protocols (KARP) Design Guide</span>
+
+Abstract
+
+   This document analyzes TCP-based routing protocols, the Border
+   Gateway Protocol (BGP), the Label Distribution Protocol (LDP), the
+   Path Computation Element Communication Protocol (PCEP), and the
+   Multicast Source Distribution Protocol (MSDP), according to
+   guidelines set forth in <a href="#section-4.2">Section 4.2</a> of &quot;Keying and Authentication for
+   Routing Protocols Design Guidelines&quot;, <a href="/doc/html/rfc6518">RFC 6518</a>.
+
+Status of This Memo
+
+   This document is not an Internet Standards Track specification; it is
+   published for informational purposes.
+
+   This document is a product of the Internet Engineering Task Force
+   (IETF).  It represents the consensus of the IETF community.  It has
+   received public review and has been approved for publication by the
+   Internet Engineering Steering Group (IESG).  Not all documents
+   approved by the IESG are a candidate for any level of Internet
+   Standard; see <a href="/doc/html/rfc5741#section-2">Section&nbsp;2 of RFC 5741</a>.
+
+   Information about the current status of this document, any errata,
+   and how to provide feedback on it may be obtained at
+   <a href="http://www.rfc-editor.org/info/rfc6952">http://www.rfc-editor.org/info/rfc6952</a>.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="grey">Jethanandani, et al.          Informational                     [Page 1]</span></pre>
+<hr class='noprint'/><!--NewPage--><pre class='newpage'><span id="page-2" ></span>
+<span class="grey"><a href="/doc/html/rfc6952">RFC 6952</a>            BGP, LDP, PCEP, and MSDP Analysis           May 2013</span>
+
+
+Copyright Notice
+
+   Copyright (c) 2013 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to <a href="/doc/html/bcp78">BCP 78</a> and the IETF Trust&#x27;s Legal
+   Provisions Relating to IETF Documents
+   (<a href="http://trustee.ietf.org/license-info">http://trustee.ietf.org/license-info</a>) in effect on the date of
+   publication of this document.  Please review these documents
+   carefully, as they describe your rights and restrictions with respect
+   to this document.  Code Components extracted from this document must
+   include Simplified BSD License text as described in Section 4.e of
+   the Trust Legal Provisions and are provided without warranty as
+   described in the Simplified BSD License.
+
+Table of Contents
+
+   <a href="#section-1">1</a>.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   <a href="#page-3">3</a>
+     <a href="#section-1.1">1.1</a>.  Abbreviations . . . . . . . . . . . . . . . . . . . . . .   <a href="#page-4">4</a>
+   <a href="#section-2">2</a>.  Current Assessment of BGP, LDP, PCEP, and MSDP  . . . . . . .   <a href="#page-5">5</a>
+     <a href="#section-2.1">2.1</a>.  Transport Layer . . . . . . . . . . . . . . . . . . . . .   <a href="#page-5">5</a>
+     <a href="#section-2.2">2.2</a>.  Keying Mechanisms . . . . . . . . . . . . . . . . . . . .   <a href="#page-6">6</a>
+     <a href="#section-2.3">2.3</a>.  BGP . . . . . . . . . . . . . . . . . . . . . . . . . . .   <a href="#page-7">7</a>
+     <a href="#section-2.4">2.4</a>.  LDP . . . . . . . . . . . . . . . . . . . . . . . . . . .   <a href="#page-7">7</a>
+       <a href="#section-2.4.1">2.4.1</a>.  Spoofing Attacks  . . . . . . . . . . . . . . . . . .   <a href="#page-7">7</a>
+       <a href="#section-2.4.2">2.4.2</a>.  Denial-of-Service Attacks . . . . . . . . . . . . . .   <a href="#page-8">8</a>
+     <a href="#section-2.5">2.5</a>.  PCEP  . . . . . . . . . . . . . . . . . . . . . . . . . .   <a href="#page-8">8</a>
+     <a href="#section-2.6">2.6</a>.  MSDP  . . . . . . . . . . . . . . . . . . . . . . . . . .  <a href="#page-10">10</a>
+   <a href="#section-3">3</a>.  Optimal State for BGP, LDP, PCEP, and MSDP  . . . . . . . . .  <a href="#page-10">10</a>
+     <a href="#section-3.1">3.1</a>.  LDP . . . . . . . . . . . . . . . . . . . . . . . . . . .  <a href="#page-10">10</a>
+   <a href="#section-4">4</a>.  Gap Analysis for BGP, LDP, PCEP, and MSDP . . . . . . . . . .  <a href="#page-11">11</a>
+     <a href="#section-4.1">4.1</a>.  LDP . . . . . . . . . . . . . . . . . . . . . . . . . . .  <a href="#page-12">12</a>
+     <a href="#section-4.2">4.2</a>.  PCEP  . . . . . . . . . . . . . . . . . . . . . . . . . .  <a href="#page-13">13</a>
+   <a href="#section-5">5</a>.  Transition and Deployment Considerations  . . . . . . . . . .  <a href="#page-13">13</a>
+   <a href="#section-6">6</a>.  Security Considerations . . . . . . . . . . . . . . . . . . .  <a href="#page-13">13</a>
+   <a href="#section-7">7</a>.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  <a href="#page-14">14</a>
+   <a href="#section-8">8</a>.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  <a href="#page-14">14</a>
+     <a href="#section-8.1">8.1</a>.  Normative References  . . . . . . . . . . . . . . . . . .  <a href="#page-14">14</a>
+     <a href="#section-8.2">8.2</a>.  Informative References  . . . . . . . . . . . . . . . . .  <a href="#page-14">14</a>
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="grey">Jethanandani, et al.          Informational                     [Page 2]</span></pre>
+<hr class='noprint'/><!--NewPage--><pre class='newpage'><span id="page-3" ></span>
+<span class="grey"><a href="/doc/html/rfc6952">RFC 6952</a>            BGP, LDP, PCEP, and MSDP Analysis           May 2013</span>
+
+
+<span class="h2"><a class="selflink" id="section-1" href="#section-1">1</a>.  Introduction</span>
+
+   In their &quot;Report from the IAB Workshop on Unwanted Traffic March
+   9-10, 2006&quot; [<a href="/doc/html/rfc4948" title="&quot;Report from the IAB workshop on Unwanted Traffic March 9-10, 2006&quot;">RFC4948</a>], the Internet Architecture Board (IAB)
+   described an attack on core routing infrastructure as an ideal attack
+   that would inflict the greatest amount of damage and suggested steps
+   to tighten the infrastructure against the attack.  Four main steps
+   were identified for that tightening:
+
+   1.  Create secure mechanisms and practices for operating routers.
+
+   2.  Clean up the Internet Routing Registry (IRR) repository, and
+       secure both the database and the access, so that it can be used
+       for routing verifications.
+
+   3.  Create specifications for cryptographic validation of routing
+       message content.
+
+   4.  Secure the routing protocols&#x27; packets on the wire.
+
+   In order to secure the routing protocols, this document performs an
+   initial analysis of the current state of four TCP-based protocols --
+   BGP [<a href="/doc/html/rfc4271" title="&quot;A Border Gateway Protocol 4 (BGP-4)&quot;">RFC4271</a>], LDP [<a href="/doc/html/rfc5036" title="&quot;LDP Specification&quot;">RFC5036</a>], PCEP [<a href="/doc/html/rfc5440" title="&quot;Path Computation Element (PCE) Communication Protocol (PCEP)&quot;">RFC5440</a>], and MSDP [<a href="/doc/html/rfc3618" title="&quot;Multicast Source Discovery Protocol (MSDP)&quot;">RFC3618</a>] --
+   according to the requirements of the KARP Design Guidelines
+   [<a href="/doc/html/rfc6518" title="&quot;Keying and Authentication for Routing Protocols (KARP) Design Guidelines&quot;">RFC6518</a>].  <a href="#section-4.2">Section 4.2</a> of that document uses the term &quot;state&quot;, which
+   will be referred to as the &quot;state of the security method&quot;.  Thus, a
+   term like &quot;Define Optimal State&quot; would be referred to as &quot;Define
+   Optimal State of the Security Method&quot;.
+
+   This document builds on several previous efforts into routing
+   security:
+
+   o  &quot;Issues with Existing Cryptographic Protection Methods for Routing
+      Protocols&quot; [<a href="/doc/html/rfc6039" title="&quot;Issues with Existing Cryptographic Protection Methods for Routing Protocols&quot;">RFC6039</a>], describes issues with existing cryptographic
+      protection methods for routing protocols.
+
+   o  Analysis of OSPF Security According to the KARP Design Guide
+      [<a href="/doc/html/rfc6863" title="&quot;Analysis of OSPF Security According to the Keying and Authentication for Routing Protocols (KARP) Design Guide&quot;">RFC6863</a>] analyzes Open Shortest Path First (OSPF) security
+      according to the KARP Design Guide.
+
+   <a href="#section-2">Section 2</a> of this document looks at the current state of the security
+   method for the four routing protocols: BGP, LDP, PCEP, and MSDP.
+   <a href="#section-3">Section 3</a> examines what the optimal state of the security method
+   would be for the four routing protocols according to the KARP Design
+   Guidelines [<a href="/doc/html/rfc6518" title="&quot;Keying and Authentication for Routing Protocols (KARP) Design Guidelines&quot;">RFC6518</a>], and <a href="#section-4">Section 4</a> does an analysis of the gap
+   between the existing state of the security method and the optimal
+   state of the security method for the protocols and suggests some
+   areas where improvement is needed.
+
+
+
+<span class="grey">Jethanandani, et al.          Informational                     [Page 3]</span></pre>
+<hr class='noprint'/><!--NewPage--><pre class='newpage'><span id="page-4" ></span>
+<span class="grey"><a href="/doc/html/rfc6952">RFC 6952</a>            BGP, LDP, PCEP, and MSDP Analysis           May 2013</span>
+
+
+<span class="h3"><a class="selflink" id="section-1.1" href="#section-1.1">1.1</a>.  Abbreviations</span>
+
+   AES - Advanced Encryption Standard
+
+   AO - Authentication Option
+
+   AS - Autonomous System
+
+   BGP - Border Gateway Protocol
+
+   CMAC - Cipher-Based Message Authentication Code
+
+   DoS - Denial of Service
+
+   GTSM - Generalized Time-to-Live (TTL) Security Mechanism
+
+   HMAC - Hash-Based MAC
+
+   KARP - Key and Authentication for Routing Protocols
+
+   KDF - Key Derivation Function
+
+   KEK - Key Encrypting Key
+
+   KMP - Key Management Protocol
+
+   LDP - Label Distribution Protocol
+
+   LSR - Label Switching Routers
+
+   MAC - Message Authentication Code
+
+   MKT - Master Key Table
+
+   MSDP - Multicast Source Distribution Protocol
+
+   MD5 - Message Digest Algorithm 5
+
+   OSPF - Open Shortest Path First
+
+   PCEP - Path Computation Element Communication Protocol
+
+   PCC - Path Computation Client
+
+   PCE - Path Computation Element
+
+   SHA - Secure Hash Algorithm
+
+
+
+
+<span class="grey">Jethanandani, et al.          Informational                     [Page 4]</span></pre>
+<hr class='noprint'/><!--NewPage--><pre class='newpage'><span id="page-5" ></span>
+<span class="grey"><a href="/doc/html/rfc6952">RFC 6952</a>            BGP, LDP, PCEP, and MSDP Analysis           May 2013</span>
+
+
+   TCP - Transmission Control Protocol
+
+   TTL - Time-to-Live
+
+   UDP - User Datagram Protocol
+
+   WG - Working Group
+
+<span class="h2"><a class="selflink" id="section-2" href="#section-2">2</a>.  Current Assessment of BGP, LDP, PCEP, and MSDP</span>
+
+   This section assesses the transport protocols for any authentication
+   or integrity mechanisms used by the protocol.  It describes the
+   current security mechanisms, if any, used by BGP, LDP, PCEP, and
+   MSDP.
+
+<span class="h3"><a class="selflink" id="section-2.1" href="#section-2.1">2.1</a>.  Transport Layer</span>
+
+   At the transport layer, routing protocols are subject to a variety of
+   DoS attacks, as outlined in &quot;Internet Denial-of-Service
+   Considerations&quot; [<a href="/doc/html/rfc4732" title="&quot;Internet Denial-of- Service Considerations&quot;">RFC4732</a>].  Such attacks can cause the routing
+   protocol to become congested, resulting in the routing updates being
+   supplied too slowly to be useful.  In extreme cases, these attacks
+   prevent routers from converging after a change.
+
+   Routing protocols use several methods to protect themselves.  Those
+   that use TCP as a transport protocol use access lists to accept
+   packets only from known sources.  These access lists also help
+   protect edge routers from attacks originating outside the protected
+   domain.  In addition, for edge routers running the External Border
+   Gateway Protocol (eBGP), TCP LISTEN is run only on interfaces on
+   which its peers have been discovered or via which routing sessions
+   are expected (as specified in router configuration databases).
+
+   &quot;Generalized TTL Security Mechanism (GTSM)&quot; [<a href="/doc/html/rfc5082" title="&quot;The Generalized TTL Security Mechanism (GTSM)&quot;">RFC5082</a>] describes a
+   generalized Time-to-Live (TTL) security mechanism to protect a
+   protocol stack from CPU-utilization-based attacks.  TCP Robustness
+   [<a href="/doc/html/rfc5961" title="&quot;Improving TCP&#x27;s Robustness to Blind In-Window Attacks&quot;">RFC5961</a>] recommends some TCP-level mitigations against spoofing
+   attacks targeted towards long-lived routing protocol sessions.
+
+   Even when BGP, LDP, PCEP, and MSDP sessions use access lists, they
+   are vulnerable to spoofing and man-in-the-middle attacks.
+   Authentication and integrity checks allow the receiver of a routing
+   protocol update to know that the message genuinely comes from the
+   node that claims to have sent it and to know whether the message has
+   been modified.  Sometimes routers can be subjected to a large number
+   of authentication and integrity requests, exhausting connection
+   resources on the router in a way that could lead to the denial of
+   genuine requests.
+
+
+
+<span class="grey">Jethanandani, et al.          Informational                     [Page 5]</span></pre>
+<hr class='noprint'/><!--NewPage--><pre class='newpage'><span id="page-6" ></span>
+<span class="grey"><a href="/doc/html/rfc6952">RFC 6952</a>            BGP, LDP, PCEP, and MSDP Analysis           May 2013</span>
+
+
+   TCP MD5 [<a href="/doc/html/rfc2385" title="&quot;Protection of BGP Sessions via the TCP MD5 Signature Option&quot;">RFC2385</a>] has been obsoleted by TCP-AO [<a href="/doc/html/rfc5925" title="&quot;The TCP Authentication Option&quot;">RFC5925</a>].  However,
+   it is still widely used to authenticate TCP-based routing protocols
+   such as BGP.  It provides a way for carrying a MD5 digest in a TCP
+   segment.  This digest is computed using information known only to the
+   endpoints, and this ensures authenticity and integrity of messages.
+   The MD5 key used to compute the digest is stored locally on the
+   router.  This option is used by routing protocols to provide for
+   session-level protection against the introduction of spoofed TCP
+   segments into any existing TCP streams, in particular, TCP Reset
+   segments.  TCP MD5 does not provide a generic mechanism to support
+   key rollover.  It also does not support algorithm agility.
+
+   The Message Authentication Codes (MACs) used by TCP MD5 are
+   considered too weak both because of the use of the hash function and
+   because of the way the secret key used by TCP MD5 is managed.
+   Furthermore, TCP MD5 does not support any algorithm agility.  TCP-AO
+   [<a href="/doc/html/rfc5925" title="&quot;The TCP Authentication Option&quot;">RFC5925</a>] and its companion document Cryptographic Algorithms for
+   TCP-AO [<a href="/doc/html/rfc5926" title="&quot;Cryptographic Algorithms for the TCP Authentication Option (TCP-AO)&quot;">RFC5926</a>], describe steps towards correcting both the MAC
+   weakness and the management of secret keys.  Those steps require that
+   two MAC algorithms be supported.  They are HMAC-SHA-1-96, as
+   specified in HMAC [<a href="/doc/html/rfc2104" title="&quot;HMAC: Keyed- Hashing for Message Authentication&quot;">RFC2104</a>], and AES-128-CMAC-96, as specified in
+   NIST-SP800-38B [<a href="#ref-NIST-SP800-38B">NIST-SP800-38B</a>].  Cryptographic research suggests
+   that both these MAC algorithms are fairly secure.  By supporting
+   multiple MAC algorithms, TCP-AO supports algorithm agility.  TCP-AO
+   also allows additional MACs to be added in the future.
+
+<span class="h3"><a class="selflink" id="section-2.2" href="#section-2.2">2.2</a>.  Keying Mechanisms</span>
+
+   For TCP-AO [<a href="/doc/html/rfc5925" title="&quot;The TCP Authentication Option&quot;">RFC5925</a>], there is no Key Management Protocol (KMP) used
+   to manage the keys that are employed to generate the MAC.  TCP-AO
+   talks about coordinating keys derived from the Master Key Table (MKT)
+   between endpoints and allows for a master key to be configured
+   manually or for it to be managed via an out-of-band mechanism.
+
+   It should be noted that most routers configured with static keys have
+   not seen the key changed ever.  The common reason given for not
+   changing the key is the difficulty in coordinating the change between
+   pairs of routers when using TCP MD5.  It is well known that the
+   longer the same key is used, the greater the chance that it can be
+   guessed or exposed, e.g., when an administrator with knowledge of the
+   keys leaves the company.
+
+   For point-to-point key management, the IKEv2 protocol [<a href="/doc/html/rfc5996" title="&quot;Internet Key Exchange Protocol Version 2 (IKEv2)&quot;">RFC5996</a>]
+   provides for automated key exchange under a Security Association (SA)
+   and can be used for a comprehensive KMP solution for routers.  IKEv2
+   can be used for both IPsec SAs [<a href="/doc/html/rfc4301" title="&quot;Security Architecture for the Internet Protocol&quot;">RFC4301</a>] and other types of SAs.  For
+   example, Fibre Channel SAs [<a href="/doc/html/rfc4595" title="&quot;Use of IKEv2 in the Fibre Channel Security Association Management Protocol&quot;">RFC4595</a>] are currently negotiated with
+   IKEv2.  Using IKEv2 to negotiate TCP-AO is a possible option.
+
+
+
+<span class="grey">Jethanandani, et al.          Informational                     [Page 6]</span></pre>
+<hr class='noprint'/><!--NewPage--><pre class='newpage'><span id="page-7" ></span>
+<span class="grey"><a href="/doc/html/rfc6952">RFC 6952</a>            BGP, LDP, PCEP, and MSDP Analysis           May 2013</span>
+
+
+<span class="h3"><a class="selflink" id="section-2.3" href="#section-2.3">2.3</a>.  BGP</span>
+
+   All BGP communications take place over TCP.  Therefore, all security
+   vulnerabilities for BGP can be categorized as relating to the
+   security of the transport protocol itself, or to the compromising of
+   individual routers and the data they handle.  This document examines
+   the issues for the transport protocol, while the SIDR Working Group
+   (WG) looks at ways to sign and secure the data exchanged in BGP as
+   described in &quot;An Infrastructure to Support Secure Internet Protocol&quot;
+   [<a href="/doc/html/rfc6480" title="&quot;An Infrastructure to Support Secure Internet Routing&quot;">RFC6480</a>].
+
+<span class="h3"><a class="selflink" id="section-2.4" href="#section-2.4">2.4</a>.  LDP</span>
+
+   &quot;Security Framework for MPLS and GMPLS Networks&quot; [<a href="/doc/html/rfc5920" title="&quot;Security Framework for MPLS and GMPLS Networks&quot;">RFC5920</a>] outlines
+   security aspects that are relevant in the context of MPLS and GMPLS.
+   It describes the security threats, the related defensive techniques,
+   and the mechanism for detection and reporting.
+
+   <a href="#section-5">Section 5</a> of LDP [<a href="/doc/html/rfc5036" title="&quot;LDP Specification&quot;">RFC5036</a>] states that LDP is subject to two
+   different types of attacks: spoofing and denial-of-service attacks.
+
+<span class="h4"><a class="selflink" id="section-2.4.1" href="#section-2.4.1">2.4.1</a>.  Spoofing Attacks</span>
+
+   A spoofing attack against LDP can occur both during the discovery
+   phase and during the session communication phase.
+
+<span class="h5"><a class="selflink" id="section-2.4.1.1" href="#section-2.4.1.1">2.4.1.1</a>.  Discovery Exchanges using UDP</span>
+
+   Label Switching Routers (LSRs) indicate their willingness to
+   establish and maintain LDP sessions by periodically sending Hello
+   messages.  Reception of a Hello message serves to create a new &quot;Hello
+   adjacency&quot;, if one does not already exist, or to refresh an existing
+   one.
+
+   There are two variants of the discovery mechanism.  A Basic Discovery
+   mechanism is used to discover LSR neighbors that are directly
+   connected at the link level, and an Extended Discovery mechanism is
+   used by LSRs that are more than one hop away.
+
+   Unlike all other LDP messages, the Hello messages are sent using UDP.
+   This means that they cannot benefit from the security mechanisms
+   available with TCP.  LDP [<a href="/doc/html/rfc5036" title="&quot;LDP Specification&quot;">RFC5036</a>] does not provide any security
+   mechanisms for use with Hello messages except for some configuration
+   that may help protect against bogus discovery events.  These
+   configurations include directly connected links and interfaces.
+   Routers that do not use directly connected links have to use the
+   Extended Discovery mechanism and will not be able to use
+   configuration to protect against bogus discovery events.
+
+
+
+<span class="grey">Jethanandani, et al.          Informational                     [Page 7]</span></pre>
+<hr class='noprint'/><!--NewPage--><pre class='newpage'><span id="page-8" ></span>
+<span class="grey"><a href="/doc/html/rfc6952">RFC 6952</a>            BGP, LDP, PCEP, and MSDP Analysis           May 2013</span>
+
+
+   Spoofing a Hello packet for an existing adjacency can cause the
+   adjacency to time out and result in termination of the associated
+   session.  This can occur when the spoofed Hello message specifies a
+   small Hold Time, causing the receiver to expect Hello messages within
+   this interval, while the true neighbor continues sending Hello
+   messages at the lower, previously agreed to frequency.
+
+   Spoofing a Hello packet can also cause the LDP session to be
+   terminated.  This can occur when the spoofed Hello specifies a
+   different Transport Address from the previously agreed one between
+   neighbors.  Spoofed Hello messages are observed and reported as a
+   real problem in production networks.
+
+<span class="h5"><a class="selflink" id="section-2.4.1.2" href="#section-2.4.1.2">2.4.1.2</a>.  Session Communication using TCP</span>
+
+   LDP, like other TCP-based routing protocols, specifies use of the TCP
+   MD5 Signature Option to provide for the authenticity and integrity of
+   session messages.  As stated in <a href="#section-2.1">Section 2.1</a> of this document and in
+   <a href="#section-2.9">Section 2.9</a> of LDP [<a href="/doc/html/rfc5036" title="&quot;LDP Specification&quot;">RFC5036</a>], MD5 authentication is considered too
+   weak for this application as outlined in MD5 and HMAC-MD5 Security
+   Considerations [<a href="/doc/html/rfc6151" title="&quot;Updated Security Considerations for the MD5 Message-Digest and the HMAC-MD5 Algorithms&quot;">RFC6151</a>].  It also does not support algorithm
+   agility.  A stronger hashing algorithm, e.g., SHA1, which is
+   supported by TCP-AO [<a href="/doc/html/rfc5925" title="&quot;The TCP Authentication Option&quot;">RFC5925</a>], could be deployed to take care of the
+   weakness.
+
+   Alternatively, one could move to using TCP-AO, which provides for
+   stronger MAC algorithms, makes it easier to set up manual keys, and
+   protects against replay attacks.
+
+<span class="h4"><a class="selflink" id="section-2.4.2" href="#section-2.4.2">2.4.2</a>.  Denial-of-Service Attacks</span>
+
+   LDP is subject to Denial-of-Service (DoS) attacks both in discovery
+   mode and session mode.  The potential targets are documented in
+   <a href="#section-5.3">Section 5.3</a> of LDP [<a href="/doc/html/rfc5036" title="&quot;LDP Specification&quot;">RFC5036</a>].
+
+<span class="h3"><a class="selflink" id="section-2.5" href="#section-2.5">2.5</a>.  PCEP</span>
+
+   For effective selection by Path Computation Clients (PCCs), a PCC
+   needs to know the location of Path Computation Elements (PCEs) in its
+   domain along with some information relevant for PCE selection.  Such
+   PCE information could be learned through manual configuration, on
+   each PCC, along with the capabilities of the PCE or automatically
+   through a PCE discovery mechanism as outlined in Requirements for PCE
+   Discovery [<a href="/doc/html/rfc4674" title="&quot;Requirements for Path Computation Element (PCE) Discovery&quot;">RFC4674</a>].
+
+   Attacks on PCEP [<a href="/doc/html/rfc5440" title="&quot;Path Computation Element (PCE) Communication Protocol (PCEP)&quot;">RFC5440</a>] may result in damage to active networks.
+   These include computation responses, which if changed can cause
+   protocols like RSVP-TE [<a href="/doc/html/rfc3209" title="&quot;RSVP-TE: Extensions to RSVP for LSP Tunnels&quot;">RFC3209</a>] to set up suboptimal or
+
+
+
+<span class="grey">Jethanandani, et al.          Informational                     [Page 8]</span></pre>
+<hr class='noprint'/><!--NewPage--><pre class='newpage'><span id="page-9" ></span>
+<span class="grey"><a href="/doc/html/rfc6952">RFC 6952</a>            BGP, LDP, PCEP, and MSDP Analysis           May 2013</span>
+
+
+   inappropriate LSPs.  In addition, PCE itself can be a target for a
+   variety of DoS attacks.  Such attacks can cause path computations to
+   be supplied too slowly to be of any value, particularly as it relates
+   to recovery or establishment of LSPs.
+
+   Finally, PCE discovery, as outlined in OSPF Protocol Extensions for
+   PCE Discovery [<a href="/doc/html/rfc5088" title="&quot;OSPF Protocol Extensions for Path Computation Element (PCE) Discovery&quot;">RFC5088</a>] and IS-IS Protocol Extensions for PCE
+   Discovery [<a href="/doc/html/rfc5089" title="&quot;IS-IS Protocol Extensions for Path Computation Element (PCE) Discovery&quot;">RFC5089</a>], is a significant feature for the successful
+   deployment of PCEP in large networks.  These mechanisms allow PCC to
+   discover the existence of PCEs within the network.  If the discovery
+   mechanism is compromised, it will impair the ability of the nodes to
+   function as described below.
+
+   As <a href="/doc/html/rfc5440">RFC 5440</a> states, PCEP (which makes use of TCP as a transport)
+   could be the target of the following attacks:
+
+   o  Spoofing (PCC or PCE implementation)
+
+   o  Snooping (message interception)
+
+   o  Falsification
+
+   o  Denial of Service
+
+   In inter-Autonomous System (inter-AS) scenarios where PCE-to-PCE
+   communication is required, attacks may be particularly significant
+   with commercial implications as well as service-level agreement
+   implications.
+
+   Additionally, snooping of PCEP requests and responses may give an
+   attacker information about the operation of the network.  By viewing
+   the PCEP messages, an attacker can determine the pattern of service
+   establishment in the network and can know where traffic is being
+   routed, thereby making the network susceptible to targeted attacks
+   and the data within specific LSPs vulnerable.
+
+   Ensuring PCEP communication privacy is of key importance, especially
+   in an inter-AS context, where PCEP communication endpoints do not
+   reside in the same AS.  An attacker that intercepts a PCE message
+   could obtain sensitive information related to computed paths and
+   resources.
+
+   At the time PCEP was documented in [<a href="/doc/html/rfc5440" title="&quot;Path Computation Element (PCE) Communication Protocol (PCEP)&quot;">RFC5440</a>], TCP-AO had not been
+   fully specified.  Therefore, [<a href="/doc/html/rfc5440" title="&quot;Path Computation Element (PCE) Communication Protocol (PCEP)&quot;">RFC5440</a>] mandates that PCEP
+   implementations include support for TCP MD5 and that use of the
+   function should be configurable by the operator.  [<a href="/doc/html/rfc5440" title="&quot;Path Computation Element (PCE) Communication Protocol (PCEP)&quot;">RFC5440</a>] also
+   describes the vulnerabilities and weaknesses of TCP MD5 as noted in
+   this document.  [<a href="/doc/html/rfc5440" title="&quot;Path Computation Element (PCE) Communication Protocol (PCEP)&quot;">RFC5440</a>] goes on to state that PCEP implementations
+
+
+
+<span class="grey">Jethanandani, et al.          Informational                     [Page 9]</span></pre>
+<hr class='noprint'/><!--NewPage--><pre class='newpage'><span id="page-10" ></span>
+<span class="grey"><a href="/doc/html/rfc6952">RFC 6952</a>            BGP, LDP, PCEP, and MSDP Analysis           May 2013</span>
+
+
+   should include support for TCP-AO as soon as that specification is
+   complete.  Since TCP-AO [<a href="/doc/html/rfc5925" title="&quot;The TCP Authentication Option&quot;">RFC5925</a>] has now been published, new PCEP
+   implementations should fully support TCP-AO.
+
+<span class="h3"><a class="selflink" id="section-2.6" href="#section-2.6">2.6</a>.  MSDP</span>
+
+   Similar to BGP and LDP, the Multicast Source Distribution Protocol
+   (MSDP) uses TCP MD5 [<a href="/doc/html/rfc2385" title="&quot;Protection of BGP Sessions via the TCP MD5 Signature Option&quot;">RFC2385</a>] to protect TCP sessions via the TCP MD5
+   option.  But with a weak MD5 authentication, TCP MD5 is not
+   considered strong enough for this application.  It also does not
+   support algorithm agility.
+
+   MSDP advocates imposing a limit on the number of source address and
+   group addresses (S,G) that can be cached within the protocol in order
+   to mitigate state explosion due to any denial of service and other
+   attacks.
+
+<span class="h2"><a class="selflink" id="section-3" href="#section-3">3</a>.  Optimal State for BGP, LDP, PCEP, and MSDP</span>
+
+   The ideal state of the security method for BGP, LDP, PCEP, and MSDP
+   protocols is when they can withstand any of the known types of
+   attacks.  The protocols also need to support algorithm agility, i.e.,
+   they must not hardwire themselves to one algorithm.
+
+   Additionally, the KMP for the routing sessions should help negotiate
+   unique, pair-wise random keys without administrator involvement.  It
+   should also negotiate Security Association (SA) parameters required
+   for the session connection, including key lifetimes.  It should keep
+   track of those lifetimes and negotiate new keys and parameters before
+   they expire and do so without administrator involvement.  In the
+   event of a breach, including when an administrator with knowledge of
+   the keys leaves the company, the keys should be changed immediately.
+
+   The DoS attacks for BGP, LDP, PCEP, and MSDP are attacks to the
+   transport protocol -- TCP for the most part, and UDP in case of the
+   discovery phase of LDP.  TCP and UDP should be able to withstand any
+   of the DoS scenarios by dropping packets that are attack packets in a
+   way that does not impact legitimate packets.
+
+   The routing protocols should provide a mechanism to authenticate the
+   routing information carried within the payload, and administrators
+   should enable it.
+
+<span class="h3"><a class="selflink" id="section-3.1" href="#section-3.1">3.1</a>.  LDP</span>
+
+   To mitigate LDP&#x27;s current vulnerability to spoofing attacks, LDP
+   needs to be upgraded such that an implementation is able to determine
+   the authenticity of the neighbors sending the Hello message.
+
+
+
+<span class="grey">Jethanandani, et al.          Informational                    [Page 10]</span></pre>
+<hr class='noprint'/><!--NewPage--><pre class='newpage'><span id="page-11" ></span>
+<span class="grey"><a href="/doc/html/rfc6952">RFC 6952</a>            BGP, LDP, PCEP, and MSDP Analysis           May 2013</span>
+
+
+   Labels are similar to routing information, which is distributed in
+   the clear.  However, there is currently no requirement that the
+   labels be encrypted.  Such a requirement is out of scope for this
+   document.
+
+   Similarly, it is important to ensure that routers exchanging labels
+   are mutually authenticated, and that there are no rogue peers or
+   unauthenticated peers that can compromise the stability of the
+   network.
+
+<span class="h2"><a class="selflink" id="section-4" href="#section-4">4</a>.  Gap Analysis for BGP, LDP, PCEP, and MSDP</span>
+
+   This section outlines the differences between the current state of
+   the security methods for routing protocols and the desired state of
+   the security methods as outlined in <a href="#section-4.2">Section 4.2</a> of the KARP Design
+   Guidelines [<a href="/doc/html/rfc6518" title="&quot;Keying and Authentication for Routing Protocols (KARP) Design Guidelines&quot;">RFC6518</a>].  As that document states, these routing
+   protocols fall into the category of one-to-one peering messages and
+   will use peer keying protocols.  This section covers issues that are
+   common to the four protocols, leaving protocol-specific issues to
+   sub-sections.
+
+   At a transport level, these routing protocols are subject to some of
+   the same attacks that TCP applications are subject to.  These include
+   DoS and spoofing attacks.  &quot;Internet Denial-of-Service
+   Considerations&quot; [<a href="/doc/html/rfc4732" title="&quot;Internet Denial-of- Service Considerations&quot;">RFC4732</a>] outlines some solutions.  &quot;Defending TCP
+   Against Spoofing Attacks&quot; [<a href="/doc/html/rfc4953" title="&quot;Defending TCP Against Spoofing Attacks&quot;">RFC4953</a>] recommends ways to prevent
+   spoofing attacks.  In addition, the recommendations in [<a href="/doc/html/rfc5961" title="&quot;Improving TCP&#x27;s Robustness to Blind In-Window Attacks&quot;">RFC5961</a>]
+   should also be followed and implemented to strengthen TCP.
+
+   Routers lack comprehensive key management and keys derived that they
+   can use to authenticate data.  As an example, TCP-AO [<a href="/doc/html/rfc5925" title="&quot;The TCP Authentication Option&quot;">RFC5925</a>], talks
+   about coordinating keys derived from the Master Key Table (MKT)
+   between endpoints, but the MKT itself has to be configured manually
+   or through an out-of-band mechanism.  Also, TCP-AO does not address
+   the issue of connectionless reset, as it applies to routers that do
+   not store MKT across reboots.
+
+   Authentication, integrity protection, and encryption all require the
+   use of keys by sender and receiver.  An automated KMP, therefore has
+   to include a way to distribute key material between two endpoints
+   with little or no administrative overhead.  It has to cover automatic
+   key rollover.  It is expected that authentication will cover the
+   packet, i.e., the payload and the TCP header, and will not cover the
+   frame, i.e., the layer 2 header.
+
+   There are two methods of automatic key rollover.  Implicit key
+   rollover can be initiated after a certain volume of data gets
+   exchanged or when a certain time has elapsed.  This does not require
+
+
+
+<span class="grey">Jethanandani, et al.          Informational                    [Page 11]</span></pre>
+<hr class='noprint'/><!--NewPage--><pre class='newpage'><span id="page-12" ></span>
+<span class="grey"><a href="/doc/html/rfc6952">RFC 6952</a>            BGP, LDP, PCEP, and MSDP Analysis           May 2013</span>
+
+
+   explicit signaling nor should it result in a reset of the TCP
+   connection in a way that the links/adjacencies are affected.  On the
+   other hand, explicit key rollover requires an out-of-band key
+   signaling mechanism.  It can be triggered by either side and can be
+   done anytime a security parameter changes, e.g., an attack has
+   happened, or a system administrator with access to the keys has left
+   the company.  An example of this is IKEv2 [<a href="/doc/html/rfc5996" title="&quot;Internet Key Exchange Protocol Version 2 (IKEv2)&quot;">RFC5996</a>], but it could be
+   any other new mechanisms also.
+
+   As stated earlier, TCP-AO [<a href="/doc/html/rfc5925" title="&quot;The TCP Authentication Option&quot;">RFC5925</a>] and its accompanying document,
+   Cryptographic Algorithms for TCP-AO [<a href="/doc/html/rfc5926" title="&quot;Cryptographic Algorithms for the TCP Authentication Option (TCP-AO)&quot;">RFC5926</a>], require that two MAC
+   algorithms be supported, and they are HMAC-SHA-1-96, as specified in
+   HMAC [<a href="/doc/html/rfc2104" title="&quot;HMAC: Keyed- Hashing for Message Authentication&quot;">RFC2104</a>], and AES-128-CMAC-96, as specified in NIST-SP800-38B
+   [<a href="#ref-NIST-SP800-38B">NIST-SP800-38B</a>].  Therefore, TCP-AO meets the algorithm agility
+   requirement.
+
+   There is a need to protect authenticity and validity of the routing/
+   label information that is carried in the payload of the sessions.
+   However, that is outside the scope of this document and is being
+   addressed by the SIDR WG.  Similar mechanisms could be used for
+   intra-domain protocols.
+
+   Finally, replay protection is required.  The replay mechanism needs
+   to be sufficient to prevent an attacker from creating a denial of
+   service or disrupting the integrity of the routing protocol by
+   replaying packets.  It is important that an attacker not be able to
+   disrupt service by capturing packets and waiting for replay state to
+   be lost.
+
+<span class="h3"><a class="selflink" id="section-4.1" href="#section-4.1">4.1</a>.  LDP</span>
+
+   As described in LDP [<a href="/doc/html/rfc5036" title="&quot;LDP Specification&quot;">RFC5036</a>], the threat of spoofed Basic Hellos can
+   be reduced by only accepting Basic Hellos on interfaces that LSRs
+   trust, employing GTSM [<a href="/doc/html/rfc5082" title="&quot;The Generalized TTL Security Mechanism (GTSM)&quot;">RFC5082</a>], and ignoring Basic Hellos not
+   addressed to the &quot;all routers on this subnet&quot; multicast group.
+   Spoofing attacks via Targeted Hellos are potentially a more serious
+   threat.  An LSR can reduce the threat of spoofed Extended Hellos by
+   filtering them and accepting Hellos from sources permitted by access
+   lists.  However, performing the filtering using access lists requires
+   LSR resources, and the LSR is still vulnerable to the IP source
+   address spoofing.  Spoofing attacks can be solved by being able to
+   authenticate the Hello messages, and an LSR can be configured to only
+   accept Hello messages from specific peers when authentication is in
+   use.
+
+   LDP Hello Cryptographic Authentication [<a href="#ref-HELLO-CRYPTO">HELLO-CRYPTO</a>] suggest a new
+   Cryptographic Authentication TLV that can be used as an
+   authentication mechanism to secure Hello messages.
+
+
+
+<span class="grey">Jethanandani, et al.          Informational                    [Page 12]</span></pre>
+<hr class='noprint'/><!--NewPage--><pre class='newpage'><span id="page-13" ></span>
+<span class="grey"><a href="/doc/html/rfc6952">RFC 6952</a>            BGP, LDP, PCEP, and MSDP Analysis           May 2013</span>
+
+
+<span class="h3"><a class="selflink" id="section-4.2" href="#section-4.2">4.2</a>.  PCEP</span>
+
+   Path Computation Element (PCE) discovery, according to [<a href="/doc/html/rfc5440" title="&quot;Path Computation Element (PCE) Communication Protocol (PCEP)&quot;">RFC5440</a>], is
+   a significant feature for the successful deployment of PCEP in large
+   networks.  This mechanism allows a Path Computation Client (PCC) to
+   discover the existence of suitable PCEs within the network without
+   the necessity of configuration.  It should be obvious that, where
+   PCEs are discovered and not configured, the PCC cannot know the
+   correct key to use.  There are different approaches to retain some
+   aspect of security, but all of them require use of a keys and a
+   keying mechanism, the need for which has been discussed above.
+
+<span class="h2"><a class="selflink" id="section-5" href="#section-5">5</a>.  Transition and Deployment Considerations</span>
+
+   As stated in the KARP Design Guidelines [<a href="/doc/html/rfc6518" title="&quot;Keying and Authentication for Routing Protocols (KARP) Design Guidelines&quot;">RFC6518</a>], it is imperative
+   that the new authentication, security mechanisms, and key management
+   protocol support incremental deployment, as it is not feasible to
+   deploy the new routing protocol authentication mechanism overnight.
+
+   Typically, authentication and security in a peer-to-peer protocol
+   requires that both parties agree to the mechanisms that will be used.
+   If an agreement is not reached, the setup of the new mechanism will
+   fail or will be deferred.  Upon failure, the routing protocols can
+   fall back to the mechanisms that were already in place, e.g., use
+   static keys if that was the mechanism in place.  The fallback should
+   be configurable on a per-node or per-interface basis.  It is usually
+   not possible for one end to use the new mechanism while the other end
+   uses the old.  Policies can be put in place to retry upgrading after
+   a said period of time, so that manual coordination is not required.
+
+   If the automatic KMP requires use of Public Key Infrastructure
+   Certificates [<a href="/doc/html/rfc5280" title="&quot;Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile&quot;">RFC5280</a>] to exchange key material, the required
+   Certificate Authority (CA) root certificates may need to be installed
+   to verify the authenticity of requests initiated by a peer.  Such a
+   step does not require coordination with the peer, except to decide
+   which CA authority will be used.
+
+<span class="h2"><a class="selflink" id="section-6" href="#section-6">6</a>.  Security Considerations</span>
+
+   This section describes security considerations that BGP, LDP, PCEP,
+   and MSDP should try to meet.
+
+   As with all routing protocols, they need protection from both on-path
+   and off-path blind attacks.  A better way to protect them would be
+   with per-packet protection using a cryptographic MAC.  In order to
+   provide for the MAC, keys are needed.
+
+
+
+
+
+<span class="grey">Jethanandani, et al.          Informational                    [Page 13]</span></pre>
+<hr class='noprint'/><!--NewPage--><pre class='newpage'><span id="page-14" ></span>
+<span class="grey"><a href="/doc/html/rfc6952">RFC 6952</a>            BGP, LDP, PCEP, and MSDP Analysis           May 2013</span>
+
+
+   The routing protocols need to support algorithm agility, i.e., they
+   must not hardwire themselves to one algorithm.
+
+   Once keys are used, mechanisms are required to support key rollover.
+   They should cover both manual and automatic key rollover.  Multiple
+   approaches could be used.  However, since the existing mechanisms
+   provide a protocol field to identify the key as well as management
+   mechanisms to introduce and retire new keys, focusing on the existing
+   mechanism as a starting point is prudent.
+
+   Furthermore, it is strongly suggested that these routing protocols
+   support algorithm agility.  It has been proven that algorithms weaken
+   over time.  Supporting algorithm agility assists in smooth
+   transitions from old to new algorithms.
+
+<span class="h2"><a class="selflink" id="section-7" href="#section-7">7</a>.  Acknowledgements</span>
+
+   We would like to thank Brian Weis for encouraging us to write this
+   document, and thanks to Anantha Ramaiah and Mach Chen for providing
+   comments on it.
+
+<span class="h2"><a class="selflink" id="section-8" href="#section-8">8</a>.  References</span>
+
+<span class="h3"><a class="selflink" id="section-8.1" href="#section-8.1">8.1</a>.  Normative References</span>
+
+   [<a id="ref-RFC5926">RFC5926</a>]  Lebovitz, G. and E. Rescorla, &quot;Cryptographic Algorithms
+              for the TCP Authentication Option (TCP-AO)&quot;, <a href="/doc/html/rfc5926">RFC 5926</a>,
+              June 2010.
+
+   [<a id="ref-RFC6518">RFC6518</a>]  Lebovitz, G. and M. Bhatia, &quot;Keying and Authentication for
+              Routing Protocols (KARP) Design Guidelines&quot;, <a href="/doc/html/rfc6518">RFC 6518</a>,
+              February 2012.
+
+   [<a id="ref-RFC6863">RFC6863</a>]  Hartman, S. and D. Zhang, &quot;Analysis of OSPF Security
+              According to the Keying and Authentication for Routing
+              Protocols (KARP) Design Guide&quot;, <a href="/doc/html/rfc6863">RFC 6863</a>, March 2013.
+
+<span class="h3"><a class="selflink" id="section-8.2" href="#section-8.2">8.2</a>.  Informative References</span>
+
+   [<a id="ref-HELLO-CRYPTO">HELLO-CRYPTO</a>]
+              Zheng, L., Chen, M., and M. Bhatia, &quot;LDP Hello
+              Cryptographic Authentication&quot;, Work in Progress, January
+              2013.
+
+   [<a id="ref-NIST-SP800-38B">NIST-SP800-38B</a>]
+              Dworking, , &quot;Recommendation for Block Cipher Modes of
+              Operation: The CMAC Mode for Authentication&quot;, May 2005.
+
+
+
+
+<span class="grey">Jethanandani, et al.          Informational                    [Page 14]</span></pre>
+<hr class='noprint'/><!--NewPage--><pre class='newpage'><span id="page-15" ></span>
+<span class="grey"><a href="/doc/html/rfc6952">RFC 6952</a>            BGP, LDP, PCEP, and MSDP Analysis           May 2013</span>
+
+
+   [<a id="ref-RFC2104">RFC2104</a>]  Krawczyk, H., Bellare, M., and R. Canetti, &quot;HMAC: Keyed-
+              Hashing for Message Authentication&quot;, <a href="/doc/html/rfc2104">RFC 2104</a>, February
+              1997.
+
+   [<a id="ref-RFC2385">RFC2385</a>]  Heffernan, A., &quot;Protection of BGP Sessions via the TCP MD5
+              Signature Option&quot;, <a href="/doc/html/rfc2385">RFC 2385</a>, August 1998.
+
+   [<a id="ref-RFC3209">RFC3209</a>]  Awduche, D., Berger, L., Gan, D., Li, T., Srinivasan, V.,
+              and G. Swallow, &quot;RSVP-TE: Extensions to RSVP for LSP
+              Tunnels&quot;, <a href="/doc/html/rfc3209">RFC 3209</a>, December 2001.
+
+   [<a id="ref-RFC3618">RFC3618</a>]  Fenner, B. and D. Meyer, &quot;Multicast Source Discovery
+              Protocol (MSDP)&quot;, <a href="/doc/html/rfc3618">RFC 3618</a>, October 2003.
+
+   [<a id="ref-RFC4271">RFC4271</a>]  Rekhter, Y., Li, T., and S. Hares, &quot;A Border Gateway
+              Protocol 4 (BGP-4)&quot;, <a href="/doc/html/rfc4271">RFC 4271</a>, January 2006.
+
+   [<a id="ref-RFC4301">RFC4301</a>]  Kent, S. and K. Seo, &quot;Security Architecture for the
+              Internet Protocol&quot;, <a href="/doc/html/rfc4301">RFC 4301</a>, December 2005.
+
+   [<a id="ref-RFC4595">RFC4595</a>]  Maino, F. and D. Black, &quot;Use of IKEv2 in the Fibre Channel
+              Security Association Management Protocol&quot;, <a href="/doc/html/rfc4595">RFC 4595</a>, July
+              2006.
+
+   [<a id="ref-RFC4674">RFC4674</a>]  Le Roux, J.L., &quot;Requirements for Path Computation Element
+              (PCE) Discovery&quot;, <a href="/doc/html/rfc4674">RFC 4674</a>, October 2006.
+
+   [<a id="ref-RFC4732">RFC4732</a>]  Handley, M., Rescorla, E., IAB, &quot;Internet Denial-of-
+              Service Considerations&quot;, <a href="/doc/html/rfc4732">RFC 4732</a>, December 2006.
+
+   [<a id="ref-RFC4948">RFC4948</a>]  Andersson, L., Davies, E., and L. Zhang, &quot;Report from the
+              IAB workshop on Unwanted Traffic March 9-10, 2006&quot;, <a href="/doc/html/rfc4948">RFC</a>
+              <a href="/doc/html/rfc4948">4948</a>, August 2007.
+
+   [<a id="ref-RFC4953">RFC4953</a>]  Touch, J., &quot;Defending TCP Against Spoofing Attacks&quot;, <a href="/doc/html/rfc4953">RFC</a>
+              <a href="/doc/html/rfc4953">4953</a>, July 2007.
+
+   [<a id="ref-RFC5036">RFC5036</a>]  Andersson, L., Minei, I., and B. Thomas, &quot;LDP
+              Specification&quot;, <a href="/doc/html/rfc5036">RFC 5036</a>, October 2007.
+
+   [<a id="ref-RFC5082">RFC5082</a>]  Gill, V., Heasley, J., Meyer, D., Savola, P., and C.
+              Pignataro, &quot;The Generalized TTL Security Mechanism
+              (GTSM)&quot;, <a href="/doc/html/rfc5082">RFC 5082</a>, October 2007.
+
+   [<a id="ref-RFC5088">RFC5088</a>]  Le Roux, JL., Vasseur, JP., Ikejiri, Y., and R. Zhang,
+              &quot;OSPF Protocol Extensions for Path Computation Element
+              (PCE) Discovery&quot;, <a href="/doc/html/rfc5088">RFC 5088</a>, January 2008.
+
+
+
+
+<span class="grey">Jethanandani, et al.          Informational                    [Page 15]</span></pre>
+<hr class='noprint'/><!--NewPage--><pre class='newpage'><span id="page-16" ></span>
+<span class="grey"><a href="/doc/html/rfc6952">RFC 6952</a>            BGP, LDP, PCEP, and MSDP Analysis           May 2013</span>
+
+
+   [<a id="ref-RFC5089">RFC5089</a>]  Le Roux, JL., Vasseur, JP., Ikejiri, Y., and R. Zhang,
+              &quot;IS-IS Protocol Extensions for Path Computation Element
+              (PCE) Discovery&quot;, <a href="/doc/html/rfc5089">RFC 5089</a>, January 2008.
+
+   [<a id="ref-RFC5280">RFC5280</a>]  Cooper, D., Santesson, S., Farrell, S., Boeyen, S.,
+              Housley, R., and W. Polk, &quot;Internet X.509 Public Key
+              Infrastructure Certificate and Certificate Revocation List
+              (CRL) Profile&quot;, <a href="/doc/html/rfc5280">RFC 5280</a>, May 2008.
+
+   [<a id="ref-RFC5440">RFC5440</a>]  Vasseur, JP. and JL. Le Roux, &quot;Path Computation Element
+              (PCE) Communication Protocol (PCEP)&quot;, <a href="/doc/html/rfc5440">RFC 5440</a>, March
+              2009.
+
+   [<a id="ref-RFC5920">RFC5920</a>]  Fang, L., &quot;Security Framework for MPLS and GMPLS
+              Networks&quot;, <a href="/doc/html/rfc5920">RFC 5920</a>, July 2010.
+
+   [<a id="ref-RFC5925">RFC5925</a>]  Touch, J., Mankin, A., and R. Bonica, &quot;The TCP
+              Authentication Option&quot;, <a href="/doc/html/rfc5925">RFC 5925</a>, June 2010.
+
+   [<a id="ref-RFC5961">RFC5961</a>]  Ramaiah, A., Stewart, R., and M. Dalal, &quot;Improving TCP&#x27;s
+              Robustness to Blind In-Window Attacks&quot;, <a href="/doc/html/rfc5961">RFC 5961</a>, August
+              2010.
+
+   [<a id="ref-RFC5996">RFC5996</a>]  Kaufman, C., Hoffman, P., Nir, Y., and P. Eronen,
+              &quot;Internet Key Exchange Protocol Version 2 (IKEv2)&quot;, <a href="/doc/html/rfc5996">RFC</a>
+              <a href="/doc/html/rfc5996">5996</a>, September 2010.
+
+   [<a id="ref-RFC6039">RFC6039</a>]  Manral, V., Bhatia, M., Jaeggli, J., and R. White, &quot;Issues
+              with Existing Cryptographic Protection Methods for Routing
+              Protocols&quot;, <a href="/doc/html/rfc6039">RFC 6039</a>, October 2010.
+
+   [<a id="ref-RFC6151">RFC6151</a>]  Turner, S. and L. Chen, &quot;Updated Security Considerations
+              for the MD5 Message-Digest and the HMAC-MD5 Algorithms&quot;,
+              <a href="/doc/html/rfc6151">RFC 6151</a>, March 2011.
+
+   [<a id="ref-RFC6480">RFC6480</a>]  Lepinski, M. and S. Kent, &quot;An Infrastructure to Support
+              Secure Internet Routing&quot;, <a href="/doc/html/rfc6480">RFC 6480</a>, February 2012.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="grey">Jethanandani, et al.          Informational                    [Page 16]</span></pre>
+<hr class='noprint'/><!--NewPage--><pre class='newpage'><span id="page-17" ></span>
+<span class="grey"><a href="/doc/html/rfc6952">RFC 6952</a>            BGP, LDP, PCEP, and MSDP Analysis           May 2013</span>
+
+
+Authors&#x27; Addresses
+
+   Mahesh Jethanandani
+   Ciena Corporation
+   1741 Technology Drive
+   San Jose, CA  95110
+   USA
+
+   Phone: +1 (408) 436-3313
+   EMail: mjethanandani@gmail.com
+
+
+   Keyur Patel
+   Cisco Systems, Inc
+   170 Tasman Drive
+   San Jose, CA  95134
+   USA
+
+   Phone: +1 (408) 526-7183
+   EMail: keyupate@cisco.com
+
+
+   Lianshu Zheng
+   Huawei Technologies
+   China
+
+   Phone: +86 (10) 82882008
+   EMail: vero.zheng@huawei.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jethanandani, et al.          Informational                    [Page 17]
+</pre></div>
+                    </div>
+                
+            </div>
+            <div class="d-print-none col-md-3 bg-light-subtle collapse show" id="sidebar">
+                <div class="position-fixed border-start sidebar overflow-scroll overscroll-none no-scrollbar">
+                    <div class="d-flex flex-column vh-100 pt-2 pt-lg-3 ps-3 pl-md-2 pl-lg-3">
+                        <div>
+                            <a class="btn btn-primary btn-sm" href="/doc/rfc6952/">Datatracker</a>
+                            <p class="fw-bold pt-2">
+                                
+                                    RFC 6952
+                                
+                                <br>
+                                
+
+
+
+
+
+<span class="text-success">RFC
+    
+    - Informational
+    
+</span>
+
+                            </p>
+                        </div>
+                        
+                        <ul class="nav nav-tabs nav-fill small me-2" role="tablist">
+                            <li class="nav-item" role="presentation" title="Document information">
+                                <button class="nav-link px-2"
+                                        id="docinfo-tab"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#docinfo-tab-pane"
+                                        type="button"
+                                        role="tab"
+                                        aria-controls="docinfo-tab-pane"
+                                        aria-selected="true">
+                                    <i class="bi bi-info-circle"></i><span class="d-none d-md-block d-xl-inline ms-xl-1">Info</span>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation" title="Table of contents">
+                                <button class="nav-link px-2"
+                                        id="toc-tab"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#toc-tab-pane"
+                                        type="button"
+                                        role="tab"
+                                        aria-controls="toc-tab-pane"
+                                        aria-selected="false">
+                                    <i class="bi bi-list-ol"></i><span class="d-none d-md-block d-xl-inline ms-xl-1">Contents</span>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation" title="Preferences">
+                                <button class="nav-link px-2"
+                                        id="pref-tab"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#pref-tab-pane"
+                                        type="button"
+                                        role="tab"
+                                        aria-controls="pref-tab-pane"
+                                        aria-selected="false">
+                                    <i class="bi bi-gear"></i><span class="d-none d-md-block d-xl-inline ms-xl-1">Prefs</span>
+                                </button>
+                            </li>
+                        </ul>
+                        <div class="overflow-auto tab-content pt-2 me-2">
+                            <div class="tab-pane"
+                                 id="docinfo-tab-pane"
+                                 role="tabpanel"
+                                 aria-labelledby="docinfo-tab"
+                                 tabindex="0">
+                                <table class="table table-sm table-borderless">
+                                    
+
+
+
+
+
+
+
+<tbody class="meta align-top ">
+    <tr>
+        <th scope="row">Document</th>
+        <th scope="row">Document type</th>
+        <td class="edit"></td>
+        <td>
+            
+
+
+
+
+
+<span class="text-success">RFC
+    
+    - Informational
+    
+</span>
+
+            
+                
+                    <br>May 2013
+                
+                <br>
+                
+                
+                    <a class="btn btn-sm btn-warning"
+                       title="Click to report an error in the document."
+                       href="https://www.rfc-editor.org/errata.php#reportnew"
+                       target="_blank">
+                        Report errata
+                    </a>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                    <div>
+                        Was
+                        <a href="/doc/draft-ietf-karp-routing-tcp-analysis/07/">draft-ietf-karp-routing-tcp-analysis</a>
+                        (<a href="/wg/karp/about/">karp WG</a>)
+                    </div>
+                
+            
+            
+            
+                
+
+
+
+
+    
+
+            
+        </td>
+    </tr>
+    
+        <tr>
+            <td></td>
+            <th scope="row">Select version</th>
+            <td class="edit"></td>
+            <td>
+                
+
+
+
+    <ul class="revision-list pagination pagination-sm text-center flex-wrap my-0">
+        
+            
+            
+                
+                    <li class="page-item">
+                        <a class="page-link"
+                        href="/doc/html/draft-ietf-karp-routing-tcp-analysis-00"
+                        rel="nofollow">
+                            00
+                        </a>
+                    </li>
+                
+                    <li class="page-item">
+                        <a class="page-link"
+                        href="/doc/html/draft-ietf-karp-routing-tcp-analysis-01"
+                        rel="nofollow">
+                            01
+                        </a>
+                    </li>
+                
+                    <li class="page-item">
+                        <a class="page-link"
+                        href="/doc/html/draft-ietf-karp-routing-tcp-analysis-02"
+                        rel="nofollow">
+                            02
+                        </a>
+                    </li>
+                
+                    <li class="page-item">
+                        <a class="page-link"
+                        href="/doc/html/draft-ietf-karp-routing-tcp-analysis-03"
+                        rel="nofollow">
+                            03
+                        </a>
+                    </li>
+                
+                    <li class="page-item">
+                        <a class="page-link"
+                        href="/doc/html/draft-ietf-karp-routing-tcp-analysis-04"
+                        rel="nofollow">
+                            04
+                        </a>
+                    </li>
+                
+                    <li class="page-item">
+                        <a class="page-link"
+                        href="/doc/html/draft-ietf-karp-routing-tcp-analysis-05"
+                        rel="nofollow">
+                            05
+                        </a>
+                    </li>
+                
+                    <li class="page-item">
+                        <a class="page-link"
+                        href="/doc/html/draft-ietf-karp-routing-tcp-analysis-06"
+                        rel="nofollow">
+                            06
+                        </a>
+                    </li>
+                
+                    <li class="page-item">
+                        <a class="page-link"
+                        href="/doc/html/draft-ietf-karp-routing-tcp-analysis-07"
+                        rel="nofollow">
+                            07
+                        </a>
+                    </li>
+                
+            
+            
+            <li class="page-item rfc active">
+                <a class="page-link"
+                href="/doc/html/rfc6952">
+                    RFC 6952
+                </a>
+            </li>
+        
+    </ul>
+
+            </td>
+        </tr>
+        
+            <tr>
+                <td></td>
+                <th scope="row">Compare versions</th>
+                <td class="edit"></td>
+                <td>
+                    
+
+
+
+<form class="form-horizontal diff-form"
+      action="https://author-tools.ietf.org/iddiff"
+      method="get"
+      target="_blank">
+
+            <select class="form-select form-select-sm mb-1 select2-field"
+                    data-max-entries="1"
+                    data-width="resolve"
+                    data-allow-clear="false"
+                    data-minimum-input-length="0"
+                    aria-label="From revision"
+                    name="url1">
+                
+                    <option value="rfc6952">
+                        RFC 6952
+                        
+                    </option>
+                
+                    <option value="draft-ietf-karp-routing-tcp-analysis-07" selected>
+                        draft-ietf-karp-routing-tcp-analysis-07
+                        
+                    </option>
+                
+                    <option value="draft-ietf-karp-routing-tcp-analysis-06">
+                        draft-ietf-karp-routing-tcp-analysis-06
+                        
+                    </option>
+                
+                    <option value="draft-ietf-karp-routing-tcp-analysis-05">
+                        draft-ietf-karp-routing-tcp-analysis-05
+                        
+                    </option>
+                
+                    <option value="draft-ietf-karp-routing-tcp-analysis-04">
+                        draft-ietf-karp-routing-tcp-analysis-04
+                        
+                    </option>
+                
+                    <option value="draft-ietf-karp-routing-tcp-analysis-03">
+                        draft-ietf-karp-routing-tcp-analysis-03
+                        
+                    </option>
+                
+                    <option value="draft-ietf-karp-routing-tcp-analysis-02">
+                        draft-ietf-karp-routing-tcp-analysis-02
+                        
+                    </option>
+                
+                    <option value="draft-ietf-karp-routing-tcp-analysis-01">
+                        draft-ietf-karp-routing-tcp-analysis-01
+                        
+                    </option>
+                
+                    <option value="draft-ietf-karp-routing-tcp-analysis-00">
+                        draft-ietf-karp-routing-tcp-analysis-00
+                        
+                    </option>
+                
+                
+            </select>
+
+            <select class="form-select form-select-sm mb-1 select2-field"
+                    data-max-entries="1"
+                    data-width="resolve"
+                    data-allow-clear="false"
+                    data-minimum-input-length="0"
+                    aria-label="To revision"
+                    name="url2">
+                
+                    <option value="rfc6952" selected>
+                        RFC 6952
+                        
+                    </option>
+                
+                    <option value="draft-ietf-karp-routing-tcp-analysis-07">
+                        draft-ietf-karp-routing-tcp-analysis-07
+                        
+                    </option>
+                
+                    <option value="draft-ietf-karp-routing-tcp-analysis-06">
+                        draft-ietf-karp-routing-tcp-analysis-06
+                        
+                    </option>
+                
+                    <option value="draft-ietf-karp-routing-tcp-analysis-05">
+                        draft-ietf-karp-routing-tcp-analysis-05
+                        
+                    </option>
+                
+                    <option value="draft-ietf-karp-routing-tcp-analysis-04">
+                        draft-ietf-karp-routing-tcp-analysis-04
+                        
+                    </option>
+                
+                    <option value="draft-ietf-karp-routing-tcp-analysis-03">
+                        draft-ietf-karp-routing-tcp-analysis-03
+                        
+                    </option>
+                
+                    <option value="draft-ietf-karp-routing-tcp-analysis-02">
+                        draft-ietf-karp-routing-tcp-analysis-02
+                        
+                    </option>
+                
+                    <option value="draft-ietf-karp-routing-tcp-analysis-01">
+                        draft-ietf-karp-routing-tcp-analysis-01
+                        
+                    </option>
+                
+                    <option value="draft-ietf-karp-routing-tcp-analysis-00">
+                        draft-ietf-karp-routing-tcp-analysis-00
+                        
+                    </option>
+                
+                
+            </select>
+
+            <button type="submit"
+                    class="btn btn-primary btn-sm"
+                    value="--html"
+                    name="difftype">
+                Side-by-side
+            </button>
+            
+            <button type="submit"
+                    class="btn btn-primary btn-sm"
+                    value="--hwdiff"
+                    name="difftype">
+                Inline
+            </button>
+
+</form>
+                </td>
+            </tr>
+        
+    
+    <tr>
+        <td></td>
+        <th scope="row">Authors</th>
+        <td class="edit">
+            
+        </td>
+        <td>
+            
+            
+                <span ><a 
+           title="Datatracker profile of Mahesh Jethanandani"
+            href="/person/mjethanandani@gmail.com" >Mahesh Jethanandani</a> <a 
+               href="mailto:mjethanandani%40gmail.com"
+               aria-label="Compose email to mjethanandani@gmail.com"
+               title="Compose email to mjethanandani@gmail.com">
+                <i class="bi bi-envelope"></i></a></span>,
+            
+                <span ><a 
+           title="Datatracker profile of Keyur Patel"
+            href="/person/keyur@arrcus.com" >Keyur Patel</a> <a 
+               href="mailto:keyur%40arrcus.com"
+               aria-label="Compose email to keyur@arrcus.com"
+               title="Compose email to keyur@arrcus.com">
+                <i class="bi bi-envelope"></i></a></span>,
+            
+                <span ><a 
+           title="Datatracker profile of Lianshu Zheng"
+            href="/person/vero.zheng@huawei.com" >Lianshu Zheng</a> <a 
+               href="mailto:vero.zheng%40huawei.com"
+               aria-label="Compose email to vero.zheng@huawei.com"
+               title="Compose email to vero.zheng@huawei.com">
+                <i class="bi bi-envelope"></i></a></span>
+            
+            
+                <br>
+                <a class="btn btn-primary btn-sm mt-1" href="mailto:rfc6952@ietf.org?subject=rfc6952" title="Send email to the document authors">Email authors</a>
+            
+        </td>
+    </tr>
+    
+    
+    <tr>
+        <td></td>
+        <th scope="row">
+            RFC stream
+        </th>
+        <td class="edit">
+            
+        </td>
+        <td >
+            
+                
+                
+                    
+                        
+
+
+
+<img alt="IETF Logo"
+     class="d-lm-none w-25 mt-1"
+     
+     
+        
+             src="https://static.ietf.org/dt/12.35.0/ietf/images/ietf-logo-nor-white.svg"
+        
+     
+     >
+
+<img alt="IETF Logo"
+     class="d-dm-none w-25 mt-1"
+     
+     
+        
+             src="https://static.ietf.org/dt/12.35.0/ietf/images/ietf-logo-nor.svg"
+        
+     
+     >
+                    
+                
+                
+            
+        </td>
+    </tr>
+    
+    <tr>
+        <td></td>
+        <th scope="row">
+            Other formats
+        </th>
+        <td class="edit">
+        </td>
+        <td>
+            
+                
+    <div class="buttonlist">
+    
+        
+        <a class="btn btn-primary btn-sm"
+          
+          target="_blank"
+          href="https://www.rfc-editor.org/rfc/rfc6952.txt">
+            
+                <i class="bi bi-file-text"></i> txt
+            
+        </a>
+        
+    
+        
+        <a class="btn btn-primary btn-sm"
+          
+          target="_blank"
+          href="https://www.rfc-editor.org/rfc/rfc6952.html">
+            
+                <i class="bi bi-file-code"></i> html
+            
+        </a>
+        
+    
+        
+        <a class="btn btn-primary btn-sm"
+          
+            download="rfc6952.pdf"
+          
+         
+          target="_blank"
+          href="https://www.rfc-editor.org/rfc/pdfrfc/rfc6952.txt.pdf">
+            
+                <i class="bi bi-file-pdf"></i> pdf
+            
+        </a>
+        
+    
+        
+    
+        
+        <a class="btn btn-primary btn-sm"
+          
+          target="_blank"
+          href="/doc/rfc6952/bibtex/">
+            
+                <i class="bi bi-file-ruled"></i> bibtex
+            
+        </a>
+        
+    
+</div>
+
+            
+        </td>
+    </tr>
+    
+    
+        
+            <tr>
+                <td>
+                </td>
+                <th scope="row">
+                    Additional resources
+                </th>
+                <td class="edit">
+                    
+                </td>
+                <td>
+                    
+                        
+                        
+                            
+                                <a href="https://mailarchive.ietf.org/arch/browse/karp?q=rfc6952 OR %22draft-ietf-karp-routing-tcp-analysis%22">
+                                    Mailing list discussion
+                                </a>
+                            
+                        
+                    
+                </td>
+            </tr>
+        
+    
+</tbody>
+                                </table>
+                                <a class="btn btn-sm btn-warning mb-3"
+                                target="_blank"
+                                href="https://github.com/ietf-tools/datatracker/issues/new/choose">
+                                    Report a datatracker bug
+                                    <i class="bi bi-bug"></i>
+                                </a>
+                            </div>
+                            <div class="tab-pane mb-5"
+                                 id="toc-tab-pane"
+                                 role="tabpanel"
+                                 aria-labelledby="toc-tab"
+                                 tabindex="0">
+                                <nav class="nav nav-pills flex-column small" id="toc-nav">
+                                </nav>
+                            </div>
+                            <div class="tab-pane mb-5 small"
+                                 id="pref-tab-pane"
+                                 role="tabpanel"
+                                 aria-labelledby="pref-tab"
+                                 tabindex="0">
+                                <label class="form-label fw-bold mb-2">Show sidebar by default</label>
+                                <div class="btn-group-vertical btn-group-sm d-flex" role="group">
+                                    <input type="radio" class="btn-check" name="sidebar" id="on-radio">
+                                    <label class="btn btn-outline-primary" for="on-radio">Yes</label>
+                                    <input type="radio" class="btn-check" name="sidebar" id="off-radio">
+                                    <label class="btn btn-outline-primary" for="off-radio">No</label>
+                                </div>
+                                <label class="form-label fw-bold mt-4 mb-2">Tab to show by default</label>
+                                <div class="btn-group-vertical btn-group-sm d-flex" role="group">
+                                    <input type="radio" class="btn-check" name="deftab" id="docinfo-radio">
+                                    <label class="btn btn-outline-primary" for="docinfo-radio">
+                                        <i class="bi bi-info-circle me-1"></i>Info
+                                    </label>
+                                    <input type="radio" class="btn-check" name="deftab" id="toc-radio">
+                                    <label class="btn btn-outline-primary" for="toc-radio">
+                                        <i class="bi bi-list-ol me-1"></i>Contents
+                                    </label>
+                                </div>
+                                <label class="form-label fw-bold mt-4 mb-2">HTMLization configuration</label>
+                                <div class="btn-group-vertical btn-group-sm d-flex" role="group">
+                                    <input type="radio" class="btn-check" name="htmlconf" id="txt-radio">
+                                    <label class="btn btn-outline-primary" for="txt-radio" title="This is the traditional HTMLization method.">
+                                        <i class="bi bi-badge-sd me-1"></i>HTMLize the plaintext
+                                    </label>
+                                    <input type="radio" class="btn-check" name="htmlconf" id="html-radio">
+                                    <label class="btn btn-outline-primary" for="html-radio" title="This is the modern HTMLization method.">
+                                        <i class="bi bi-badge-hd me-1"></i>Plaintextify the HTML
+                                    </label>
+                                </div>
+                                <label class="form-label fw-bold mt-4 mb-2" for="ptsize">Maximum font size</label>
+                                <input type="range" class="form-range" min="7" max="16" id="ptsize" oninput="ptdemo.value = ptsize.value">
+                                <label class="form-label fw-bold mt-4 mb-2">Page dependencies</label>
+                                <div class="btn-group-vertical btn-group-sm d-flex" role="group">
+                                    <input type="radio" class="btn-check" name="pagedeps" id="inline-radio">
+                                    <label class="btn btn-outline-primary" for="inline-radio" title="Generate larger, standalone web pages that do not require network access to render.">
+                                        <i class="bi bi-box me-1"></i>Inline
+                                    </label>
+                                    <input type="radio" class="btn-check" name="pagedeps" id="reference-radio">
+                                    <label class="btn btn-outline-primary" for="reference-radio" title="Generate regular web pages that require network access to render.">
+                                        <i class="bi bi-link-45deg me-1"></i>Reference
+                                    </label>
+                                </div>
+                                <label class="form-label fw-bold mt-4 mb-2">Citation links</label>
+                                <div class="btn-group-vertical btn-group-sm d-flex" role="group">
+                                    <input type="radio" class="btn-check" name="reflinks" id="refsection-radio">
+                                    <label class="btn btn-outline-primary" for="refsection-radio" title="Citation links go to the reference section.">
+                                        <i class="bi bi-arrow-clockwise"></i> Go to reference section
+                                    </label>
+                                    <input type="radio" class="btn-check" name="reflinks" id="citation-radio">
+                                    <label class="btn btn-outline-primary" for="citation-radio" title="Citation links go directly to the cited document.">
+                                        <i class="bi bi-link-45deg me-1"></i>Go to linked document
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+<script type="text/javascript">
+  var _paq = window._paq || [];
+  
+  _paq.push(['disableCookies']);
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="//analytics.ietf.org/";
+    _paq.push(['setTrackerUrl', u+'matomo.php']);
+    _paq.push(['setSiteId', 7]);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<noscript><p><img src="//analytics.ietf.org/piwik.php?idsite=7" style="border:0;" alt="" /></p></noscript>
+
+    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'90f987907ab2af2b',t:'MTczOTE2MzU2NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
