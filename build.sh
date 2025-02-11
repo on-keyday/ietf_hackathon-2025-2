@@ -13,6 +13,7 @@ if ! docker buildx bake\
         -f ./compose.yaml\
         --builder "$CREATED_BUILDER"\
         --load \
+        --progress=plain \
         --set "*.cache-from=type=local,src=$(pwd)/.buildx-cache"\
         --set "*.cache-to=type=local,dest=$(pwd)/.buildx-cache"
 then
@@ -22,7 +23,7 @@ then
 fi
 
 # remove builder
-docker buildx rm "$CREATED_BUILDER"
+docker buildx rm "$CREATED_BUILDER" 
 
-docker compose create --remove-orphans
+docker compose create --remove-orphans --force-recreate
 docker compose start

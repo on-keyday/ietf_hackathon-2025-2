@@ -1,4 +1,4 @@
-FROM golang:latest AS builder
+FROM golang:1.23.6 AS builder
 
 WORKDIR /app
 
@@ -15,7 +15,10 @@ RUN chmod +x /app/runbgp.sh
 RUN CGO_ENABLED=0 go build -o /app/gobgp ./cmd/gobgp
 RUN CGO_ENABLED=0 go build -o /app/gobgpd ./cmd/gobgpd
 
-FROM alpine:latest
+FROM alpine:3.21.2 AS final
+
+# add tcpdump
+RUN apk add --no-cache tcpdump
 
 COPY --from=builder /app/gobgp /app/gobgp
 COPY --from=builder /app/gobgpd /app/gobgpd

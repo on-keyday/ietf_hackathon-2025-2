@@ -4,17 +4,23 @@ services:
     build:
       context: .
       dockerfile: ./docker/source.Dockerfile
+      target: final
+      tags:
+        - ietf_hackathon-source:latest
     networks:
       source:
         ipv6_address: 2001:db8:0:1::2
 
       control:
-        ipv6_address: 2001:db8:0:5::2
+        ipv6_address: 2001:db8:0:5::9
 
   destination:
     build:
       context: .
       dockerfile: ./docker/destination.Dockerfile
+      target: final
+      tags:
+        - ietf_hackathon-destination:latest
     networks:
       destination:
         ipv6_address: 2001:db8:0:2::2
@@ -26,11 +32,12 @@ services:
       context: .
       dockerfile: ./docker/middle.Dockerfile
       tags:
-        - middle-base:latest
+        - ietf_hackathon-middle-base:latest
+      target: final
     profiles:
       - base
   middle1:
-    image: middle-base:latest
+    image: ietf_hackathon-middle-base:latest
     networks:
       middle1:
         ipv6_address: 2001:db8:0:3::2
@@ -41,7 +48,7 @@ services:
         ipv6_address: 2001:db8:0:5::4
     
   middle2:
-    image: middle-base:latest
+    image: ietf_hackathon-middle-base:latest
     networks:
       middle2:
         ipv6_address: 2001:db8:0:4::2
@@ -52,7 +59,7 @@ services:
         ipv6_address: 2001:db8:0:5::5
   
   middle3:
-    image: middle-base:latest
+    image: ietf_hackathon-middle-base:latest
     networks:
       middle1:
         ipv6_address: 2001:db8:0:3::3
@@ -61,7 +68,7 @@ services:
         ipv6_address: 2001:db8:0:5::6
       
   middle4:
-    image: middle-base:latest
+    image: ietf_hackathon-middle-base:latest
     networks:
       middle1:
         ipv6_address: 2001:db8:0:3::4
@@ -74,7 +81,7 @@ services:
         ipv6_address: 2001:db8:0:5::7
   
   middle5:
-    image: middle-base:latest
+    image: ietf_hackathon-middle-base:latest
     networks:
       middle2:
         ipv6_address: 2001:db8:0:4::5
@@ -88,9 +95,13 @@ services:
     build:
       context: .
       dockerfile: ./docker/control.Dockerfile
+      target: final
+      tags:
+        - ietf_hackathon-control_plane:latest
     networks:
       control:
-        ipv6_address: 2001:db8:0:5::9
+        ipv6_address: 2001:db8:0:5::2
+    
 
 networks:
   source:
@@ -108,6 +119,7 @@ networks:
       driver: default
       config:
         - subnet: 2001:db8:0:2::/64
+        
 
   middle1:
     driver: bridge

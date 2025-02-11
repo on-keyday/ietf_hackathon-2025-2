@@ -1,4 +1,5 @@
 #!/bin/bash
 
 # Run BGP daemon
-# /app/gobgpd -f /app/gobgpd.conf 
+echo "Starting BGP daemon..."
+/app/gobgpd -f /app/gobgpd.yml 

@@ -1,4 +1,28 @@
 global:
     config:
         as: 64512
-        router-id: 2001:db8:0:5::9
+        router-id: 2001:db8:0:5::2
+
+neighbors:
+    - config:
+        neighbor-address: 2001:db8:0:5::9
+        peer-as: 64513
+    - config:
+        neighbor-address: 2001:db8:0:5::3
+        peer-as: 64514
+    - config:
+        neighbor-address: 2001:db8:0:5::4
+        peer-as: 64515
+    - config:
+        neighbor-address: 2001:db8:0:5::5
+        peer-as: 64516
+    - config:
+        neighbor-address: 2001:db8:0:5::6
+        peer-as: 64517
+    - config:
+        neighbor-address: 2001:db8:0:5::7
+        peer-as: 64518
+    - config:
+        neighbor-address: 2001:db8:0:5::8
+        peer-as: 64519
+

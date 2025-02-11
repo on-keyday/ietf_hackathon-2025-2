@@ -1,4 +1,4 @@
-FROM golang:latest AS builder
+FROM golang:1.23.6 AS builder
 
 WORKDIR /app
 
@@ -10,8 +10,9 @@ COPY . .
 
 RUN CGO_ENABLED=0 go build -o /app/main ./client/main.go
 
-FROM alpine:3.13
+FROM alpine:3.21.2 AS final
 
 COPY --from=builder /app/main /app/main
+
 
 CMD ["/app/main"]

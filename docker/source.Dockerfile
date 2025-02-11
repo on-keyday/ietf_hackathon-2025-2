@@ -1,4 +1,4 @@
-FROM golang:latest AS builder
+FROM golang:1.23.6 AS builder
 
 WORKDIR /app
 
@@ -8,10 +8,10 @@ RUN go mod download
 
 COPY . .
 
-RUN CGO_ENABLED=0 go build -o /app/main ./client/main.go
+RUN CGO_ENABLED=0 go build -o /app/source ./client/main.go
 
-FROM alpine:3.13
+FROM alpine:3.21.2 AS final
 
-COPY --from=builder /app/main /app/main
+COPY --from=builder /app/source /app/source
 
-CMD ["/app/main"]
+CMD ["/app/source"]
