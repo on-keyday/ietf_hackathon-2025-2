@@ -8,7 +8,7 @@ RUN go mod download
 
 COPY . .
 
-RUN CGO_ENABLED=0 go build -o /app/source ./client/main.go
+RUN CGO_ENABLED=0 go build -o /app/source ./client/router
 
 FROM alpine:3.21.2 AS final
 

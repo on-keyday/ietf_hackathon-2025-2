@@ -38,12 +38,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-func LoadBpfObjects() (*ebpf.Program, error) {
-	objs := &bpfPrograms{}
-	if err := loadBpfObjects(objs, nil); err != nil {
+func LoadBpfObjects() (*bpfObjects, error) {
+	objs := &bpfObjects{}
+	if err := loadBpfObjects(objs, &ebpf.CollectionOptions{
+		Programs: ebpf.ProgramOptions{
+			LogLevel: ebpf.LogLevelInstruction,
+		},
+	}); err != nil {
 		return nil, err
 	}
-	return objs.FilterTcpRstByKernel, nil
+	return objs, nil
 }
 
 // detectCgroupPath returns the first-found mount point of type cgroup2

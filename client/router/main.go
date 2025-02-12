@@ -14,7 +14,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/on-keyday/dplane_importer/client/routing"
+	"github.com/on-keyday/dplane_importer/client/router/routing"
 	"golang.org/x/sys/unix"
 )
 

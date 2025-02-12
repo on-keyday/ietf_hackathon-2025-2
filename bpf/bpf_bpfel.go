@@ -12,6 +12,15 @@ import (
 	"github.com/cilium/ebpf"
 )
 
+type bpfRecentV6Packet struct {
+	Timestamp uint64
+	Saddr     [4]uint32
+	Daddr     [4]uint32
+	Sport     uint16
+	Dport     uint16
+	_         [4]byte
+}
+
 // loadBpf returns the embedded CollectionSpec for bpf.
 func loadBpf() (*ebpf.CollectionSpec, error) {
 	reader := bytes.NewReader(_BpfBytes)
@@ -61,6 +70,7 @@ type bpfProgramSpecs struct {
 //
 // It can be passed ebpf.CollectionSpec.Assign.
 type bpfMapSpecs struct {
+	RecentPackets *ebpf.MapSpec `ebpf:"recent_packets"`
 }
 
 // bpfVariableSpecs contains global variables before they are loaded into the kernel.
@@ -89,10 +99,13 @@ func (o *bpfObjects) Close() error {
 //
 // It can be passed to loadBpfObjects or ebpf.CollectionSpec.LoadAndAssign.
 type bpfMaps struct {
+	RecentPackets *ebpf.Map `ebpf:"recent_packets"`
 }
 
 func (m *bpfMaps) Close() error {
-	return _BpfClose()
+	return _BpfClose(
+		m.RecentPackets,
+	)
 }
 
 // bpfVariables contains all global variables after they have been loaded into the kernel.

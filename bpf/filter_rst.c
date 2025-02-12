@@ -8,9 +8,11 @@
 #include <linux/tcp.h>
 #include <linux/ipv6.h>
 #include <sys/socket.h>
-// #include <bpf/bpf.h>
-#include <bpf/bpf_tracing.h>
+//#include <bpf/bpf.h>
+//#include <bpf/bpf_tracing.h>
 #include <bpf/bpf_endian.h>
+#include <bpf/bpf_helpers.h>
+
 
 
 #define ALLOW_PACKET 1
@@ -26,38 +28,63 @@
  * SPDX-License-Identifier: GPL-2.0
 */
 
+struct recent_v6_packet {
+    __u64 timestamp;
+    __u32 saddr[4];
+    __u32 daddr[4];
+    __u16 sport;
+    __u16 dport;
+};
+
+struct {
+    __uint(type, BPF_MAP_TYPE_QUEUE);
+    __type(key, int);
+    __type(value, struct recent_v6_packet);
+    __uint(max_entries, 16);
+} recent_packets SEC(".maps");
 
 SEC("cgroup_skb/egress")
 int filter_tcp_rst_by_kernel(struct __sk_buff *skb) {
     if(skb->protocol == bpf_htons(ETH_P_IPV6)) {
-        __u8 ihlen = sizeof(struct ipv6hdr);
-        void* data = (void *)(long) skb->data;
-        void *data_end = (void *)(long) skb->data_end;
-        if (data + ihlen > data_end) { return 0; }
-        struct ipv6hdr *ip = data;
-        __u8 proto = ip->nexthdr;
+        struct ipv6hdr hdr;
+        if(bpf_skb_load_bytes(skb, sizeof(struct ethhdr) ,&hdr, sizeof(hdr)) < 0) {
+            return ALLOW_PACKET; // skip
+        }
+        __u8 proto = hdr.nexthdr;
+        __u32 offset = sizeof(struct ethhdr) + sizeof(struct ipv6hdr);
         #pragma unroll
         for (int i = 0; i < 8; i++) { /* max 8 extension headers */
             if (proto == IPPROTO_TCP) {
-                if (((void *) ip) + ihlen + sizeof(struct tcphdr) > data_end) { return 0; }
-                struct tcphdr *tcp = ((void *) ip) + ihlen;
-                if(tcp->rst&&!skb->sk) { // tcp reset without socket will be dropped
-                    bpf_trace_printk("Dropping TCP RST packet by kernel\n", 36);
+                struct tcphdr tcp;
+                if(bpf_skb_load_bytes(skb, offset, &tcp, sizeof(tcp)) < 0) {
+                    return ALLOW_PACKET; // skip
+                }
+                struct recent_v6_packet pkt = {0};
+                pkt.timestamp = bpf_ktime_get_ns();
+                pkt.saddr[0] = hdr.saddr.in6_u.u6_addr32[0];
+                pkt.saddr[1] = hdr.saddr.in6_u.u6_addr32[1];
+                pkt.saddr[2] = hdr.saddr.in6_u.u6_addr32[2];
+                pkt.saddr[3] = hdr.saddr.in6_u.u6_addr32[3];
+                pkt.daddr[0] = hdr.daddr.in6_u.u6_addr32[0];
+                pkt.daddr[1] = hdr.daddr.in6_u.u6_addr32[1];
+                pkt.daddr[2] = hdr.daddr.in6_u.u6_addr32[2];
+                pkt.daddr[3] = hdr.daddr.in6_u.u6_addr32[3];
+                pkt.sport = tcp.source;
+                pkt.dport = tcp.dest;
+                bpf_map_push_elem(&recent_packets, &pkt,BPF_EXIST);
+                if(tcp.rst&&!skb->sk) { // tcp reset without socket will be dropped
                     return DROP_PACKET;
                 }
                 break;
             }
-            if (proto == IPPROTO_FRAGMENT || proto == IPPROTO_HOPOPTS ||
+            if  (proto == IPPROTO_HOPOPTS ||
                 proto == IPPROTO_ROUTING || proto == IPPROTO_AH || proto == IPPROTO_DSTOPTS) {
-                if (((void *) ip) + ihlen + 2 > data_end) { return 0; }
-                ip = ((void *) ip) + ihlen;
-                proto = *((__u8 *) ip);
-                if (proto == IPPROTO_FRAGMENT) {
-                    ihlen = 8;
-                } else {
-                    ihlen = *(((__u8 *) ip) + 1) + 8;
+                struct ipv6_opt_hdr hdr;
+                if(bpf_skb_load_bytes(skb, offset, &hdr, sizeof(hdr)) < 0) {
+                    return ALLOW_PACKET; // skip
                 }
-                if (((void *) ip) + ihlen > data_end) { return 0; }
+                proto = hdr.nexthdr;
+                offset += (hdr.hdrlen + 1) * 8;
             } else {
                 break;
             }
@@ -66,4 +93,4 @@ int filter_tcp_rst_by_kernel(struct __sk_buff *skb) {
     return ALLOW_PACKET;
 }
 
-char _license[] SEC("license") = "GPL";
+char _license[] SEC("license") = "MIT";

@@ -1,6 +1,13 @@
 {
     "files.associations": {
         "bpf.h": "c",
-        "bpf_tracing.h": "c"
+        "bpf_tracing.h": "c",
+        "array": "c",
+        "string": "c",
+        "string_view": "c",
+        "span": "c",
+        "vector": "c",
+        "bpf_helpers.h": "c",
+        "bpf_helper_defs.h": "c"
     }
 }

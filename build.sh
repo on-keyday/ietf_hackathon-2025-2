@@ -1,4 +1,6 @@
+#!/bin/bash
 
+go generate ./...
 
 
 # create temporary builder
