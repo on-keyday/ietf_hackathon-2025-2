@@ -31,3 +31,5 @@ docker buildx rm "$CREATED_BUILDER"
 
 docker compose create --remove-orphans --force-recreate
 docker compose start
+
+docker compose logs -f

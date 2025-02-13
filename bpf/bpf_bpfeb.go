@@ -12,15 +12,6 @@ import (
 	"github.com/cilium/ebpf"
 )
 
-type bpfRecentV6Packet struct {
-	Timestamp uint64
-	Saddr     [4]uint32
-	Daddr     [4]uint32
-	Sport     uint16
-	Dport     uint16
-	_         [4]byte
-}
-
 // loadBpf returns the embedded CollectionSpec for bpf.
 func loadBpf() (*ebpf.CollectionSpec, error) {
 	reader := bytes.NewReader(_BpfBytes)
@@ -63,14 +54,15 @@ type bpfSpecs struct {
 //
 // It can be passed ebpf.CollectionSpec.Assign.
 type bpfProgramSpecs struct {
-	FilterTcpRstByKernel *ebpf.ProgramSpec `ebpf:"filter_tcp_rst_by_kernel"`
+	FilterTcpRstByKernel        *ebpf.ProgramSpec `ebpf:"filter_tcp_rst_by_kernel"`
+	FilterTcpRstByKernelIngress *ebpf.ProgramSpec `ebpf:"filter_tcp_rst_by_kernel_ingress"`
 }
 
 // bpfMapSpecs contains maps before they are loaded into the kernel.
 //
 // It can be passed ebpf.CollectionSpec.Assign.
 type bpfMapSpecs struct {
-	RecentPackets *ebpf.MapSpec `ebpf:"recent_packets"`
+	PacketCount *ebpf.MapSpec `ebpf:"packet_count"`
 }
 
 // bpfVariableSpecs contains global variables before they are loaded into the kernel.
@@ -99,12 +91,12 @@ func (o *bpfObjects) Close() error {
 //
 // It can be passed to loadBpfObjects or ebpf.CollectionSpec.LoadAndAssign.
 type bpfMaps struct {
-	RecentPackets *ebpf.Map `ebpf:"recent_packets"`
+	PacketCount *ebpf.Map `ebpf:"packet_count"`
 }
 
 func (m *bpfMaps) Close() error {
 	return _BpfClose(
-		m.RecentPackets,
+		m.PacketCount,
 	)
 }
 
@@ -118,12 +110,14 @@ type bpfVariables struct {
 //
 // It can be passed to loadBpfObjects or ebpf.CollectionSpec.LoadAndAssign.
 type bpfPrograms struct {
-	FilterTcpRstByKernel *ebpf.Program `ebpf:"filter_tcp_rst_by_kernel"`
+	FilterTcpRstByKernel        *ebpf.Program `ebpf:"filter_tcp_rst_by_kernel"`
+	FilterTcpRstByKernelIngress *ebpf.Program `ebpf:"filter_tcp_rst_by_kernel_ingress"`
 }
 
 func (p *bpfPrograms) Close() error {
 	return _BpfClose(
 		p.FilterTcpRstByKernel,
+		p.FilterTcpRstByKernelIngress,
 	)
 }
 

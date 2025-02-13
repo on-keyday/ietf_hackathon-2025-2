@@ -1,6 +1,6 @@
 module github.com/on-keyday/dplane_importer
 
-go 1.23.5
+go 1.24
 
 //replace github.com/osrg/gobgp => ../gobgp
 

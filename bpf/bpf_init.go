@@ -38,8 +38,8 @@ func init() {
 	}
 	cg, err := link.AttachCgroup(link.CgroupOptions{
 		Path:    path,
-		Attach:  ebpf.AttachCGroupInetEgress,
 		Program: objs.FilterTcpRstByKernel,
+		Attach:  ebpf.AttachCGroupInetEgress,
 	})
 	if err != nil {
 		log.Fatal(err)
@@ -47,11 +47,14 @@ func init() {
 	go func() {
 		ticker := time.NewTicker(time.Second)
 		for range ticker.C {
-			iter := objs.RecentPackets.Iterate()
-			key := new(uint32)
-			value := &bpfRecentV6Packet{}
-			for iter.Next(key, value) {
-				fmt.Printf("%s", fmt.Sprintf("%v\n", value))
+			iter := objs.PacketCount.Iterate()
+			key := uint32(0)
+			value := uint64(0)
+			for iter.Next(&key, &value) {
+				fmt.Printf("%x: %v\n", key, value)
+			}
+			if err := iter.Err(); err != nil {
+				log.Fatal(err)
 			}
 		}
 	}()

@@ -6,7 +6,7 @@ global:
 neighbors:
     - config:
         neighbor-address: 2001:db8:0:5::9
-        peer-as: 64513
+        peer-as: 64520
     - config:
         neighbor-address: 2001:db8:0:5::3
         peer-as: 64514

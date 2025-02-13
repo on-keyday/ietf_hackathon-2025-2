@@ -16,6 +16,7 @@ services:
     cap_add:
       - BPF
       - NET_ADMIN
+      - PERFMON
 
   destination:
     build:
@@ -34,6 +35,7 @@ services:
     cap_add:
       - BPF
       - NET_ADMIN
+      - PERFMON
   middle-base:
     build:
       context: .
@@ -58,6 +60,7 @@ services:
     cap_add:
       - BPF    
       - NET_ADMIN
+      - PERFMON
   middle2:
     image: ietf_hackathon-middle-base:latest
     networks:
@@ -71,6 +74,7 @@ services:
     cap_add:
       - BPF
       - NET_ADMIN
+      - PERFMON
 
   middle3:
     image: ietf_hackathon-middle-base:latest
@@ -83,6 +87,7 @@ services:
     cap_add:
       - BPF
       - NET_ADMIN
+      - PERFMON
 
   middle4:
     image: ietf_hackathon-middle-base:latest
@@ -99,6 +104,7 @@ services:
     cap_add:
       - BPF 
       - NET_ADMIN 
+      - PERFMON
   middle5:
     image: ietf_hackathon-middle-base:latest
     networks:
@@ -112,6 +118,7 @@ services:
     cap_add:
       - BPF
       - NET_ADMIN
+      - PERFMON
 
   control_plane:
     build:

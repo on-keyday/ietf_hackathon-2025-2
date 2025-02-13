@@ -8,6 +8,10 @@
         "span": "c",
         "vector": "c",
         "bpf_helpers.h": "c",
-        "bpf_helper_defs.h": "c"
+        "bpf_helper_defs.h": "c",
+        "ptrace.h": "c",
+        "xt_bpf.h": "c",
+        "vmlinux.h": "c",
+        "if_ether.h": "c"
     }
 }
