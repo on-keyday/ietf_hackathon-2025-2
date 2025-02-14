@@ -14,6 +14,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/on-keyday/dplane_importer/client/router/ospf"
 	"github.com/on-keyday/dplane_importer/client/router/routing"
 	"golang.org/x/sys/unix"
 )
@@ -551,7 +552,21 @@ func (h *Handler) handleICMPv6(dev *Device, srcMac [6]byte, ipv6 *routing.Ipv6He
 	if err != nil {
 		return fmt.Errorf("failed to decode ICMPv6 packet: %v", err)
 	}
-	if neigh := r.NeighborSolicitation(); neigh != nil {
+	if echo := r.EchoRequest(); echo != nil {
+		r.Header.Type = uint8(routing.Icmpv6Type_EchoReply)
+		r.SetEchoReply(*echo)
+		checkSumTarget := r.MustEncode()
+		v6 := makeIPv6Header(netip.AddrFrom16(ipv6.DstAddr), netip.AddrFrom16(ipv6.SrcAddr), routing.ProtocolNumber_Icmpv6, 255, checkSumTarget)
+		r.Header.Checksum = calcPseudoHeaderChecksum(&routing.Ipv6ChecksumPseudoHeader{
+			SrcAddr:          v6.SrcAddr,
+			DstAddr:          v6.DstAddr,
+			NextHeader:       v6.NextHeader,
+			UpperLayerLength: uint32(v6.PayloadLen),
+		}, checkSumTarget)
+		enc := r.MustEncode()
+		enc = append(v6.MustEncode(), enc...)
+		dev.writeEthernet(h.w, net.HardwareAddr(srcMac[:]), enc)
+	} else if neigh := r.NeighborSolicitation(); neigh != nil {
 		//srcAddr := netip.AddrFrom16(ipv6.SrcAddr)
 		srcAddr := netip.AddrFrom16(ipv6.SrcAddr)
 		targetAddr := netip.AddrFrom16(neigh.TargetAddr)
@@ -676,6 +691,10 @@ func (h *Handler) isAcceptableMacAddress(dev *Device, dst [6]byte, src [6]byte) 
 	return false
 }
 
+func (h *Handler) handleOSPF(dev *Device, srcMac [6]byte, ipv6 *routing.Ipv6Header, data []byte) {
+	fmt.Fprintf(h.w, "OSPF packet from %v\n", net.HardwareAddr(srcMac[:]))
+}
+
 func (h *Handler) parsePacket(dev *Device, p []byte) (err error) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -745,6 +764,14 @@ func (h *Handler) parsePacket(dev *Device, p []byte) (err error) {
 				}
 				data = data[read:]
 				h.handleTCP(dev, eth.SrcMac, ipv6, tcp, data)
+			case routing.ProtocolNumber_Ospf:
+				ospf := &ospf.Ospfpacket{}
+				read, err := ospf.Decode(data)
+				if err != nil {
+					return fmt.Errorf("failed to decode OSPF packet: %v", err)
+				}
+				data = data[read:]
+				h.handleOSPF(dev, [6]byte(eth.SrcMac), ipv6, data)
 			}
 		}
 	}

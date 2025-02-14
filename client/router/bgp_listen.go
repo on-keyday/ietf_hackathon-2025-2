@@ -2,11 +2,13 @@ package main
 
 import (
 	"context"
+	"io"
 	"log"
 	"net/netip"
 
 	apipb "github.com/osrg/gobgp/v3/api"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 /*
@@ -95,9 +97,10 @@ func bgpListen(addr netip.Addr, asNum uint16) error {
 */
 
 func bgpListen(addr netip.Addr, _ uint16) error {
-	conn, err := grpc.NewClient(addr.String())
+	conn, err := grpc.NewClient(netip.AddrPortFrom(addr, 50051).String(), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Println(err)
+		return err
 	}
 	defer conn.Close()
 	client := apipb.NewGobgpApiClient(conn)
@@ -108,42 +111,49 @@ func bgpListen(addr netip.Addr, _ uint16) error {
 		})
 		if err != nil {
 			log.Println(err)
+			return err
 		}
-		resp, err := list.Recv()
-		if err != nil {
-			log.Println(err)
-		}
-		for _, p := range resp.Destination.Paths {
-			attrs := p.GetPattrs()
-			for _, a := range attrs {
-				val, err := a.UnmarshalNew()
-				if err != nil {
-					log.Println(err)
-					continue
+		for {
+			resp, err := list.Recv()
+			if err != nil {
+				if err == io.EOF {
+					break
 				}
-				switch v := val.(type) {
-				case *apipb.MpReachNLRIAttribute:
-					for _, nlri := range v.Nlris {
-						val, err := nlri.UnmarshalNew()
-						if err != nil {
-							log.Println(err)
-							continue
-						}
-						switch v := val.(type) {
-						case *apipb.FlowSpecNLRI:
-							for _, r := range v.Rules {
-								n, err := r.UnmarshalNew()
-								if err != nil {
-									log.Println(err)
-									continue
-								}
-								switch n := n.(type) {
-								case *apipb.FlowSpecComponent:
-									log.Println(n)
-								case *apipb.FlowSpecIPPrefix:
-									log.Println(n)
-								case *apipb.FlowSpecMAC:
-									log.Println(n)
+				log.Println(err)
+				break
+			}
+			for _, p := range resp.Destination.Paths {
+				attrs := p.GetPattrs()
+				for _, a := range attrs {
+					val, err := a.UnmarshalNew()
+					if err != nil {
+						log.Println(err)
+						continue
+					}
+					switch v := val.(type) {
+					case *apipb.MpReachNLRIAttribute:
+						for _, nlri := range v.Nlris {
+							val, err := nlri.UnmarshalNew()
+							if err != nil {
+								log.Println(err)
+								continue
+							}
+							switch v := val.(type) {
+							case *apipb.FlowSpecNLRI:
+								for _, r := range v.Rules {
+									n, err := r.UnmarshalNew()
+									if err != nil {
+										log.Println(err)
+										continue
+									}
+									switch n := n.(type) {
+									case *apipb.FlowSpecComponent:
+										log.Println(n)
+									case *apipb.FlowSpecIPPrefix:
+										log.Println(n)
+									case *apipb.FlowSpecMAC:
+										log.Println(n)
+									}
 								}
 							}
 						}
