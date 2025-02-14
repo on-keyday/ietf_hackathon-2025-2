@@ -95,21 +95,25 @@ func (r *RoutingTable) Lookup(dst netip.Addr, srcDev *Device) *routingEntry {
 }
 
 func (r *RoutingTable) AddEntry(log io.Writer, from string, dst netip.Prefix, nextHop netip.Addr, dev *Device) {
+	oldLen := len(r.entries)
 	r.entries = append(r.entries, &routingEntry{
 		dstNetwork: dst,
 		nextHop:    nextHop,
 		dev:        dev,
 	})
-	oldLen := len(r.entries)
 	// order by longest prefix match
 	sort.Slice(r.entries, func(i, j int) bool {
 		return r.entries[i].dstNetwork.Bits() > r.entries[j].dstNetwork.Bits()
 	})
 	r.entries = slices.CompactFunc(r.entries, func(i, j *routingEntry) bool {
-		return i.dstNetwork.Contains(j.dstNetwork.Addr()) && i.dev == j.dev
+		return i.dstNetwork == j.dstNetwork && i.dev == j.dev
 	})
-	if len(r.entries) != oldLen {
-		fmt.Fprintf(log, "add routing entry: %v via %v%%%v from %s\n", dst, nextHop, dev.addr, from)
+	if len(r.entries) > oldLen {
+		if dst.Addr() != nextHop {
+			fmt.Fprintf(log, "add routing entry: %v via %v%%%v from %s\n", dst, nextHop, dev.addr, from)
+		} else {
+			fmt.Fprintf(log, "add routing entry: %v directly from %s\n", dst, from)
+		}
 	}
 }
 
@@ -507,6 +511,7 @@ func (h *Handler) sendNeighborAdvertisement(
 	dstAddr [16]byte, dev *Device, targetAddr [16]byte,
 	responseHardwareAddr net.HardwareAddr,
 ) {
+	fmt.Fprintf(h.w, "sending neighbor advertisement for %v\n", netip.AddrFrom16(targetAddr))
 	adv := &routing.NdpneighborAdvertisement{}
 	adv.TargetAddr = targetAddr
 	opt := routing.Ndpoption{}
@@ -542,11 +547,10 @@ func (h *Handler) SendRouterSolicitation(dev *Device) {}
 
 func (h *Handler) handleICMPv6(dev *Device, srcMac [6]byte, ipv6 *routing.Ipv6Header, data []byte) error {
 	r := &routing.Icmpv6Packet{}
-	read, err := r.Decode(data)
+	_, err := r.Decode(data)
 	if err != nil {
 		return fmt.Errorf("failed to decode ICMPv6 packet: %v", err)
 	}
-	data = data[read:]
 	if neigh := r.NeighborSolicitation(); neigh != nil {
 		//srcAddr := netip.AddrFrom16(ipv6.SrcAddr)
 		srcAddr := netip.AddrFrom16(ipv6.SrcAddr)
@@ -572,6 +576,7 @@ func (h *Handler) handleICMPv6(dev *Device, srcMac [6]byte, ipv6 *routing.Ipv6He
 				targetAddr := netip.AddrFrom16(adv.TargetAddr)
 				h.routing.AddEntry(h.w, "neighbor advertisement", netip.PrefixFrom(targetAddr, 128), resolvedAddr, dev)
 				h.routing.AddEntry(h.w, "neighbor advertisement", netip.PrefixFrom(resolvedAddr, 128), resolvedAddr, dev)
+				break
 			}
 		}
 
@@ -855,7 +860,11 @@ OUTER:
 	asNumber := 64511 + uint16(controlAddr.As16()[15])
 	log.Printf("AS number: %d\n", asNumber)
 	handler.asNumber = asNumber
-	go bgpListen(*controlAddr, asNumber)
+	go bgpListen(controlPlane.Addr(), asNumber)
+	go func() {
+		time.Sleep(1 * time.Second)
+		handler.SendAdvertisments()
+	}()
 	for {
 		events := make([]syscall.EpollEvent, 1)
 		_, err := syscall.EpollWait(epoll, events, -1)

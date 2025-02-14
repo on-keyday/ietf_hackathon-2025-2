@@ -1,23 +1,24 @@
 package main
 
 import (
+	"context"
 	"log"
-	"net"
 	"net/netip"
-	"time"
 
-	"github.com/on-keyday/dplane_importer/client/router/routing"
+	apipb "github.com/osrg/gobgp/v3/api"
+	"google.golang.org/grpc"
 )
 
+/*
 func handleBGPConn(conn net.Conn, asNum uint16) {
-	pkt := &routing.Bgppacket{}
-	open := &routing.Open{}
+	pkt := &bgp.Bgppacket{}
+	open := &bgp.Open{}
 	open.As = asNum
 	open.Version = 4
 	open.Hold = 180
 	open.Id = 0x01020304
 	encoded := open.MustEncode()
-	pkt.Header.Type = routing.Bgptype_Open
+	pkt.Header.Type = bgp.Bgptype_Open
 	pkt.Header.Length = uint16(len(encoded)) + 19
 	pkt.SetOpen(*open)
 	err := pkt.Write(conn)
@@ -46,19 +47,19 @@ func handleBGPConn(conn net.Conn, asNum uint16) {
 				return
 			}
 			switch pkt.Header.Type {
-			case routing.Bgptype_Open:
+			case bgp.Bgptype_Open:
 				log.Println("open")
-			case routing.Bgptype_Update:
+			case bgp.Bgptype_Update:
 				log.Println("update")
-			case routing.Bgptype_Notification:
+			case bgp.Bgptype_Notification:
 				log.Println("notification")
-			case routing.Bgptype_Keepalive:
+			case bgp.Bgptype_Keepalive:
 				log.Println("keepalive")
 			}
 		}
 	}()
 	sendKeepalive := func() bool {
-		pkt.Header.Type = routing.Bgptype_Keepalive
+		pkt.Header.Type = bgp.Bgptype_Keepalive
 		pkt.Header.Length = 19
 		err := pkt.Write(conn)
 		if err != nil {
@@ -89,5 +90,66 @@ func bgpListen(addr netip.Addr, asNum uint16) error {
 			return err
 		}
 		go handleBGPConn(conn, asNum)
+	}
+}
+*/
+
+func bgpListen(addr netip.Addr, _ uint16) error {
+	conn, err := grpc.NewClient(addr.String())
+	if err != nil {
+		log.Println(err)
+	}
+	defer conn.Close()
+	client := apipb.NewGobgpApiClient(conn)
+	for {
+		list, err := client.ListPath(context.Background(), &apipb.ListPathRequest{
+			TableType: apipb.TableType_GLOBAL,
+			Family:    &apipb.Family{Afi: apipb.Family_AFI_IP6, Safi: apipb.Family_SAFI_UNICAST},
+		})
+		if err != nil {
+			log.Println(err)
+		}
+		resp, err := list.Recv()
+		if err != nil {
+			log.Println(err)
+		}
+		for _, p := range resp.Destination.Paths {
+			attrs := p.GetPattrs()
+			for _, a := range attrs {
+				val, err := a.UnmarshalNew()
+				if err != nil {
+					log.Println(err)
+					continue
+				}
+				switch v := val.(type) {
+				case *apipb.MpReachNLRIAttribute:
+					for _, nlri := range v.Nlris {
+						val, err := nlri.UnmarshalNew()
+						if err != nil {
+							log.Println(err)
+							continue
+						}
+						switch v := val.(type) {
+						case *apipb.FlowSpecNLRI:
+							for _, r := range v.Rules {
+								n, err := r.UnmarshalNew()
+								if err != nil {
+									log.Println(err)
+									continue
+								}
+								switch n := n.(type) {
+								case *apipb.FlowSpecComponent:
+									log.Println(n)
+								case *apipb.FlowSpecIPPrefix:
+									log.Println(n)
+								case *apipb.FlowSpecMAC:
+									log.Println(n)
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 }
