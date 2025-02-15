@@ -5,12 +5,14 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"math/rand/v2"
 	"net"
 	"net/netip"
 	"os"
 	"runtime/debug"
 	"slices"
 	"sort"
+	"sync"
 	"syscall"
 	"time"
 
@@ -83,10 +85,13 @@ type deferredEntry struct {
 }
 
 type RoutingTable struct {
+	m       sync.Mutex
 	entries []*routingEntry
 }
 
 func (r *RoutingTable) Lookup(dst netip.Addr, srcDev *Device) *routingEntry {
+	r.m.Lock()
+	defer r.m.Unlock()
 	for _, entry := range r.entries {
 		if entry.dstNetwork.Contains(dst) && (!dst.IsLinkLocalUnicast() || entry.dev == srcDev) {
 			return entry
@@ -96,6 +101,8 @@ func (r *RoutingTable) Lookup(dst netip.Addr, srcDev *Device) *routingEntry {
 }
 
 func (r *RoutingTable) AddEntry(log io.Writer, from string, dst netip.Prefix, nextHop netip.Addr, dev *Device) {
+	r.m.Lock()
+	defer r.m.Unlock()
 	oldLen := len(r.entries)
 	r.entries = append(r.entries, &routingEntry{
 		dstNetwork: dst,
@@ -129,12 +136,15 @@ type neighborDeferred struct {
 }
 
 type NeighborCache struct {
+	m         sync.Mutex
 	entries   map[netip.Addr]*neighborEntry
 	deferred  map[netip.Addr][]*neighborDeferred
 	searching map[netip.Addr]time.Time
 }
 
 func (n *NeighborCache) Lookup(dst netip.Addr) *neighborEntry {
+	n.m.Lock()
+	defer n.m.Unlock()
 	for _, entry := range n.entries {
 		if entry.dst == dst {
 			return entry
@@ -208,6 +218,8 @@ func (n *NeighborCache) sendNeighborSolicitation(log io.Writer, dev *Device, tar
 }
 
 func (n *NeighborCache) Defer(log io.Writer, dst netip.Addr, dev *Device, callback func(*neighborEntry)) {
+	n.m.Lock()
+	defer n.m.Unlock()
 	if !dst.IsLinkLocalUnicast() {
 		fmt.Fprintf(log, "drop non link local address: %v\n", dst)
 		return
@@ -234,6 +246,8 @@ func (n *NeighborCache) Defer(log io.Writer, dst netip.Addr, dev *Device, callba
 }
 
 func (n *NeighborCache) AddEntry(log io.Writer, dev *Device, from string, dst netip.Addr, hardAddr net.HardwareAddr) {
+	n.m.Lock()
+	defer n.m.Unlock()
 	if n.entries == nil {
 		n.entries = make(map[netip.Addr]*neighborEntry)
 	}
@@ -473,10 +487,7 @@ func calcPseudoHeaderChecksum(pseudo *routing.Ipv6ChecksumPseudoHeader, data []b
 	return checkSum(checkSumTarget)
 }
 
-func (h *Handler) writeIP(srcDev *Device, src, dst netip.Addr, proto routing.ProtocolNumber, data []byte) {
-	hdr := makeIPv6Header(src, dst, proto, 64, data)
-	enc := hdr.MustEncode()
-	enc = append(enc, data...)
+func (h *Handler) routingAndSend(srcDev *Device, dst netip.Addr, proto routing.ProtocolNumber, data []byte) {
 	doRouting := func(dev *routingEntry) {
 		dstMac := dev.dev.neighbors.Lookup(dev.nextHop)
 		if dstMac == nil {
@@ -484,20 +495,37 @@ func (h *Handler) writeIP(srcDev *Device, src, dst netip.Addr, proto routing.Pro
 			dev.dev.neighbors.Defer(h.w, dev.nextHop, dev.dev, func(neigh *neighborEntry) {
 				fmt.Fprintf(h.w, "resolved neighbor %v\n", neigh.hardAddr)
 				fmt.Fprintf(h.w, "sending packet to %v as %v\n", dev.nextHop, neigh.hardAddr)
-				dev.dev.writeEthernet(h.w, neigh.hardAddr, enc)
+				dev.dev.writeEthernet(h.w, neigh.hardAddr, data)
 			})
 			return
 		}
 		fmt.Fprintf(h.w, "sending packet to %v via %v as %v\n", dev.dstNetwork, dev.nextHop, dstMac.hardAddr)
-		dev.dev.writeEthernet(h.w, dstMac.hardAddr, enc)
+		dev.dev.writeEthernet(h.w, dstMac.hardAddr, data)
 	}
 	et := h.routing.Lookup(dst, srcDev)
 	if et == nil {
 		// try to routing directly
-		fmt.Printf("no routing entry for %v\n", dst)
+		fmt.Fprintf(h.w, "no routing entry for %v\n", dst)
 		return
 	}
 	doRouting(et)
+}
+
+func (h *Handler) segmentRouting(next routing.ProtocolNumber) {
+	r := &routing.SegmentRouting{}
+	r.Header.NextHeader = next
+	r.SegmentsLeft = 1
+	r.LastEntry = 1
+	r.SegmentList = [][16]byte{
+		{},
+	}
+}
+
+func (h *Handler) writeIP(srcDev *Device, src, dst netip.Addr, proto routing.ProtocolNumber, data []byte) {
+	hdr := makeIPv6Header(src, dst, proto, 64, data)
+	enc := hdr.MustEncode()
+	enc = append(enc, data...)
+	h.routingAndSend(srcDev, dst, proto, enc)
 }
 
 func (h *Handler) SendAdvertisments() {
@@ -530,7 +558,7 @@ func (h *Handler) sendNeighborAdvertisement(
 	if addr == netip.IPv6Unspecified() {
 		addr = netip.IPv6LinkLocalAllNodes()
 	}
-	v6 := makeIPv6Header(dev.linlLocal.Addr(), addr, routing.ProtocolNumber_Icmpv6, 255, checkSumTarget)
+	v6 := makeIPv6Header(dev.linkLocal.Addr(), addr, routing.ProtocolNumber_Icmpv6, 255, checkSumTarget)
 
 	r.Header.Checksum = calcPseudoHeaderChecksum(&routing.Ipv6ChecksumPseudoHeader{
 		SrcAddr:          v6.SrcAddr,
@@ -653,6 +681,9 @@ func (h *Handler) isAcceptableAddress(addr netip.Addr, dev *Device, dstMac [6]ui
 	if addr == netip.IPv6LinkLocalAllNodes() {
 		return true
 	}
+	if *mode == "router" && addr == netip.IPv6LinkLocalAllRouters() {
+		return true
+	}
 	isSolicited := solicitedLinkLocal.Contains(addr)
 	macIsSolicted := dstMac[0] == 0x33 && dstMac[1] == 0x33 && dstMac[2] == 0xff
 	if isSolicited != macIsSolicted {
@@ -691,8 +722,124 @@ func (h *Handler) isAcceptableMacAddress(dev *Device, dst [6]byte, src [6]byte) 
 	return false
 }
 
-func (h *Handler) handleOSPF(dev *Device, srcMac [6]byte, ipv6 *routing.Ipv6Header, data []byte) {
-	fmt.Fprintf(h.w, "OSPF packet from %v\n", net.HardwareAddr(srcMac[:]))
+func (h *Handler) handleOSPF(dev *Device, srcMac [6]byte, ipv6 *routing.Ipv6Header, pkt *ospf.Ospfpacket) error {
+	// fmt.Fprintf(h.w, "OSPF packet from %v\n", net.HardwareAddr(srcMac[:]))
+	if hello := pkt.HelloPacket(); hello != nil {
+		fmt.Fprintf(h.w, "Hello packet from %v (router id: %v)\n", net.HardwareAddr(srcMac[:]), pkt.Header.RouterId)
+		hdr := &ospf.Lsaheader{}
+		hdr.HeaderChecksum.LsType.SetScoping(ospf.Scoping_AreaLocal)
+		hdr.HeaderChecksum.LsType.SetCode(ospf.LsafunctionCode_RouterLsa)
+		hdr.LsAge = 0
+		routerLS := ospf.RouterLsa{}
+		routerLS.Options.SetV6(true)
+		info := ospf.RouterInfo{}
+		info.InterfaceId = hello.InterfaceId
+		info.Metric = 1
+		info.NeighborRouterId = pkt.Header.RouterId
+		info.NeighborInterfaceId = hello.InterfaceId
+
+	}
+	return nil
+}
+
+func (h *Handler) sendOSPFHello(dev *Device) {
+	pf := &ospf.Ospfpacket{}
+	pf.Header.Version = 3
+	hello := ospf.HelloPacket{}
+	hello.HelloInterval = 60
+	hello.InterfaceId = uint32(dev.ifaceID)
+	hello.RtrPriority = 1
+	hello.RouterDeadInterval = 120
+	lengthCand := hello.MustEncode()
+	pf.Header.PacketLength = uint16(len(lengthCand)) + 16
+	pf.Header.Type = ospf.OspfpacketType_Hello
+	pf.Header.RouterId = uint32(h.asNumber)
+	pf.Header.AreaId = 0
+	pf.SetHelloPacket(hello)
+	checkSumTarget := pf.MustEncode()
+	v6 := makeIPv6Header(dev.linkLocal.Addr(), netip.IPv6LinkLocalAllRouters(), routing.ProtocolNumber_Ospf, 1, checkSumTarget)
+	pf.Header.CheckSum = calcPseudoHeaderChecksum(&routing.Ipv6ChecksumPseudoHeader{
+		SrcAddr:          v6.SrcAddr,
+		DstAddr:          v6.DstAddr,
+		NextHeader:       v6.NextHeader,
+		UpperLayerLength: uint32(v6.PayloadLen),
+	}, checkSumTarget)
+	enc := pf.MustEncode()
+	enc = append(v6.MustEncode(), enc...)
+	dev.writeEthernet(h.w, net.HardwareAddr{0xff, 0xff, 0xff, 0xff, 0xff, 0xff}, enc)
+}
+
+func (h *Handler) sendOSPFHelloAll() {
+	for _, dev := range h.devices {
+		h.sendOSPFHello(dev)
+	}
+}
+
+func (h *Handler) sendTimeExceeded(dev *Device, eth *routing.EthernetFrame, ipv6 *routing.Ipv6Header, data []byte) {
+	pkt := &routing.Icmpv6Packet{}
+	pkt.Header.Type = uint8(routing.Icmpv6Type_TimeExceeded)
+	pkt.SetTimeExceeded(routing.Icmpv6ParameterProblem{
+		Data: data,
+	})
+	checkSumTarget := pkt.MustEncode()
+	v6 := makeIPv6Header(netip.AddrFrom16(ipv6.DstAddr), netip.AddrFrom16(ipv6.SrcAddr), routing.ProtocolNumber_Icmpv6, 255, checkSumTarget)
+	pkt.Header.Checksum = calcPseudoHeaderChecksum(&routing.Ipv6ChecksumPseudoHeader{
+		SrcAddr:          v6.SrcAddr,
+		DstAddr:          v6.DstAddr,
+		NextHeader:       v6.NextHeader,
+		UpperLayerLength: uint32(v6.PayloadLen),
+	}, checkSumTarget)
+	enc := pkt.MustEncode()
+	enc = append(v6.MustEncode(), enc...)
+	dev.writeEthernet(h.w, eth.SrcMac[:], enc)
+}
+
+func (h *Handler) doRouting(dev *Device, eth *routing.EthernetFrame, ipv6 *routing.Ipv6Header, data []byte) {
+	dst := netip.AddrFrom16(ipv6.DstAddr)
+	if dst.IsLinkLocalMulticast() || dst.IsLinkLocalUnicast() || dst.IsInterfaceLocalMulticast() {
+		// link local address
+		return
+	}
+	if dst.IsMulticast() {
+		// multicast address
+		return
+	}
+	ipv6.HopLimit-- // at here, hop limit is least 1
+	if ipv6.HopLimit == 0 {
+		h.sendTimeExceeded(dev, eth, ipv6, data)
+		// drop packet
+		return
+	}
+	payload := append(ipv6.MustEncode(), data...)
+	fmt.Fprintf(h.w, "routing packet to %v\n", dst)
+	h.routingAndSend(dev, dst, ipv6.NextHeader, payload)
+}
+
+func (h *Handler) SendPing(src, dst netip.Addr) {
+	pkt := &routing.Icmpv6Packet{}
+	pkt.Header.Type = uint8(routing.Icmpv6Type_EchoRequest)
+	echo := &routing.Icmpecho{
+		Id:   0,
+		Seq:  0,
+		Data: []byte("ping"),
+	}
+	pkt.SetEchoRequest(*echo)
+	checkSumTarget := pkt.MustEncode()
+	v6 := makeIPv6Header(src, dst, routing.ProtocolNumber_Icmpv6, 255, checkSumTarget)
+	pkt.Header.Checksum = calcPseudoHeaderChecksum(&routing.Ipv6ChecksumPseudoHeader{
+		SrcAddr:          v6.SrcAddr,
+		DstAddr:          v6.DstAddr,
+		NextHeader:       v6.NextHeader,
+		UpperLayerLength: uint32(v6.PayloadLen),
+	}, checkSumTarget)
+	enc := pkt.MustEncode()
+	enc = append(v6.MustEncode(), enc...)
+	dev := h.GetSelfDevice(src)
+	if dev == nil {
+		fmt.Fprintf(h.w, "no device for %v\n", src)
+		return
+	}
+	h.routingAndSend(dev, dst, routing.ProtocolNumber_Icmpv6, enc)
 }
 
 func (h *Handler) parsePacket(dev *Device, p []byte) (err error) {
@@ -723,7 +870,11 @@ func (h *Handler) parsePacket(dev *Device, p []byte) (err error) {
 		data = data[read:]
 		// try adding the source address to the neighbor cache
 		dev.neighbors.AddEntry(h.w, dev, "incoming packet", netip.AddrFrom16(ipv6.SrcAddr), net.HardwareAddr(eth.SrcMac[:]))
+		if ipv6.HopLimit == 0 {
+			return nil // drop packet, maybe bug?
+		}
 		if !h.isAcceptableAddress(netip.AddrFrom16(ipv6.DstAddr), dev, eth.DstMac) {
+			h.doRouting(dev, eth, ipv6, data)
 			return nil
 		}
 		nextHdr := ipv6.NextHeader
@@ -766,12 +917,11 @@ func (h *Handler) parsePacket(dev *Device, p []byte) (err error) {
 				h.handleTCP(dev, eth.SrcMac, ipv6, tcp, data)
 			case routing.ProtocolNumber_Ospf:
 				ospf := &ospf.Ospfpacket{}
-				read, err := ospf.Decode(data)
+				err := ospf.DecodeExact(data)
 				if err != nil {
 					return fmt.Errorf("failed to decode OSPF packet: %v", err)
 				}
-				data = data[read:]
-				h.handleOSPF(dev, [6]byte(eth.SrcMac), ipv6, data)
+				return h.handleOSPF(dev, [6]byte(eth.SrcMac), ipv6, ospf)
 			}
 		}
 	}
@@ -779,10 +929,11 @@ func (h *Handler) parsePacket(dev *Device, p []byte) (err error) {
 }
 
 type Device struct {
+	ifaceID   int
 	fd        int
 	addr      net.HardwareAddr
 	addrs     []netip.Prefix
-	linlLocal netip.Prefix
+	linkLocal netip.Prefix
 	neighbors *NeighborCache
 }
 
@@ -799,8 +950,9 @@ func NewHandler(devices []*Device, w io.Writer) *Handler {
 	return h
 }
 
-func NewDevice(fd int, addr net.HardwareAddr, addrs []netip.Prefix) *Device {
+func NewDevice(fd, ifaceID int, addr net.HardwareAddr, addrs []netip.Prefix) *Device {
 	dev := &Device{
+		ifaceID:   ifaceID,
 		fd:        fd,
 		addr:      addr,
 		addrs:     addrs,
@@ -808,7 +960,7 @@ func NewDevice(fd int, addr net.HardwareAddr, addrs []netip.Prefix) *Device {
 	}
 	for _, a := range addrs {
 		if linkLocal.Contains(a.Addr()) {
-			dev.linlLocal = a
+			dev.linkLocal = a
 			return dev
 		}
 	}
@@ -817,6 +969,8 @@ func NewDevice(fd int, addr net.HardwareAddr, addrs []netip.Prefix) *Device {
 
 var controlSubnet = netip.MustParsePrefix("2001:db8:0:5::/64")
 var controlPlane = netip.MustParsePrefix("2001:db8:0:5::2/128")
+var destination = netip.MustParsePrefix("2001:db8:0:2::2/128")
+var mode = flag.String("mode", "router", "source, router or destination")
 
 func main() {
 	flag.Parse()
@@ -833,6 +987,7 @@ func main() {
 	defer syscall.Close(epoll)
 	var devs []*Device
 	var controlAddr *netip.Addr
+	var globalAddrs []netip.Prefix
 OUTER:
 	for _, iface := range ifaces {
 		if iface.Flags&net.FlagLoopback != 0 {
@@ -858,6 +1013,9 @@ OUTER:
 				controlAddr = &a
 				continue OUTER // control plane connection is specially handled
 			}
+			if a := addr.Addr(); a.IsGlobalUnicast() {
+				globalAddrs = append(globalAddrs, addr)
+			}
 		}
 		fd, err := createRawSocket(iface.Index)
 		if err != nil {
@@ -874,7 +1032,8 @@ OUTER:
 			fmt.Println("failed to add socket to epoll:", err)
 			return
 		}
-		devs = append(devs, NewDevice(fd, iface.HardwareAddr, addrs))
+		randomID := rand.Uint32()
+		devs = append(devs, NewDevice(fd, int(randomID), iface.HardwareAddr, addrs))
 	}
 	if controlAddr == nil {
 		fmt.Println("no control address found")
@@ -891,6 +1050,18 @@ OUTER:
 	go func() {
 		time.Sleep(1 * time.Second)
 		handler.SendAdvertisments()
+		if *mode == "src" { // at source, only one interface exists
+			for {
+				handler.SendPing(globalAddrs[0].Addr(), destination.Addr())
+				time.Sleep(1 * time.Second)
+			}
+		}
+		if *mode == "router" {
+			for {
+				handler.sendOSPFHelloAll()
+				time.Sleep(30 * time.Second)
+			}
+		}
 	}()
 	for {
 		events := make([]syscall.EpollEvent, 1)

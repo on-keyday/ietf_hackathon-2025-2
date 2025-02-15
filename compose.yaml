@@ -120,16 +120,23 @@ services:
       - NET_ADMIN
       - PERFMON
 
-  control_plane:
+  control-base:
     build:
       context: .
       dockerfile: ./docker/control.Dockerfile
       target: final
       tags:
         - ietf_hackathon-control_plane:latest
+
+    profiles:
+      - base
+
+  control1:
+    image: ietf_hackathon-control_plane:latest
     networks:
       control:
         ipv6_address: 2001:db8:0:5::2
+
 
 
 networks:
@@ -140,6 +147,8 @@ networks:
       driver: default
       config:
         - subnet: 2001:db8:0:1::/64
+    driver_opts:
+      com.docker.network.container_iface_prefix: src
 
   destination:
     driver: bridge
@@ -148,7 +157,8 @@ networks:
       driver: default
       config:
         - subnet: 2001:db8:0:2::/64
-        
+    driver_opts:
+      com.docker.network.container_iface_prefix: dst   
 
   middle1:
     driver: bridge
@@ -157,6 +167,8 @@ networks:
       driver: default
       config:
         - subnet: 2001:db8:0:3::/64
+    driver_opts:
+      com.docker.network.container_iface_prefix: mid1
 
   middle2:
     driver: bridge
@@ -165,6 +177,8 @@ networks:
       driver: default
       config:
         - subnet: 2001:db8:0:4::/64
+    driver_opts:
+      com.docker.network.container_iface_prefix: mid2
 
   control:
     driver: bridge
@@ -173,3 +187,5 @@ networks:
       driver: default
       config:
         - subnet: 2001:db8:0:5::/64
+    driver_opts:
+      com.docker.network.container_iface_prefix: ctrl

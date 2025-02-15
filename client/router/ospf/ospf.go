@@ -60,18 +60,20 @@ func (t Scoping) String() string {
 	return fmt.Sprintf("Scoping(%d)", t)
 }
 
-type LsafunctionCode uint16
+type LsafunctionCode int
 
 const (
-	LsafunctionCode_RouterLsa          LsafunctionCode = 0x2001
-	LsafunctionCode_NetworkLsa         LsafunctionCode = 0x2002
-	LsafunctionCode_InterAreaPrefixLsa LsafunctionCode = 0x2003
-	LsafunctionCode_InterAreaRouterLsa LsafunctionCode = 0x2004
-	LsafunctionCode_AsExternalLsa      LsafunctionCode = 0x4005
-	LsafunctionCode_NssaLsa            LsafunctionCode = 0x2007
-	LsafunctionCode_LinkLsa            LsafunctionCode = 0x0008
-	LsafunctionCode_IntraAreaPrefixLsa LsafunctionCode = 0x2009
-	LsafunctionCode_IntraAreaRouterLsa LsafunctionCode = 0x200a
+	LsafunctionCode_RouterLsa           LsafunctionCode = 0x01
+	LsafunctionCode_NetworkLsa          LsafunctionCode = 0x02
+	LsafunctionCode_InterAreaPrefixLsa  LsafunctionCode = 0x03
+	LsafunctionCode_InterAreaRouterLsa  LsafunctionCode = 0x04
+	LsafunctionCode_AsExternalLsa       LsafunctionCode = 0x05
+	LsafunctionCode_NssaLsa             LsafunctionCode = 0x07
+	LsafunctionCode_LinkLsa             LsafunctionCode = 0x08
+	LsafunctionCode_IntraAreaPrefixLsa  LsafunctionCode = 0x09
+	LsafunctionCode_IntraAreaRouterLsa  LsafunctionCode = 0x0a
+	LsafunctionCode_RouterInfoOpaqueLsa LsafunctionCode = 0x0b
+	LsafunctionCode_Srv6LocatorLsa      LsafunctionCode = 42
 )
 
 func (t LsafunctionCode) String() string {
@@ -94,8 +96,241 @@ func (t LsafunctionCode) String() string {
 		return "IntraAreaPrefixLsa"
 	case LsafunctionCode_IntraAreaRouterLsa:
 		return "IntraAreaRouterLsa"
+	case LsafunctionCode_RouterInfoOpaqueLsa:
+		return "RouterInfoOpaqueLsa"
+	case LsafunctionCode_Srv6LocatorLsa:
+		return "Srv6LocatorLsa"
 	}
 	return fmt.Sprintf("LsafunctionCode(%d)", t)
+}
+
+type RouterInfoTlvtype uint16
+
+const (
+	RouterInfoTlvtype_Capabilities           RouterInfoTlvtype = 1
+	RouterInfoTlvtype_FunctionalCapabilities RouterInfoTlvtype = 2
+	RouterInfoTlvtype_Srv6Capabilities       RouterInfoTlvtype = 20
+)
+
+func (t RouterInfoTlvtype) String() string {
+	switch t {
+	case RouterInfoTlvtype_Capabilities:
+		return "Capabilities"
+	case RouterInfoTlvtype_FunctionalCapabilities:
+		return "FunctionalCapabilities"
+	case RouterInfoTlvtype_Srv6Capabilities:
+		return "Srv6Capabilities"
+	}
+	return fmt.Sprintf("RouterInfoTlvtype(%d)", t)
+}
+
+type Srv6LocatorLsatlvtype uint16
+
+const (
+	Srv6LocatorLsatlvtype_Locator Srv6LocatorLsatlvtype = 1
+)
+
+func (t Srv6LocatorLsatlvtype) String() string {
+	switch t {
+	case Srv6LocatorLsatlvtype_Locator:
+		return "Locator"
+	}
+	return fmt.Sprintf("Srv6LocatorLsatlvtype(%d)", t)
+}
+
+type OspfrouteType uint8
+
+const (
+	OspfrouteType_IntraAreaPrefix OspfrouteType = 1
+	OspfrouteType_InterAreaPrefix OspfrouteType = 2
+	OspfrouteType_External1       OspfrouteType = 3
+	OspfrouteType_External2       OspfrouteType = 4
+	OspfrouteType_Nssa1           OspfrouteType = 5
+	OspfrouteType_Nssa2           OspfrouteType = 6
+)
+
+func (t OspfrouteType) String() string {
+	switch t {
+	case OspfrouteType_IntraAreaPrefix:
+		return "IntraAreaPrefix"
+	case OspfrouteType_InterAreaPrefix:
+		return "InterAreaPrefix"
+	case OspfrouteType_External1:
+		return "External1"
+	case OspfrouteType_External2:
+		return "External2"
+	case OspfrouteType_Nssa1:
+		return "Nssa1"
+	case OspfrouteType_Nssa2:
+		return "Nssa2"
+	}
+	return fmt.Sprintf("OspfrouteType(%d)", t)
+}
+
+type EndpointBehavior uint16
+
+const (
+	EndpointBehavior_Reserved                   EndpointBehavior = 0
+	EndpointBehavior_End                        EndpointBehavior = 1
+	EndpointBehavior_EndWithPsp                 EndpointBehavior = 2
+	EndpointBehavior_EndWithUsp                 EndpointBehavior = 3
+	EndpointBehavior_EndWithPspAndUsp           EndpointBehavior = 4
+	EndpointBehavior_EndX                       EndpointBehavior = 5
+	EndpointBehavior_EndXwithPsp                EndpointBehavior = 6
+	EndpointBehavior_EndXwithUsp                EndpointBehavior = 7
+	EndpointBehavior_EndXwithPspAndUsp          EndpointBehavior = 8
+	EndpointBehavior_EndT                       EndpointBehavior = 9
+	EndpointBehavior_EndTwithPsp                EndpointBehavior = 10
+	EndpointBehavior_EndTwithUsp                EndpointBehavior = 11
+	EndpointBehavior_EndTwithPspAndUsp          EndpointBehavior = 12
+	EndpointBehavior_Unassigned                 EndpointBehavior = 13
+	EndpointBehavior_EndB6Encaps                EndpointBehavior = 14
+	EndpointBehavior_EndBm                      EndpointBehavior = 15
+	EndpointBehavior_EndDx6                     EndpointBehavior = 16
+	EndpointBehavior_EndDx4                     EndpointBehavior = 17
+	EndpointBehavior_EndDt6                     EndpointBehavior = 18
+	EndpointBehavior_EndDt4                     EndpointBehavior = 19
+	EndpointBehavior_EndDt46                    EndpointBehavior = 20
+	EndpointBehavior_EndDx2                     EndpointBehavior = 21
+	EndpointBehavior_EndDx2V                    EndpointBehavior = 22
+	EndpointBehavior_EndDx2U                    EndpointBehavior = 23
+	EndpointBehavior_EndDx2M                    EndpointBehavior = 24
+	EndpointBehavior_Reserved2                  EndpointBehavior = 25
+	EndpointBehavior_Unassigned2                EndpointBehavior = 26
+	EndpointBehavior_EndB6EncapsRed             EndpointBehavior = 27
+	EndpointBehavior_EndWithUsd                 EndpointBehavior = 28
+	EndpointBehavior_EndWithPspAndUsd           EndpointBehavior = 29
+	EndpointBehavior_EndWithUspAndUsd           EndpointBehavior = 30
+	EndpointBehavior_EndXwithUsd                EndpointBehavior = 31
+	EndpointBehavior_EndXwithPspAndUsd          EndpointBehavior = 32
+	EndpointBehavior_EndXwithUspAndUsd          EndpointBehavior = 33
+	EndpointBehavior_EndXwithPspUspAndUsd       EndpointBehavior = 34
+	EndpointBehavior_EndTwithPspAndUsd          EndpointBehavior = 35
+	EndpointBehavior_EndTwithUspAndUsd          EndpointBehavior = 36
+	EndpointBehavior_EndTwithPspUspAndUsd       EndpointBehavior = 37
+	EndpointBehavior_SidDefinedInRfc8754        EndpointBehavior = 0x7fff
+	EndpointBehavior_ReservedForPrivateUseBegin EndpointBehavior = 0x8000
+	EndpointBehavior_ReservedForPrivateUseEnd   EndpointBehavior = 0xfffe
+	EndpointBehavior_Opaque                     EndpointBehavior = 0xffff
+)
+
+func (t EndpointBehavior) String() string {
+	switch t {
+	case EndpointBehavior_Reserved:
+		return "Reserved"
+	case EndpointBehavior_End:
+		return "End"
+	case EndpointBehavior_EndWithPsp:
+		return "EndWithPsp"
+	case EndpointBehavior_EndWithUsp:
+		return "EndWithUsp"
+	case EndpointBehavior_EndWithPspAndUsp:
+		return "EndWithPspAndUsp"
+	case EndpointBehavior_EndX:
+		return "EndX"
+	case EndpointBehavior_EndXwithPsp:
+		return "EndXwithPsp"
+	case EndpointBehavior_EndXwithUsp:
+		return "EndXwithUsp"
+	case EndpointBehavior_EndXwithPspAndUsp:
+		return "EndXwithPspAndUsp"
+	case EndpointBehavior_EndT:
+		return "EndT"
+	case EndpointBehavior_EndTwithPsp:
+		return "EndTwithPsp"
+	case EndpointBehavior_EndTwithUsp:
+		return "EndTwithUsp"
+	case EndpointBehavior_EndTwithPspAndUsp:
+		return "EndTwithPspAndUsp"
+	case EndpointBehavior_Unassigned:
+		return "Unassigned"
+	case EndpointBehavior_EndB6Encaps:
+		return "EndB6Encaps"
+	case EndpointBehavior_EndBm:
+		return "EndBm"
+	case EndpointBehavior_EndDx6:
+		return "EndDx6"
+	case EndpointBehavior_EndDx4:
+		return "EndDx4"
+	case EndpointBehavior_EndDt6:
+		return "EndDt6"
+	case EndpointBehavior_EndDt4:
+		return "EndDt4"
+	case EndpointBehavior_EndDt46:
+		return "EndDt46"
+	case EndpointBehavior_EndDx2:
+		return "EndDx2"
+	case EndpointBehavior_EndDx2V:
+		return "EndDx2V"
+	case EndpointBehavior_EndDx2U:
+		return "EndDx2U"
+	case EndpointBehavior_EndDx2M:
+		return "EndDx2M"
+	case EndpointBehavior_Reserved2:
+		return "Reserved2"
+	case EndpointBehavior_Unassigned2:
+		return "Unassigned2"
+	case EndpointBehavior_EndB6EncapsRed:
+		return "EndB6EncapsRed"
+	case EndpointBehavior_EndWithUsd:
+		return "EndWithUsd"
+	case EndpointBehavior_EndWithPspAndUsd:
+		return "EndWithPspAndUsd"
+	case EndpointBehavior_EndWithUspAndUsd:
+		return "EndWithUspAndUsd"
+	case EndpointBehavior_EndXwithUsd:
+		return "EndXwithUsd"
+	case EndpointBehavior_EndXwithPspAndUsd:
+		return "EndXwithPspAndUsd"
+	case EndpointBehavior_EndXwithUspAndUsd:
+		return "EndXwithUspAndUsd"
+	case EndpointBehavior_EndXwithPspUspAndUsd:
+		return "EndXwithPspUspAndUsd"
+	case EndpointBehavior_EndTwithPspAndUsd:
+		return "EndTwithPspAndUsd"
+	case EndpointBehavior_EndTwithUspAndUsd:
+		return "EndTwithUspAndUsd"
+	case EndpointBehavior_EndTwithPspUspAndUsd:
+		return "EndTwithPspUspAndUsd"
+	case EndpointBehavior_SidDefinedInRfc8754:
+		return "SidDefinedInRfc8754"
+	case EndpointBehavior_ReservedForPrivateUseBegin:
+		return "ReservedForPrivateUseBegin"
+	case EndpointBehavior_ReservedForPrivateUseEnd:
+		return "ReservedForPrivateUseEnd"
+	case EndpointBehavior_Opaque:
+		return "Opaque"
+	}
+	return fmt.Sprintf("EndpointBehavior(%d)", t)
+}
+
+type LocatorTlvsubTlvtype uint16
+
+const (
+	LocatorTlvsubTlvtype_Srv6EndSid                    LocatorTlvsubTlvtype = 1
+	LocatorTlvsubTlvtype_Ipv6ForwardingAddress         LocatorTlvsubTlvtype = 2
+	LocatorTlvsubTlvtype_RouteTag                      LocatorTlvsubTlvtype = 3
+	LocatorTlvsubTlvtype_PrefixSourceOspfRouterId      LocatorTlvsubTlvtype = 4
+	LocatorTlvsubTlvtype_PrefixSourceOspfRouterAddress LocatorTlvsubTlvtype = 5
+	LocatorTlvsubTlvtype_Srv6SidStructure              LocatorTlvsubTlvtype = 10
+)
+
+func (t LocatorTlvsubTlvtype) String() string {
+	switch t {
+	case LocatorTlvsubTlvtype_Srv6EndSid:
+		return "Srv6EndSid"
+	case LocatorTlvsubTlvtype_Ipv6ForwardingAddress:
+		return "Ipv6ForwardingAddress"
+	case LocatorTlvsubTlvtype_RouteTag:
+		return "RouteTag"
+	case LocatorTlvsubTlvtype_PrefixSourceOspfRouterId:
+		return "PrefixSourceOspfRouterId"
+	case LocatorTlvsubTlvtype_PrefixSourceOspfRouterAddress:
+		return "PrefixSourceOspfRouterAddress"
+	case LocatorTlvsubTlvtype_Srv6SidStructure:
+		return "Srv6SidStructure"
+	}
+	return fmt.Sprintf("LocatorTlvsubTlvtype(%d)", t)
 }
 
 type Ospfheader struct {
@@ -160,7 +395,7 @@ func VisitorTIJJOToMap(v any) interface{} {
 type HelloPacket struct {
 	InterfaceId            uint32
 	RtrPriority            uint8
-	Options                uint8
+	Options                uint32
 	HelloInterval          uint16
 	RouterDeadInterval     uint16
 	DesignatedRouter       uint32
@@ -179,18 +414,9 @@ type PrefixOptions struct {
 type Lsatype struct {
 	flags19 uint16
 }
-type Lsaheader struct {
-	LsAge             uint16
-	LsType            LsafunctionCode
-	LinkStateId       uint32
-	AdvertisingRouter uint32
-	LsSequenceNumber  uint32
-	LsChecksum        uint16
-	Length            uint16
-}
 type Option struct {
 	Reserved uint16
-	flags28  uint8
+	flags21  uint8
 }
 type RouterInfo struct {
 	Type                uint8
@@ -200,8 +426,64 @@ type RouterInfo struct {
 	NeighborInterfaceId uint32
 	NeighborRouterId    uint32
 }
+type RouterInformationCapabilities struct {
+	flags27 uint32
+}
+type FunctionalCapabilities struct {
+	Capabilities []uint32
+}
+type Srv6CapabilitiesSubTlv struct {
+	Type   uint16
+	Length uint16
+	Value  []uint8
+}
+type Srv6EndSidsubTlv struct {
+	Type   uint16
+	Length uint16
+	Value  []uint8
+}
+type Srv6EndXsidsubTlvsubTlv struct {
+	Type   uint16
+	Length uint16
+	Value  []uint8
+}
+type Srv6LanEndXsidsubTlvsubTlv struct {
+	Type   uint16
+	Length uint16
+	Value  []uint8
+}
+type Srv6SidstructureSubTlv struct {
+	LocatorBlockLength uint8
+	LocatorNodeLength  uint8
+	FunctionLength     uint8
+	ArgumentsLength    uint8
+}
+type Ipv6ForwardingAddress struct {
+	ForwardingAddress [16]uint8
+}
+type RouteTag struct {
+	RouteTag uint32
+}
+type PrefixSourceRouterId struct {
+	RouterId uint32
+}
+type PrefixSourceRouterAddress struct {
+	RouterAddress []uint8
+}
+type LsaheaderChecksum struct {
+	LsType            Lsatype
+	LinkStateId       uint32
+	AdvertisingRouter uint32
+	LsSequenceNumber  uint32
+	LsChecksum        uint16
+	Length            uint16
+}
+type Lsaheader struct {
+	LsAge          uint16
+	HeaderChecksum LsaheaderChecksum
+}
 type RouterLsa struct {
-	flags34  uint8
+	flags48  uint8
 	Options  Option
 	LinkInfo []RouterInfo
 }
@@ -228,33 +510,33 @@ type InterAreaRouterLsa struct {
 	Metric       uint32
 	DestRouterId uint32
 }
-type union44_AsexternalLsa interface {
-	isunion43_()
+type union58_AsexternalLsa interface {
+	isunion57_()
 }
-type union_45_t struct {
+type union_59_t struct {
 	ForwardingAddress [16]uint8
 }
-type union47_AsexternalLsa interface {
-	isunion46_()
+type union61_AsexternalLsa interface {
+	isunion60_()
 }
-type union_48_t struct {
+type union_62_t struct {
 	ExternalRouteTag uint32
 }
-type union50_AsexternalLsa interface {
-	isunion49_()
+type union64_AsexternalLsa interface {
+	isunion63_()
 }
-type union_51_t struct {
+type union_65_t struct {
 	ReferencedLinkStateId uint32
 }
 type AsexternalLsa struct {
-	flags42          uint8
+	flags56          uint8
 	Metric           uint32
 	PrefixLen        uint8
 	PrefixOptions    PrefixOptions
 	ReferencedLsType uint16
-	union43_         union44_AsexternalLsa
-	union46_         union47_AsexternalLsa
-	union49_         union50_AsexternalLsa
+	union57_         union58_AsexternalLsa
+	union60_         union61_AsexternalLsa
+	union63_         union64_AsexternalLsa
 }
 type LinkLsa struct {
 	RtrPriority               uint8
@@ -269,36 +551,133 @@ type IntraAreaPrefixLsa struct {
 	ReferencedLinkStateId uint32
 	Prefixes              []AddressPrefix
 }
-type union64_Lsa interface {
-	isunion63_()
+type Srv6Capabilities struct {
+	Reserved1 uint8
+	flags77   uint8
+	Reserved4 uint16
+	Tlvs      []Srv6CapabilitiesSubTlv
 }
-type union_65_t struct {
+type union82_RouterInfoOpaqueLsatlv interface {
+	isunion81_()
+}
+type union_83_t struct {
+	Capabilities RouterInformationCapabilities
+}
+type union_84_t struct {
+	FunctionalCapabilities FunctionalCapabilities
+}
+type union_85_t struct {
+	Srv6Capabilities Srv6Capabilities
+}
+type union_86_t struct {
+	Value []uint8
+}
+type RouterInfoOpaqueLsatlv struct {
+	Type     RouterInfoTlvtype
+	Length   uint16
+	union81_ union82_RouterInfoOpaqueLsatlv
+}
+type RouterInfoOpaqueLsa struct {
+	Tlvs []RouterInfoOpaqueLsatlv
+}
+type Srv6EndSid struct {
+	Flags    uint8
+	Reserved uint8
+	Behavior EndpointBehavior
+	Sid      [16]uint8
+	SubTlvs  []Srv6EndSidsubTlv
+}
+type union101_LocatorTlvsubTlv interface {
+	isunion100_()
+}
+type union_102_t struct {
+	Srv6EndSid Srv6EndSid
+}
+type union_103_t struct {
+	Ipv6ForwardingAddress Ipv6ForwardingAddress
+}
+type union_104_t struct {
+	RouteTag RouteTag
+}
+type union_105_t struct {
+	PrefixSourceOspfRouterId PrefixSourceRouterId
+}
+type union_106_t struct {
+	PrefixSourceOspfRouterAddress PrefixSourceRouterAddress
+}
+type union_107_t struct {
+	Srv6SidStructure Srv6SidstructureSubTlv
+}
+type union_108_t struct {
+	Value []uint8
+}
+type LocatorTlvsubTlv struct {
+	Type      LocatorTlvsubTlvtype
+	Length    uint16
+	union100_ union101_LocatorTlvsubTlv
+}
+type LocatorTlv struct {
+	RouteType     OspfrouteType
+	Algorithm     uint8
+	LocatorLength uint8
+	PrefixOptions PrefixOptions
+	Metric        uint32
+	Locator       []uint8
+	SubTlvs       []LocatorTlvsubTlv
+}
+type union127_Srv6LocatorLsatlv interface {
+	isunion126_()
+}
+type union_128_t struct {
+	Locator LocatorTlv
+}
+type union_129_t struct {
+	Value []uint8
+}
+type Srv6LocatorLsatlv struct {
+	Type      Srv6LocatorLsatlvtype
+	Length    uint16
+	union126_ union127_Srv6LocatorLsatlv
+}
+type Srv6LocatorLsa struct {
+	Tlvs []Srv6LocatorLsatlv
+}
+type union137_Lsa interface {
+	isunion136_()
+}
+type union_138_t struct {
 	RouterLsa RouterLsa
 }
-type union_66_t struct {
+type union_139_t struct {
 	NetworkLsa NetworkLsa
 }
-type union_67_t struct {
+type union_140_t struct {
 	InterAreaPrefixLsa InterAreaPrefixLsa
 }
-type union_68_t struct {
+type union_141_t struct {
 	InterAreaRouterLsa InterAreaRouterLsa
 }
-type union_69_t struct {
+type union_142_t struct {
 	AsExternalLsa AsexternalLsa
 }
-type union_70_t struct {
+type union_143_t struct {
 	LinkLsa LinkLsa
 }
-type union_71_t struct {
+type union_144_t struct {
 	IntraAreaPrefixLsa IntraAreaPrefixLsa
 }
-type union_72_t struct {
+type union_145_t struct {
+	RouterInfoOpaqueLsa RouterInfoOpaqueLsa
+}
+type union_146_t struct {
+	Srv6LocatorLsa Srv6LocatorLsa
+}
+type union_147_t struct {
 	Data []uint8
 }
 type Lsa struct {
 	LsaHeader Lsaheader
-	union63_  union64_Lsa
+	union136_ union137_Lsa
 }
 type OspflinkStateUpdatePacket struct {
 	NumLsa     uint32
@@ -307,39 +686,60 @@ type OspflinkStateUpdatePacket struct {
 type OspflinkStateAcknowledgementPacket struct {
 	LsaHeaders []Lsaheader
 }
+type Srv6EndXsidsubTlv struct {
+	Behavior  EndpointBehavior
+	Flags     uint8
+	Reserved  uint8
+	Algorithm uint8
+	Weight    uint8
+	Reserved2 uint16
+	Sid       [16]uint8
+	SubTlvs   []Srv6EndXsidsubTlvsubTlv
+}
+type Srv6LanEndXsidsubTlv struct {
+	Behavior         EndpointBehavior
+	Flags            uint8
+	Reserved         uint8
+	Algorithm        uint8
+	Weight           uint8
+	Reserved2        uint16
+	NeighborRouterId uint32
+	Sid              [16]uint8
+	SubTlvs          []Srv6LanEndXsidsubTlvsubTlv
+}
 type DatabaseDescriptionPacket struct {
 	Reserved         uint8
 	Options          Option
 	InterfaceMtu     uint16
 	Reserved2        uint8
-	flags92          uint8
+	flags180         uint8
 	DdSequenceNumber uint32
 	LsaHeaders       []Lsaheader
 }
-type union98_Ospfpacket interface {
-	isunion97_()
+type union186_Ospfpacket interface {
+	isunion185_()
 }
-type union_99_t struct {
+type union_187_t struct {
 	HelloPacket HelloPacket
 }
-type union_100_t struct {
+type union_188_t struct {
 	DatabaseDescriptionPacket DatabaseDescriptionPacket
 }
-type union_101_t struct {
+type union_189_t struct {
 	OspfLinkStateRequestPacket OspflinkStateRequestPacket
 }
-type union_102_t struct {
+type union_190_t struct {
 	OspfLinkStateUpdatePacket OspflinkStateUpdatePacket
 }
-type union_103_t struct {
+type union_191_t struct {
 	OspfLinkStateAcknowledgementPacket OspflinkStateAcknowledgementPacket
 }
-type union_104_t struct {
+type union_192_t struct {
 	Data []uint8
 }
 type Ospfpacket struct {
-	Header   Ospfheader
-	union97_ union98_Ospfpacket
+	Header    Ospfheader
+	union185_ union186_Ospfpacket
 }
 
 func (t *Ospfheader) Visit(v VisitorTIJJO) {
@@ -491,7 +891,7 @@ func (t *HelloPacket) Write(w io.Writer) (err error) {
 	if n, err := w.Write([]byte{byte(t.RtrPriority)}); err != nil || n != 1 {
 		return fmt.Errorf("encode t.RtrPriority: %w", err)
 	}
-	if n, err := w.Write([]byte{byte(t.Options)}); err != nil || n != 1 {
+	if n, err := w.Write([]byte{byte(t.Options >> 16), byte(t.Options >> 8), byte(t.Options)}); err != nil || n != 3 {
 		return fmt.Errorf("encode t.Options: %w", err)
 	}
 	tmp6 := [2]byte{}
@@ -524,7 +924,7 @@ func (t *HelloPacket) Write(w io.Writer) (err error) {
 	return nil
 }
 func (t *HelloPacket) Encode() ([]byte, error) {
-	w := bytes.NewBuffer(make([]byte, 0, 18))
+	w := bytes.NewBuffer(make([]byte, 0, 20))
 	if err := t.Write(w); err != nil {
 		return nil, err
 	}
@@ -550,12 +950,12 @@ func (t *HelloPacket) Read(r io.Reader) (err error) {
 		return fmt.Errorf("read RtrPriority: expect 1 byte but read %d bytes: %w", n_RtrPriority, err)
 	}
 	t.RtrPriority = uint8(tmpRtrPriority[0])
-	tmpOptions := [1]byte{}
+	tmpOptions := [3]byte{}
 	n_Options, err := io.ReadFull(r, tmpOptions[:])
 	if err != nil {
-		return fmt.Errorf("read Options: expect 1 byte but read %d bytes: %w", n_Options, err)
+		return fmt.Errorf("read Options: expect 3 bytes but read %d bytes: %w", n_Options, err)
 	}
-	t.Options = uint8(tmpOptions[0])
+	t.Options = uint32(uint32(tmpOptions[0])<<16 | uint32(tmpOptions[1])<<8 | uint32(tmpOptions[2]))
 	tmpHelloInterval := [2]byte{}
 	n_HelloInterval, err := io.ReadFull(r, tmpHelloInterval[:])
 	if err != nil {
@@ -889,14 +1289,14 @@ func (t *Lsatype) SetScoping(v Scoping) bool {
 	t.flags19 = (t.flags19 & ^uint16(0x6000)) | ((uint16(v) & 0x3) << 13)
 	return true
 }
-func (t *Lsatype) Code() uint16 {
-	return ((t.flags19 & 0x1fff) >> 0)
+func (t *Lsatype) Code() LsafunctionCode {
+	return LsafunctionCode(((t.flags19 & 0x1fff) >> 0))
 }
-func (t *Lsatype) SetCode(v uint16) bool {
+func (t *Lsatype) SetCode(v LsafunctionCode) bool {
 	if v > 8191 {
 		return false
 	}
-	t.flags19 = (t.flags19 & ^uint16(0x1fff)) | ((v & 0x1fff) << 0)
+	t.flags19 = (t.flags19 & ^uint16(0x1fff)) | ((uint16(v) & 0x1fff) << 0)
 	return true
 }
 func (t *Lsatype) Visit(v VisitorTIJJO) {
@@ -958,218 +1358,95 @@ func (t *Lsatype) DecodeExact(d []byte) error {
 	}
 	return nil
 }
-func (t *Lsaheader) Visit(v VisitorTIJJO) {
-	v.Visit(v, "LsAge", &t.LsAge)
-	v.Visit(v, "LsType", &t.LsType)
-	v.Visit(v, "LinkStateId", &t.LinkStateId)
-	v.Visit(v, "AdvertisingRouter", &t.AdvertisingRouter)
-	v.Visit(v, "LsSequenceNumber", &t.LsSequenceNumber)
-	v.Visit(v, "LsChecksum", &t.LsChecksum)
-	v.Visit(v, "Length", &t.Length)
-}
-func (t *Lsaheader) MarshalJSON() ([]byte, error) {
-	return json.Marshal(VisitorTIJJOToMap(t))
-}
-func (t *Lsaheader) Write(w io.Writer) (err error) {
-	tmp21 := [2]byte{}
-	binary.BigEndian.PutUint16(tmp21[:], uint16(t.LsAge))
-	if n, err := w.Write(tmp21[:]); err != nil || n != 2 {
-		return fmt.Errorf("encode t.LsAge: %w", err)
-	}
-	tmp22 := [2]byte{}
-	binary.BigEndian.PutUint16(tmp22[:], uint16(t.LsType))
-	if n, err := w.Write(tmp22[:]); err != nil || n != 2 {
-		return fmt.Errorf("encode t.LsType: %w", err)
-	}
-	tmp23 := [4]byte{}
-	binary.BigEndian.PutUint32(tmp23[:], uint32(t.LinkStateId))
-	if n, err := w.Write(tmp23[:]); err != nil || n != 4 {
-		return fmt.Errorf("encode t.LinkStateId: %w", err)
-	}
-	tmp24 := [4]byte{}
-	binary.BigEndian.PutUint32(tmp24[:], uint32(t.AdvertisingRouter))
-	if n, err := w.Write(tmp24[:]); err != nil || n != 4 {
-		return fmt.Errorf("encode t.AdvertisingRouter: %w", err)
-	}
-	tmp25 := [4]byte{}
-	binary.BigEndian.PutUint32(tmp25[:], uint32(t.LsSequenceNumber))
-	if n, err := w.Write(tmp25[:]); err != nil || n != 4 {
-		return fmt.Errorf("encode t.LsSequenceNumber: %w", err)
-	}
-	tmp26 := [2]byte{}
-	binary.BigEndian.PutUint16(tmp26[:], uint16(t.LsChecksum))
-	if n, err := w.Write(tmp26[:]); err != nil || n != 2 {
-		return fmt.Errorf("encode t.LsChecksum: %w", err)
-	}
-	tmp27 := [2]byte{}
-	binary.BigEndian.PutUint16(tmp27[:], uint16(t.Length))
-	if n, err := w.Write(tmp27[:]); err != nil || n != 2 {
-		return fmt.Errorf("encode t.Length: %w", err)
-	}
-	return nil
-}
-func (t *Lsaheader) Encode() ([]byte, error) {
-	w := bytes.NewBuffer(make([]byte, 0, 20))
-	if err := t.Write(w); err != nil {
-		return nil, err
-	}
-	return w.Bytes(), nil
-}
-func (t *Lsaheader) MustEncode() []byte {
-	buf, err := t.Encode()
-	if err != nil {
-		panic(err)
-	}
-	return buf
-}
-func (t *Lsaheader) Read(r io.Reader) (err error) {
-	tmpLsAge := [2]byte{}
-	n_LsAge, err := io.ReadFull(r, tmpLsAge[:])
-	if err != nil {
-		return fmt.Errorf("read LsAge: expect 2 bytes but read %d bytes: %w", n_LsAge, err)
-	}
-	t.LsAge = uint16(binary.BigEndian.Uint16(tmpLsAge[:]))
-	tmpLsType := [2]byte{}
-	n_LsType, err := io.ReadFull(r, tmpLsType[:])
-	if err != nil {
-		return fmt.Errorf("read LsType: expect 2 bytes but read %d bytes: %w", n_LsType, err)
-	}
-	t.LsType = LsafunctionCode(binary.BigEndian.Uint16(tmpLsType[:]))
-	tmpLinkStateId := [4]byte{}
-	n_LinkStateId, err := io.ReadFull(r, tmpLinkStateId[:])
-	if err != nil {
-		return fmt.Errorf("read LinkStateId: expect 4 bytes but read %d bytes: %w", n_LinkStateId, err)
-	}
-	t.LinkStateId = uint32(binary.BigEndian.Uint32(tmpLinkStateId[:]))
-	tmpAdvertisingRouter := [4]byte{}
-	n_AdvertisingRouter, err := io.ReadFull(r, tmpAdvertisingRouter[:])
-	if err != nil {
-		return fmt.Errorf("read AdvertisingRouter: expect 4 bytes but read %d bytes: %w", n_AdvertisingRouter, err)
-	}
-	t.AdvertisingRouter = uint32(binary.BigEndian.Uint32(tmpAdvertisingRouter[:]))
-	tmpLsSequenceNumber := [4]byte{}
-	n_LsSequenceNumber, err := io.ReadFull(r, tmpLsSequenceNumber[:])
-	if err != nil {
-		return fmt.Errorf("read LsSequenceNumber: expect 4 bytes but read %d bytes: %w", n_LsSequenceNumber, err)
-	}
-	t.LsSequenceNumber = uint32(binary.BigEndian.Uint32(tmpLsSequenceNumber[:]))
-	tmpLsChecksum := [2]byte{}
-	n_LsChecksum, err := io.ReadFull(r, tmpLsChecksum[:])
-	if err != nil {
-		return fmt.Errorf("read LsChecksum: expect 2 bytes but read %d bytes: %w", n_LsChecksum, err)
-	}
-	t.LsChecksum = uint16(binary.BigEndian.Uint16(tmpLsChecksum[:]))
-	tmpLength := [2]byte{}
-	n_Length, err := io.ReadFull(r, tmpLength[:])
-	if err != nil {
-		return fmt.Errorf("read Length: expect 2 bytes but read %d bytes: %w", n_Length, err)
-	}
-	t.Length = uint16(binary.BigEndian.Uint16(tmpLength[:]))
-	return nil
-}
-
-func (t *Lsaheader) Decode(d []byte) (int, error) {
-	r := bytes.NewReader(d)
-	err := t.Read(r)
-	return int(int(r.Size()) - r.Len()), err
-}
-func (t *Lsaheader) DecodeExact(d []byte) error {
-	if n, err := t.Decode(d); err != nil {
-		return err
-	} else if n != len(d) {
-		return fmt.Errorf("decode Lsaheader: expect %d bytes but got %d bytes", len(d), n)
-	}
-	return nil
-}
 func (t *Option) Ospfv2Compat() uint8 {
-	return ((t.flags28 & 0xc0) >> 6)
+	return ((t.flags21 & 0xc0) >> 6)
 }
 func (t *Option) SetOspfv2Compat(v uint8) bool {
 	if v > 3 {
 		return false
 	}
-	t.flags28 = (t.flags28 & ^uint8(0xc0)) | ((v & 0x3) << 6)
+	t.flags21 = (t.flags21 & ^uint8(0xc0)) | ((v & 0x3) << 6)
 	return true
 }
-func (t *Option) Dc() bool {
-	return ((t.flags28 & 0x20) >> 5) == 1
+func (t *Option) DemandCircuit() bool {
+	return ((t.flags21 & 0x20) >> 5) == 1
 }
-func (t *Option) SetDc(v bool) {
+func (t *Option) SetDemandCircuit(v bool) {
 	if v {
-		t.flags28 |= uint8(0x20)
+		t.flags21 |= uint8(0x20)
 	} else {
-		t.flags28 &= ^uint8(0x20)
+		t.flags21 &= ^uint8(0x20)
 	}
 }
-func (t *Option) R() bool {
-	return ((t.flags28 & 0x10) >> 4) == 1
+func (t *Option) OriginatorIsRouter() bool {
+	return ((t.flags21 & 0x10) >> 4) == 1
 }
-func (t *Option) SetR(v bool) {
+func (t *Option) SetOriginatorIsRouter(v bool) {
 	if v {
-		t.flags28 |= uint8(0x10)
+		t.flags21 |= uint8(0x10)
 	} else {
-		t.flags28 &= ^uint8(0x10)
+		t.flags21 &= ^uint8(0x10)
 	}
 }
-func (t *Option) N() bool {
-	return ((t.flags28 & 0x08) >> 3) == 1
+func (t *Option) Nssa() bool {
+	return ((t.flags21 & 0x08) >> 3) == 1
 }
-func (t *Option) SetN(v bool) {
+func (t *Option) SetNssa(v bool) {
 	if v {
-		t.flags28 |= uint8(0x8)
+		t.flags21 |= uint8(0x8)
 	} else {
-		t.flags28 &= ^uint8(0x8)
+		t.flags21 &= ^uint8(0x8)
 	}
 }
 func (t *Option) X() bool {
-	return ((t.flags28 & 0x04) >> 2) == 1
+	return ((t.flags21 & 0x04) >> 2) == 1
 }
 func (t *Option) SetX(v bool) {
 	if v {
-		t.flags28 |= uint8(0x4)
+		t.flags21 |= uint8(0x4)
 	} else {
-		t.flags28 &= ^uint8(0x4)
+		t.flags21 &= ^uint8(0x4)
 	}
 }
 func (t *Option) External() bool {
-	return ((t.flags28 & 0x02) >> 1) == 1
+	return ((t.flags21 & 0x02) >> 1) == 1
 }
 func (t *Option) SetExternal(v bool) {
 	if v {
-		t.flags28 |= uint8(0x2)
+		t.flags21 |= uint8(0x2)
 	} else {
-		t.flags28 &= ^uint8(0x2)
+		t.flags21 &= ^uint8(0x2)
 	}
 }
 func (t *Option) V6() bool {
-	return ((t.flags28 & 0x01) >> 0) == 1
+	return ((t.flags21 & 0x01) >> 0) == 1
 }
 func (t *Option) SetV6(v bool) {
 	if v {
-		t.flags28 |= uint8(0x1)
+		t.flags21 |= uint8(0x1)
 	} else {
-		t.flags28 &= ^uint8(0x1)
+		t.flags21 &= ^uint8(0x1)
 	}
 }
 func (t *Option) Visit(v VisitorTIJJO) {
 	v.Visit(v, "Reserved", &t.Reserved)
 	v.Visit(v, "Ospfv2Compat", t.Ospfv2Compat())
-	v.Visit(v, "Dc", (func() uint8 {
-		if t.Dc() {
+	v.Visit(v, "DemandCircuit", (func() uint8 {
+		if t.DemandCircuit() {
 			return 1
 		} else {
 			return 0
 		}
 	}()))
-	v.Visit(v, "R", (func() uint8 {
-		if t.R() {
+	v.Visit(v, "OriginatorIsRouter", (func() uint8 {
+		if t.OriginatorIsRouter() {
 			return 1
 		} else {
 			return 0
 		}
 	}()))
-	v.Visit(v, "N", (func() uint8 {
-		if t.N() {
+	v.Visit(v, "Nssa", (func() uint8 {
+		if t.Nssa() {
 			return 1
 		} else {
 			return 0
@@ -1201,13 +1478,13 @@ func (t *Option) MarshalJSON() ([]byte, error) {
 	return json.Marshal(VisitorTIJJOToMap(t))
 }
 func (t *Option) Write(w io.Writer) (err error) {
-	tmp29 := [2]byte{}
-	binary.BigEndian.PutUint16(tmp29[:], uint16(t.Reserved))
-	if n, err := w.Write(tmp29[:]); err != nil || n != 2 {
+	tmp22 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp22[:], uint16(t.Reserved))
+	if n, err := w.Write(tmp22[:]); err != nil || n != 2 {
 		return fmt.Errorf("encode t.Reserved: %w", err)
 	}
-	if n, err := w.Write([]byte{byte(t.flags28)}); err != nil || n != 1 {
-		return fmt.Errorf("encode t.flags28: %w", err)
+	if n, err := w.Write([]byte{byte(t.flags21)}); err != nil || n != 1 {
+		return fmt.Errorf("encode t.flags21: %w", err)
 	}
 	return nil
 }
@@ -1232,12 +1509,12 @@ func (t *Option) Read(r io.Reader) (err error) {
 		return fmt.Errorf("read Reserved: expect 2 bytes but read %d bytes: %w", n_Reserved, err)
 	}
 	t.Reserved = uint16(binary.BigEndian.Uint16(tmpReserved[:]))
-	tmpflags28 := [1]byte{}
-	n_flags28, err := io.ReadFull(r, tmpflags28[:])
+	tmpflags21 := [1]byte{}
+	n_flags21, err := io.ReadFull(r, tmpflags21[:])
 	if err != nil {
-		return fmt.Errorf("read flags28: expect 1 byte but read %d bytes: %w", n_flags28, err)
+		return fmt.Errorf("read flags21: expect 1 byte but read %d bytes: %w", n_flags21, err)
 	}
-	t.flags28 = uint8(tmpflags28[0])
+	t.flags21 = uint8(tmpflags21[0])
 	return nil
 }
 
@@ -1272,24 +1549,24 @@ func (t *RouterInfo) Write(w io.Writer) (err error) {
 	if n, err := w.Write([]byte{byte(t.Reserved)}); err != nil || n != 1 {
 		return fmt.Errorf("encode t.Reserved: %w", err)
 	}
-	tmp30 := [2]byte{}
-	binary.BigEndian.PutUint16(tmp30[:], uint16(t.Metric))
-	if n, err := w.Write(tmp30[:]); err != nil || n != 2 {
+	tmp23 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp23[:], uint16(t.Metric))
+	if n, err := w.Write(tmp23[:]); err != nil || n != 2 {
 		return fmt.Errorf("encode t.Metric: %w", err)
 	}
-	tmp31 := [4]byte{}
-	binary.BigEndian.PutUint32(tmp31[:], uint32(t.InterfaceId))
-	if n, err := w.Write(tmp31[:]); err != nil || n != 4 {
+	tmp24 := [4]byte{}
+	binary.BigEndian.PutUint32(tmp24[:], uint32(t.InterfaceId))
+	if n, err := w.Write(tmp24[:]); err != nil || n != 4 {
 		return fmt.Errorf("encode t.InterfaceId: %w", err)
 	}
-	tmp32 := [4]byte{}
-	binary.BigEndian.PutUint32(tmp32[:], uint32(t.NeighborInterfaceId))
-	if n, err := w.Write(tmp32[:]); err != nil || n != 4 {
+	tmp25 := [4]byte{}
+	binary.BigEndian.PutUint32(tmp25[:], uint32(t.NeighborInterfaceId))
+	if n, err := w.Write(tmp25[:]); err != nil || n != 4 {
 		return fmt.Errorf("encode t.NeighborInterfaceId: %w", err)
 	}
-	tmp33 := [4]byte{}
-	binary.BigEndian.PutUint32(tmp33[:], uint32(t.NeighborRouterId))
-	if n, err := w.Write(tmp33[:]); err != nil || n != 4 {
+	tmp26 := [4]byte{}
+	binary.BigEndian.PutUint32(tmp26[:], uint32(t.NeighborRouterId))
+	if n, err := w.Write(tmp26[:]); err != nil || n != 4 {
 		return fmt.Errorf("encode t.NeighborRouterId: %w", err)
 	}
 	return nil
@@ -1361,70 +1638,1104 @@ func (t *RouterInfo) DecodeExact(d []byte) error {
 	}
 	return nil
 }
+func (t *RouterInformationCapabilities) GracefulRestart() bool {
+	return ((t.flags27 & 0x80000000) >> 31) == 1
+}
+func (t *RouterInformationCapabilities) SetGracefulRestart(v bool) {
+	if v {
+		t.flags27 |= uint32(0x80000000)
+	} else {
+		t.flags27 &= ^uint32(0x80000000)
+	}
+}
+func (t *RouterInformationCapabilities) RestartHelper() bool {
+	return ((t.flags27 & 0x40000000) >> 30) == 1
+}
+func (t *RouterInformationCapabilities) SetRestartHelper(v bool) {
+	if v {
+		t.flags27 |= uint32(0x40000000)
+	} else {
+		t.flags27 &= ^uint32(0x40000000)
+	}
+}
+func (t *RouterInformationCapabilities) StubRouter() bool {
+	return ((t.flags27 & 0x20000000) >> 29) == 1
+}
+func (t *RouterInformationCapabilities) SetStubRouter(v bool) {
+	if v {
+		t.flags27 |= uint32(0x20000000)
+	} else {
+		t.flags27 &= ^uint32(0x20000000)
+	}
+}
+func (t *RouterInformationCapabilities) TrafficEngineering() bool {
+	return ((t.flags27 & 0x10000000) >> 28) == 1
+}
+func (t *RouterInformationCapabilities) SetTrafficEngineering(v bool) {
+	if v {
+		t.flags27 |= uint32(0x10000000)
+	} else {
+		t.flags27 &= ^uint32(0x10000000)
+	}
+}
+func (t *RouterInformationCapabilities) P2PoverLan() bool {
+	return ((t.flags27 & 0x08000000) >> 27) == 1
+}
+func (t *RouterInformationCapabilities) SetP2PoverLan(v bool) {
+	if v {
+		t.flags27 |= uint32(0x8000000)
+	} else {
+		t.flags27 &= ^uint32(0x8000000)
+	}
+}
+func (t *RouterInformationCapabilities) ExperimentalTe() bool {
+	return ((t.flags27 & 0x04000000) >> 26) == 1
+}
+func (t *RouterInformationCapabilities) SetExperimentalTe(v bool) {
+	if v {
+		t.flags27 |= uint32(0x4000000)
+	} else {
+		t.flags27 &= ^uint32(0x4000000)
+	}
+}
+func (t *RouterInformationCapabilities) Reserved() uint32 {
+	return ((t.flags27 & 0x03ffffff) >> 0)
+}
+func (t *RouterInformationCapabilities) SetReserved(v uint32) bool {
+	if v > 67108863 {
+		return false
+	}
+	t.flags27 = (t.flags27 & ^uint32(0x3ffffff)) | ((v & 0x3ffffff) << 0)
+	return true
+}
+func (t *RouterInformationCapabilities) Visit(v VisitorTIJJO) {
+	v.Visit(v, "GracefulRestart", (func() uint32 {
+		if t.GracefulRestart() {
+			return 1
+		} else {
+			return 0
+		}
+	}()))
+	v.Visit(v, "RestartHelper", (func() uint32 {
+		if t.RestartHelper() {
+			return 1
+		} else {
+			return 0
+		}
+	}()))
+	v.Visit(v, "StubRouter", (func() uint32 {
+		if t.StubRouter() {
+			return 1
+		} else {
+			return 0
+		}
+	}()))
+	v.Visit(v, "TrafficEngineering", (func() uint32 {
+		if t.TrafficEngineering() {
+			return 1
+		} else {
+			return 0
+		}
+	}()))
+	v.Visit(v, "P2PoverLan", (func() uint32 {
+		if t.P2PoverLan() {
+			return 1
+		} else {
+			return 0
+		}
+	}()))
+	v.Visit(v, "ExperimentalTe", (func() uint32 {
+		if t.ExperimentalTe() {
+			return 1
+		} else {
+			return 0
+		}
+	}()))
+	v.Visit(v, "Reserved", t.Reserved())
+}
+func (t *RouterInformationCapabilities) MarshalJSON() ([]byte, error) {
+	return json.Marshal(VisitorTIJJOToMap(t))
+}
+func (t *RouterInformationCapabilities) Write(w io.Writer) (err error) {
+	tmp28 := [4]byte{}
+	binary.BigEndian.PutUint32(tmp28[:], uint32(t.flags27))
+	if n, err := w.Write(tmp28[:]); err != nil || n != 4 {
+		return fmt.Errorf("encode t.flags27: %w", err)
+	}
+	return nil
+}
+func (t *RouterInformationCapabilities) Encode() ([]byte, error) {
+	w := bytes.NewBuffer(make([]byte, 0, 4))
+	if err := t.Write(w); err != nil {
+		return nil, err
+	}
+	return w.Bytes(), nil
+}
+func (t *RouterInformationCapabilities) MustEncode() []byte {
+	buf, err := t.Encode()
+	if err != nil {
+		panic(err)
+	}
+	return buf
+}
+func (t *RouterInformationCapabilities) Read(r io.Reader) (err error) {
+	tmpflags27 := [4]byte{}
+	n_flags27, err := io.ReadFull(r, tmpflags27[:])
+	if err != nil {
+		return fmt.Errorf("read flags27: expect 4 bytes but read %d bytes: %w", n_flags27, err)
+	}
+	t.flags27 = uint32(binary.BigEndian.Uint32(tmpflags27[:]))
+	return nil
+}
+
+func (t *RouterInformationCapabilities) Decode(d []byte) (int, error) {
+	r := bytes.NewReader(d)
+	err := t.Read(r)
+	return int(int(r.Size()) - r.Len()), err
+}
+func (t *RouterInformationCapabilities) DecodeExact(d []byte) error {
+	if n, err := t.Decode(d); err != nil {
+		return err
+	} else if n != len(d) {
+		return fmt.Errorf("decode RouterInformationCapabilities: expect %d bytes but got %d bytes", len(d), n)
+	}
+	return nil
+}
+func (t *FunctionalCapabilities) Visit(v VisitorTIJJO) {
+	v.Visit(v, "Capabilities", &t.Capabilities)
+}
+func (t *FunctionalCapabilities) MarshalJSON() ([]byte, error) {
+	return json.Marshal(VisitorTIJJOToMap(t))
+}
+func (t *FunctionalCapabilities) Write(w io.Writer) (err error) {
+	for _, v := range t.Capabilities {
+		tmp29 := [4]byte{}
+		binary.BigEndian.PutUint32(tmp29[:], uint32(v))
+		if n, err := w.Write(tmp29[:]); err != nil || n != 4 {
+			return fmt.Errorf("encode v: %w", err)
+		}
+	}
+	return nil
+}
+func (t *FunctionalCapabilities) Encode() ([]byte, error) {
+	w := bytes.NewBuffer(make([]byte, 0, 0))
+	if err := t.Write(w); err != nil {
+		return nil, err
+	}
+	return w.Bytes(), nil
+}
+func (t *FunctionalCapabilities) MustEncode() []byte {
+	buf, err := t.Encode()
+	if err != nil {
+		panic(err)
+	}
+	return buf
+}
+func (t *FunctionalCapabilities) Read(r io.Reader) (err error) {
+	tmp_byte_scanner30_ := bufio.NewReaderSize(r, 1)
+	old_r_Capabilities := r
+	r = tmp_byte_scanner30_
+	for {
+		_, err := tmp_byte_scanner30_.ReadByte()
+		if err != nil {
+			if err != io.EOF {
+				return fmt.Errorf("read Capabilities: %w", err)
+			}
+			break
+		}
+		if err := tmp_byte_scanner30_.UnreadByte(); err != nil {
+			return fmt.Errorf("read Capabilities: unexpected unread error: %w", err)
+		}
+		var tmp31_ uint32
+		tmpCapabilities := [4]byte{}
+		n_Capabilities, err := io.ReadFull(r, tmpCapabilities[:])
+		if err != nil {
+			return fmt.Errorf("read Capabilities: expect 4 bytes but read %d bytes: %w", n_Capabilities, err)
+		}
+		tmp31_ = uint32(binary.BigEndian.Uint32(tmpCapabilities[:]))
+		t.Capabilities = append(t.Capabilities, tmp31_)
+	}
+	r = old_r_Capabilities
+	return nil
+}
+
+func (t *FunctionalCapabilities) Decode(d []byte) (int, error) {
+	r := bytes.NewReader(d)
+	err := t.Read(r)
+	return int(int(r.Size()) - r.Len()), err
+}
+func (t *FunctionalCapabilities) DecodeExact(d []byte) error {
+	if n, err := t.Decode(d); err != nil {
+		return err
+	} else if n != len(d) {
+		return fmt.Errorf("decode FunctionalCapabilities: expect %d bytes but got %d bytes", len(d), n)
+	}
+	return nil
+}
+func (t *Srv6CapabilitiesSubTlv) SetValue(v []uint8) bool {
+	if len(v) > int(^uint16(0)) {
+		return false
+	}
+	t.Length = uint16(len(v))
+	t.Value = v
+	return true
+}
+func (t *Srv6CapabilitiesSubTlv) Visit(v VisitorTIJJO) {
+	v.Visit(v, "Type", &t.Type)
+	v.Visit(v, "Length", &t.Length)
+	v.Visit(v, "Value", &t.Value)
+}
+func (t *Srv6CapabilitiesSubTlv) MarshalJSON() ([]byte, error) {
+	return json.Marshal(VisitorTIJJOToMap(t))
+}
+func (t *Srv6CapabilitiesSubTlv) Write(w io.Writer) (err error) {
+	tmp32 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp32[:], uint16(t.Type))
+	if n, err := w.Write(tmp32[:]); err != nil || n != 2 {
+		return fmt.Errorf("encode t.Type: %w", err)
+	}
+	tmp33 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp33[:], uint16(t.Length))
+	if n, err := w.Write(tmp33[:]); err != nil || n != 2 {
+		return fmt.Errorf("encode t.Length: %w", err)
+	}
+	len_Value := int(t.Length)
+	if len(t.Value) != len_Value {
+		return fmt.Errorf("encode Value: expect %d bytes but got %d bytes", len_Value, len(t.Value))
+	}
+	if n, err := w.Write(t.Value); err != nil || n != len(t.Value) {
+		return fmt.Errorf("encode Value: %w", err)
+	}
+	return nil
+}
+func (t *Srv6CapabilitiesSubTlv) Encode() ([]byte, error) {
+	w := bytes.NewBuffer(make([]byte, 0, 4))
+	if err := t.Write(w); err != nil {
+		return nil, err
+	}
+	return w.Bytes(), nil
+}
+func (t *Srv6CapabilitiesSubTlv) MustEncode() []byte {
+	buf, err := t.Encode()
+	if err != nil {
+		panic(err)
+	}
+	return buf
+}
+func (t *Srv6CapabilitiesSubTlv) Read(r io.Reader) (err error) {
+	tmpType := [2]byte{}
+	n_Type, err := io.ReadFull(r, tmpType[:])
+	if err != nil {
+		return fmt.Errorf("read Type: expect 2 bytes but read %d bytes: %w", n_Type, err)
+	}
+	t.Type = uint16(binary.BigEndian.Uint16(tmpType[:]))
+	tmpLength := [2]byte{}
+	n_Length, err := io.ReadFull(r, tmpLength[:])
+	if err != nil {
+		return fmt.Errorf("read Length: expect 2 bytes but read %d bytes: %w", n_Length, err)
+	}
+	t.Length = uint16(binary.BigEndian.Uint16(tmpLength[:]))
+	len_Value := int(t.Length)
+	if len_Value != 0 {
+		tmpValue := make([]byte, len_Value)
+		n_Value, err := io.ReadFull(r, tmpValue[:])
+		if err != nil {
+			return fmt.Errorf("read Value: expect %d bytes but read %d bytes: %w", len_Value, n_Value, err)
+		}
+		t.Value = tmpValue[:]
+	} else {
+		t.Value = nil
+	}
+	return nil
+}
+
+func (t *Srv6CapabilitiesSubTlv) Decode(d []byte) (int, error) {
+	r := bytes.NewReader(d)
+	err := t.Read(r)
+	return int(int(r.Size()) - r.Len()), err
+}
+func (t *Srv6CapabilitiesSubTlv) DecodeExact(d []byte) error {
+	if n, err := t.Decode(d); err != nil {
+		return err
+	} else if n != len(d) {
+		return fmt.Errorf("decode Srv6CapabilitiesSubTlv: expect %d bytes but got %d bytes", len(d), n)
+	}
+	return nil
+}
+func (t *Srv6EndSidsubTlv) SetValue(v []uint8) bool {
+	if len(v) > int(^uint16(0)) {
+		return false
+	}
+	t.Length = uint16(len(v))
+	t.Value = v
+	return true
+}
+func (t *Srv6EndSidsubTlv) Visit(v VisitorTIJJO) {
+	v.Visit(v, "Type", &t.Type)
+	v.Visit(v, "Length", &t.Length)
+	v.Visit(v, "Value", &t.Value)
+}
+func (t *Srv6EndSidsubTlv) MarshalJSON() ([]byte, error) {
+	return json.Marshal(VisitorTIJJOToMap(t))
+}
+func (t *Srv6EndSidsubTlv) Write(w io.Writer) (err error) {
+	tmp34 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp34[:], uint16(t.Type))
+	if n, err := w.Write(tmp34[:]); err != nil || n != 2 {
+		return fmt.Errorf("encode t.Type: %w", err)
+	}
+	tmp35 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp35[:], uint16(t.Length))
+	if n, err := w.Write(tmp35[:]); err != nil || n != 2 {
+		return fmt.Errorf("encode t.Length: %w", err)
+	}
+	len_Value := int(t.Length)
+	if len(t.Value) != len_Value {
+		return fmt.Errorf("encode Value: expect %d bytes but got %d bytes", len_Value, len(t.Value))
+	}
+	if n, err := w.Write(t.Value); err != nil || n != len(t.Value) {
+		return fmt.Errorf("encode Value: %w", err)
+	}
+	return nil
+}
+func (t *Srv6EndSidsubTlv) Encode() ([]byte, error) {
+	w := bytes.NewBuffer(make([]byte, 0, 4))
+	if err := t.Write(w); err != nil {
+		return nil, err
+	}
+	return w.Bytes(), nil
+}
+func (t *Srv6EndSidsubTlv) MustEncode() []byte {
+	buf, err := t.Encode()
+	if err != nil {
+		panic(err)
+	}
+	return buf
+}
+func (t *Srv6EndSidsubTlv) Read(r io.Reader) (err error) {
+	tmpType := [2]byte{}
+	n_Type, err := io.ReadFull(r, tmpType[:])
+	if err != nil {
+		return fmt.Errorf("read Type: expect 2 bytes but read %d bytes: %w", n_Type, err)
+	}
+	t.Type = uint16(binary.BigEndian.Uint16(tmpType[:]))
+	tmpLength := [2]byte{}
+	n_Length, err := io.ReadFull(r, tmpLength[:])
+	if err != nil {
+		return fmt.Errorf("read Length: expect 2 bytes but read %d bytes: %w", n_Length, err)
+	}
+	t.Length = uint16(binary.BigEndian.Uint16(tmpLength[:]))
+	len_Value := int(t.Length)
+	if len_Value != 0 {
+		tmpValue := make([]byte, len_Value)
+		n_Value, err := io.ReadFull(r, tmpValue[:])
+		if err != nil {
+			return fmt.Errorf("read Value: expect %d bytes but read %d bytes: %w", len_Value, n_Value, err)
+		}
+		t.Value = tmpValue[:]
+	} else {
+		t.Value = nil
+	}
+	return nil
+}
+
+func (t *Srv6EndSidsubTlv) Decode(d []byte) (int, error) {
+	r := bytes.NewReader(d)
+	err := t.Read(r)
+	return int(int(r.Size()) - r.Len()), err
+}
+func (t *Srv6EndSidsubTlv) DecodeExact(d []byte) error {
+	if n, err := t.Decode(d); err != nil {
+		return err
+	} else if n != len(d) {
+		return fmt.Errorf("decode Srv6EndSidsubTlv: expect %d bytes but got %d bytes", len(d), n)
+	}
+	return nil
+}
+func (t *Srv6EndXsidsubTlvsubTlv) SetValue(v []uint8) bool {
+	if len(v) > int(^uint16(0)) {
+		return false
+	}
+	t.Length = uint16(len(v))
+	t.Value = v
+	return true
+}
+func (t *Srv6EndXsidsubTlvsubTlv) Visit(v VisitorTIJJO) {
+	v.Visit(v, "Type", &t.Type)
+	v.Visit(v, "Length", &t.Length)
+	v.Visit(v, "Value", &t.Value)
+}
+func (t *Srv6EndXsidsubTlvsubTlv) MarshalJSON() ([]byte, error) {
+	return json.Marshal(VisitorTIJJOToMap(t))
+}
+func (t *Srv6EndXsidsubTlvsubTlv) Write(w io.Writer) (err error) {
+	tmp36 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp36[:], uint16(t.Type))
+	if n, err := w.Write(tmp36[:]); err != nil || n != 2 {
+		return fmt.Errorf("encode t.Type: %w", err)
+	}
+	tmp37 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp37[:], uint16(t.Length))
+	if n, err := w.Write(tmp37[:]); err != nil || n != 2 {
+		return fmt.Errorf("encode t.Length: %w", err)
+	}
+	len_Value := int(t.Length)
+	if len(t.Value) != len_Value {
+		return fmt.Errorf("encode Value: expect %d bytes but got %d bytes", len_Value, len(t.Value))
+	}
+	if n, err := w.Write(t.Value); err != nil || n != len(t.Value) {
+		return fmt.Errorf("encode Value: %w", err)
+	}
+	return nil
+}
+func (t *Srv6EndXsidsubTlvsubTlv) Encode() ([]byte, error) {
+	w := bytes.NewBuffer(make([]byte, 0, 4))
+	if err := t.Write(w); err != nil {
+		return nil, err
+	}
+	return w.Bytes(), nil
+}
+func (t *Srv6EndXsidsubTlvsubTlv) MustEncode() []byte {
+	buf, err := t.Encode()
+	if err != nil {
+		panic(err)
+	}
+	return buf
+}
+func (t *Srv6EndXsidsubTlvsubTlv) Read(r io.Reader) (err error) {
+	tmpType := [2]byte{}
+	n_Type, err := io.ReadFull(r, tmpType[:])
+	if err != nil {
+		return fmt.Errorf("read Type: expect 2 bytes but read %d bytes: %w", n_Type, err)
+	}
+	t.Type = uint16(binary.BigEndian.Uint16(tmpType[:]))
+	tmpLength := [2]byte{}
+	n_Length, err := io.ReadFull(r, tmpLength[:])
+	if err != nil {
+		return fmt.Errorf("read Length: expect 2 bytes but read %d bytes: %w", n_Length, err)
+	}
+	t.Length = uint16(binary.BigEndian.Uint16(tmpLength[:]))
+	len_Value := int(t.Length)
+	if len_Value != 0 {
+		tmpValue := make([]byte, len_Value)
+		n_Value, err := io.ReadFull(r, tmpValue[:])
+		if err != nil {
+			return fmt.Errorf("read Value: expect %d bytes but read %d bytes: %w", len_Value, n_Value, err)
+		}
+		t.Value = tmpValue[:]
+	} else {
+		t.Value = nil
+	}
+	return nil
+}
+
+func (t *Srv6EndXsidsubTlvsubTlv) Decode(d []byte) (int, error) {
+	r := bytes.NewReader(d)
+	err := t.Read(r)
+	return int(int(r.Size()) - r.Len()), err
+}
+func (t *Srv6EndXsidsubTlvsubTlv) DecodeExact(d []byte) error {
+	if n, err := t.Decode(d); err != nil {
+		return err
+	} else if n != len(d) {
+		return fmt.Errorf("decode Srv6EndXsidsubTlvsubTlv: expect %d bytes but got %d bytes", len(d), n)
+	}
+	return nil
+}
+func (t *Srv6LanEndXsidsubTlvsubTlv) SetValue(v []uint8) bool {
+	if len(v) > int(^uint16(0)) {
+		return false
+	}
+	t.Length = uint16(len(v))
+	t.Value = v
+	return true
+}
+func (t *Srv6LanEndXsidsubTlvsubTlv) Visit(v VisitorTIJJO) {
+	v.Visit(v, "Type", &t.Type)
+	v.Visit(v, "Length", &t.Length)
+	v.Visit(v, "Value", &t.Value)
+}
+func (t *Srv6LanEndXsidsubTlvsubTlv) MarshalJSON() ([]byte, error) {
+	return json.Marshal(VisitorTIJJOToMap(t))
+}
+func (t *Srv6LanEndXsidsubTlvsubTlv) Write(w io.Writer) (err error) {
+	tmp38 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp38[:], uint16(t.Type))
+	if n, err := w.Write(tmp38[:]); err != nil || n != 2 {
+		return fmt.Errorf("encode t.Type: %w", err)
+	}
+	tmp39 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp39[:], uint16(t.Length))
+	if n, err := w.Write(tmp39[:]); err != nil || n != 2 {
+		return fmt.Errorf("encode t.Length: %w", err)
+	}
+	len_Value := int(t.Length)
+	if len(t.Value) != len_Value {
+		return fmt.Errorf("encode Value: expect %d bytes but got %d bytes", len_Value, len(t.Value))
+	}
+	if n, err := w.Write(t.Value); err != nil || n != len(t.Value) {
+		return fmt.Errorf("encode Value: %w", err)
+	}
+	return nil
+}
+func (t *Srv6LanEndXsidsubTlvsubTlv) Encode() ([]byte, error) {
+	w := bytes.NewBuffer(make([]byte, 0, 4))
+	if err := t.Write(w); err != nil {
+		return nil, err
+	}
+	return w.Bytes(), nil
+}
+func (t *Srv6LanEndXsidsubTlvsubTlv) MustEncode() []byte {
+	buf, err := t.Encode()
+	if err != nil {
+		panic(err)
+	}
+	return buf
+}
+func (t *Srv6LanEndXsidsubTlvsubTlv) Read(r io.Reader) (err error) {
+	tmpType := [2]byte{}
+	n_Type, err := io.ReadFull(r, tmpType[:])
+	if err != nil {
+		return fmt.Errorf("read Type: expect 2 bytes but read %d bytes: %w", n_Type, err)
+	}
+	t.Type = uint16(binary.BigEndian.Uint16(tmpType[:]))
+	tmpLength := [2]byte{}
+	n_Length, err := io.ReadFull(r, tmpLength[:])
+	if err != nil {
+		return fmt.Errorf("read Length: expect 2 bytes but read %d bytes: %w", n_Length, err)
+	}
+	t.Length = uint16(binary.BigEndian.Uint16(tmpLength[:]))
+	len_Value := int(t.Length)
+	if len_Value != 0 {
+		tmpValue := make([]byte, len_Value)
+		n_Value, err := io.ReadFull(r, tmpValue[:])
+		if err != nil {
+			return fmt.Errorf("read Value: expect %d bytes but read %d bytes: %w", len_Value, n_Value, err)
+		}
+		t.Value = tmpValue[:]
+	} else {
+		t.Value = nil
+	}
+	return nil
+}
+
+func (t *Srv6LanEndXsidsubTlvsubTlv) Decode(d []byte) (int, error) {
+	r := bytes.NewReader(d)
+	err := t.Read(r)
+	return int(int(r.Size()) - r.Len()), err
+}
+func (t *Srv6LanEndXsidsubTlvsubTlv) DecodeExact(d []byte) error {
+	if n, err := t.Decode(d); err != nil {
+		return err
+	} else if n != len(d) {
+		return fmt.Errorf("decode Srv6LanEndXsidsubTlvsubTlv: expect %d bytes but got %d bytes", len(d), n)
+	}
+	return nil
+}
+func (t *Srv6SidstructureSubTlv) Visit(v VisitorTIJJO) {
+	v.Visit(v, "LocatorBlockLength", &t.LocatorBlockLength)
+	v.Visit(v, "LocatorNodeLength", &t.LocatorNodeLength)
+	v.Visit(v, "FunctionLength", &t.FunctionLength)
+	v.Visit(v, "ArgumentsLength", &t.ArgumentsLength)
+}
+func (t *Srv6SidstructureSubTlv) MarshalJSON() ([]byte, error) {
+	return json.Marshal(VisitorTIJJOToMap(t))
+}
+func (t *Srv6SidstructureSubTlv) Write(w io.Writer) (err error) {
+	if n, err := w.Write([]byte{byte(t.LocatorBlockLength)}); err != nil || n != 1 {
+		return fmt.Errorf("encode t.LocatorBlockLength: %w", err)
+	}
+	if n, err := w.Write([]byte{byte(t.LocatorNodeLength)}); err != nil || n != 1 {
+		return fmt.Errorf("encode t.LocatorNodeLength: %w", err)
+	}
+	if n, err := w.Write([]byte{byte(t.FunctionLength)}); err != nil || n != 1 {
+		return fmt.Errorf("encode t.FunctionLength: %w", err)
+	}
+	if n, err := w.Write([]byte{byte(t.ArgumentsLength)}); err != nil || n != 1 {
+		return fmt.Errorf("encode t.ArgumentsLength: %w", err)
+	}
+	return nil
+}
+func (t *Srv6SidstructureSubTlv) Encode() ([]byte, error) {
+	w := bytes.NewBuffer(make([]byte, 0, 4))
+	if err := t.Write(w); err != nil {
+		return nil, err
+	}
+	return w.Bytes(), nil
+}
+func (t *Srv6SidstructureSubTlv) MustEncode() []byte {
+	buf, err := t.Encode()
+	if err != nil {
+		panic(err)
+	}
+	return buf
+}
+func (t *Srv6SidstructureSubTlv) Read(r io.Reader) (err error) {
+	tmpLocatorBlockLength := [1]byte{}
+	n_LocatorBlockLength, err := io.ReadFull(r, tmpLocatorBlockLength[:])
+	if err != nil {
+		return fmt.Errorf("read LocatorBlockLength: expect 1 byte but read %d bytes: %w", n_LocatorBlockLength, err)
+	}
+	t.LocatorBlockLength = uint8(tmpLocatorBlockLength[0])
+	tmpLocatorNodeLength := [1]byte{}
+	n_LocatorNodeLength, err := io.ReadFull(r, tmpLocatorNodeLength[:])
+	if err != nil {
+		return fmt.Errorf("read LocatorNodeLength: expect 1 byte but read %d bytes: %w", n_LocatorNodeLength, err)
+	}
+	t.LocatorNodeLength = uint8(tmpLocatorNodeLength[0])
+	tmpFunctionLength := [1]byte{}
+	n_FunctionLength, err := io.ReadFull(r, tmpFunctionLength[:])
+	if err != nil {
+		return fmt.Errorf("read FunctionLength: expect 1 byte but read %d bytes: %w", n_FunctionLength, err)
+	}
+	t.FunctionLength = uint8(tmpFunctionLength[0])
+	tmpArgumentsLength := [1]byte{}
+	n_ArgumentsLength, err := io.ReadFull(r, tmpArgumentsLength[:])
+	if err != nil {
+		return fmt.Errorf("read ArgumentsLength: expect 1 byte but read %d bytes: %w", n_ArgumentsLength, err)
+	}
+	t.ArgumentsLength = uint8(tmpArgumentsLength[0])
+	return nil
+}
+
+func (t *Srv6SidstructureSubTlv) Decode(d []byte) (int, error) {
+	r := bytes.NewReader(d)
+	err := t.Read(r)
+	return int(int(r.Size()) - r.Len()), err
+}
+func (t *Srv6SidstructureSubTlv) DecodeExact(d []byte) error {
+	if n, err := t.Decode(d); err != nil {
+		return err
+	} else if n != len(d) {
+		return fmt.Errorf("decode Srv6SidstructureSubTlv: expect %d bytes but got %d bytes", len(d), n)
+	}
+	return nil
+}
+func (t *Ipv6ForwardingAddress) Visit(v VisitorTIJJO) {
+	v.Visit(v, "ForwardingAddress", &t.ForwardingAddress)
+}
+func (t *Ipv6ForwardingAddress) MarshalJSON() ([]byte, error) {
+	return json.Marshal(VisitorTIJJOToMap(t))
+}
+func (t *Ipv6ForwardingAddress) Write(w io.Writer) (err error) {
+	if n, err := w.Write(t.ForwardingAddress[:]); err != nil || n != len(t.ForwardingAddress) {
+		return fmt.Errorf("encode ForwardingAddress: %w", err)
+	}
+	return nil
+}
+func (t *Ipv6ForwardingAddress) Encode() ([]byte, error) {
+	w := bytes.NewBuffer(make([]byte, 0, 16))
+	if err := t.Write(w); err != nil {
+		return nil, err
+	}
+	return w.Bytes(), nil
+}
+func (t *Ipv6ForwardingAddress) MustEncode() []byte {
+	buf, err := t.Encode()
+	if err != nil {
+		panic(err)
+	}
+	return buf
+}
+func (t *Ipv6ForwardingAddress) Read(r io.Reader) (err error) {
+	n_ForwardingAddress, err := io.ReadFull(r, t.ForwardingAddress[:])
+	if err != nil {
+		return fmt.Errorf("read ForwardingAddress: expect %d bytes but read %d bytes: %w", 16, n_ForwardingAddress, err)
+	}
+	return nil
+}
+
+func (t *Ipv6ForwardingAddress) Decode(d []byte) (int, error) {
+	r := bytes.NewReader(d)
+	err := t.Read(r)
+	return int(int(r.Size()) - r.Len()), err
+}
+func (t *Ipv6ForwardingAddress) DecodeExact(d []byte) error {
+	if n, err := t.Decode(d); err != nil {
+		return err
+	} else if n != len(d) {
+		return fmt.Errorf("decode Ipv6ForwardingAddress: expect %d bytes but got %d bytes", len(d), n)
+	}
+	return nil
+}
+func (t *RouteTag) Visit(v VisitorTIJJO) {
+	v.Visit(v, "RouteTag", &t.RouteTag)
+}
+func (t *RouteTag) MarshalJSON() ([]byte, error) {
+	return json.Marshal(VisitorTIJJOToMap(t))
+}
+func (t *RouteTag) Write(w io.Writer) (err error) {
+	tmp40 := [4]byte{}
+	binary.BigEndian.PutUint32(tmp40[:], uint32(t.RouteTag))
+	if n, err := w.Write(tmp40[:]); err != nil || n != 4 {
+		return fmt.Errorf("encode t.RouteTag: %w", err)
+	}
+	return nil
+}
+func (t *RouteTag) Encode() ([]byte, error) {
+	w := bytes.NewBuffer(make([]byte, 0, 4))
+	if err := t.Write(w); err != nil {
+		return nil, err
+	}
+	return w.Bytes(), nil
+}
+func (t *RouteTag) MustEncode() []byte {
+	buf, err := t.Encode()
+	if err != nil {
+		panic(err)
+	}
+	return buf
+}
+func (t *RouteTag) Read(r io.Reader) (err error) {
+	tmpRouteTag := [4]byte{}
+	n_RouteTag, err := io.ReadFull(r, tmpRouteTag[:])
+	if err != nil {
+		return fmt.Errorf("read RouteTag: expect 4 bytes but read %d bytes: %w", n_RouteTag, err)
+	}
+	t.RouteTag = uint32(binary.BigEndian.Uint32(tmpRouteTag[:]))
+	return nil
+}
+
+func (t *RouteTag) Decode(d []byte) (int, error) {
+	r := bytes.NewReader(d)
+	err := t.Read(r)
+	return int(int(r.Size()) - r.Len()), err
+}
+func (t *RouteTag) DecodeExact(d []byte) error {
+	if n, err := t.Decode(d); err != nil {
+		return err
+	} else if n != len(d) {
+		return fmt.Errorf("decode RouteTag: expect %d bytes but got %d bytes", len(d), n)
+	}
+	return nil
+}
+func (t *PrefixSourceRouterId) Visit(v VisitorTIJJO) {
+	v.Visit(v, "RouterId", &t.RouterId)
+}
+func (t *PrefixSourceRouterId) MarshalJSON() ([]byte, error) {
+	return json.Marshal(VisitorTIJJOToMap(t))
+}
+func (t *PrefixSourceRouterId) Write(w io.Writer) (err error) {
+	tmp41 := [4]byte{}
+	binary.BigEndian.PutUint32(tmp41[:], uint32(t.RouterId))
+	if n, err := w.Write(tmp41[:]); err != nil || n != 4 {
+		return fmt.Errorf("encode t.RouterId: %w", err)
+	}
+	return nil
+}
+func (t *PrefixSourceRouterId) Encode() ([]byte, error) {
+	w := bytes.NewBuffer(make([]byte, 0, 4))
+	if err := t.Write(w); err != nil {
+		return nil, err
+	}
+	return w.Bytes(), nil
+}
+func (t *PrefixSourceRouterId) MustEncode() []byte {
+	buf, err := t.Encode()
+	if err != nil {
+		panic(err)
+	}
+	return buf
+}
+func (t *PrefixSourceRouterId) Read(r io.Reader) (err error) {
+	tmpRouterId := [4]byte{}
+	n_RouterId, err := io.ReadFull(r, tmpRouterId[:])
+	if err != nil {
+		return fmt.Errorf("read RouterId: expect 4 bytes but read %d bytes: %w", n_RouterId, err)
+	}
+	t.RouterId = uint32(binary.BigEndian.Uint32(tmpRouterId[:]))
+	return nil
+}
+
+func (t *PrefixSourceRouterId) Decode(d []byte) (int, error) {
+	r := bytes.NewReader(d)
+	err := t.Read(r)
+	return int(int(r.Size()) - r.Len()), err
+}
+func (t *PrefixSourceRouterId) DecodeExact(d []byte) error {
+	if n, err := t.Decode(d); err != nil {
+		return err
+	} else if n != len(d) {
+		return fmt.Errorf("decode PrefixSourceRouterId: expect %d bytes but got %d bytes", len(d), n)
+	}
+	return nil
+}
+func (t *PrefixSourceRouterAddress) Visit(v VisitorTIJJO) {
+	v.Visit(v, "RouterAddress", &t.RouterAddress)
+}
+func (t *PrefixSourceRouterAddress) MarshalJSON() ([]byte, error) {
+	return json.Marshal(VisitorTIJJOToMap(t))
+}
+func (t *PrefixSourceRouterAddress) Write(w io.Writer) (err error) {
+	if n, err := w.Write(t.RouterAddress); err != nil || n != len(t.RouterAddress) {
+		return fmt.Errorf("encode RouterAddress: %w", err)
+	}
+	return nil
+}
+func (t *PrefixSourceRouterAddress) Encode() ([]byte, error) {
+	w := bytes.NewBuffer(make([]byte, 0, 0))
+	if err := t.Write(w); err != nil {
+		return nil, err
+	}
+	return w.Bytes(), nil
+}
+func (t *PrefixSourceRouterAddress) MustEncode() []byte {
+	buf, err := t.Encode()
+	if err != nil {
+		panic(err)
+	}
+	return buf
+}
+func (t *PrefixSourceRouterAddress) Read(r io.Reader) (err error) {
+	bytes_buf_RouterAddress := &bytes.Buffer{}
+	if _, err := io.Copy(bytes_buf_RouterAddress, r); err != nil {
+		return err
+	}
+	t.RouterAddress = bytes_buf_RouterAddress.Bytes()
+	return nil
+}
+
+func (t *PrefixSourceRouterAddress) Decode(d []byte) (int, error) {
+	r := bytes.NewReader(d)
+	err := t.Read(r)
+	return int(int(r.Size()) - r.Len()), err
+}
+func (t *PrefixSourceRouterAddress) DecodeExact(d []byte) error {
+	if n, err := t.Decode(d); err != nil {
+		return err
+	} else if n != len(d) {
+		return fmt.Errorf("decode PrefixSourceRouterAddress: expect %d bytes but got %d bytes", len(d), n)
+	}
+	return nil
+}
+func (t *LsaheaderChecksum) Visit(v VisitorTIJJO) {
+	v.Visit(v, "LsType", &t.LsType)
+	v.Visit(v, "LinkStateId", &t.LinkStateId)
+	v.Visit(v, "AdvertisingRouter", &t.AdvertisingRouter)
+	v.Visit(v, "LsSequenceNumber", &t.LsSequenceNumber)
+	v.Visit(v, "LsChecksum", &t.LsChecksum)
+	v.Visit(v, "Length", &t.Length)
+}
+func (t *LsaheaderChecksum) MarshalJSON() ([]byte, error) {
+	return json.Marshal(VisitorTIJJOToMap(t))
+}
+func (t *LsaheaderChecksum) Write(w io.Writer) (err error) {
+	if err := t.LsType.Write(w); err != nil {
+		return fmt.Errorf("encode LsType: %w", err)
+	}
+	tmp42 := [4]byte{}
+	binary.BigEndian.PutUint32(tmp42[:], uint32(t.LinkStateId))
+	if n, err := w.Write(tmp42[:]); err != nil || n != 4 {
+		return fmt.Errorf("encode t.LinkStateId: %w", err)
+	}
+	tmp43 := [4]byte{}
+	binary.BigEndian.PutUint32(tmp43[:], uint32(t.AdvertisingRouter))
+	if n, err := w.Write(tmp43[:]); err != nil || n != 4 {
+		return fmt.Errorf("encode t.AdvertisingRouter: %w", err)
+	}
+	tmp44 := [4]byte{}
+	binary.BigEndian.PutUint32(tmp44[:], uint32(t.LsSequenceNumber))
+	if n, err := w.Write(tmp44[:]); err != nil || n != 4 {
+		return fmt.Errorf("encode t.LsSequenceNumber: %w", err)
+	}
+	tmp45 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp45[:], uint16(t.LsChecksum))
+	if n, err := w.Write(tmp45[:]); err != nil || n != 2 {
+		return fmt.Errorf("encode t.LsChecksum: %w", err)
+	}
+	tmp46 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp46[:], uint16(t.Length))
+	if n, err := w.Write(tmp46[:]); err != nil || n != 2 {
+		return fmt.Errorf("encode t.Length: %w", err)
+	}
+	return nil
+}
+func (t *LsaheaderChecksum) Encode() ([]byte, error) {
+	w := bytes.NewBuffer(make([]byte, 0, 18))
+	if err := t.Write(w); err != nil {
+		return nil, err
+	}
+	return w.Bytes(), nil
+}
+func (t *LsaheaderChecksum) MustEncode() []byte {
+	buf, err := t.Encode()
+	if err != nil {
+		panic(err)
+	}
+	return buf
+}
+func (t *LsaheaderChecksum) Read(r io.Reader) (err error) {
+	if err := t.LsType.Read(r); err != nil {
+		return fmt.Errorf("read LsType: %w", err)
+	}
+	tmpLinkStateId := [4]byte{}
+	n_LinkStateId, err := io.ReadFull(r, tmpLinkStateId[:])
+	if err != nil {
+		return fmt.Errorf("read LinkStateId: expect 4 bytes but read %d bytes: %w", n_LinkStateId, err)
+	}
+	t.LinkStateId = uint32(binary.BigEndian.Uint32(tmpLinkStateId[:]))
+	tmpAdvertisingRouter := [4]byte{}
+	n_AdvertisingRouter, err := io.ReadFull(r, tmpAdvertisingRouter[:])
+	if err != nil {
+		return fmt.Errorf("read AdvertisingRouter: expect 4 bytes but read %d bytes: %w", n_AdvertisingRouter, err)
+	}
+	t.AdvertisingRouter = uint32(binary.BigEndian.Uint32(tmpAdvertisingRouter[:]))
+	tmpLsSequenceNumber := [4]byte{}
+	n_LsSequenceNumber, err := io.ReadFull(r, tmpLsSequenceNumber[:])
+	if err != nil {
+		return fmt.Errorf("read LsSequenceNumber: expect 4 bytes but read %d bytes: %w", n_LsSequenceNumber, err)
+	}
+	t.LsSequenceNumber = uint32(binary.BigEndian.Uint32(tmpLsSequenceNumber[:]))
+	tmpLsChecksum := [2]byte{}
+	n_LsChecksum, err := io.ReadFull(r, tmpLsChecksum[:])
+	if err != nil {
+		return fmt.Errorf("read LsChecksum: expect 2 bytes but read %d bytes: %w", n_LsChecksum, err)
+	}
+	t.LsChecksum = uint16(binary.BigEndian.Uint16(tmpLsChecksum[:]))
+	tmpLength := [2]byte{}
+	n_Length, err := io.ReadFull(r, tmpLength[:])
+	if err != nil {
+		return fmt.Errorf("read Length: expect 2 bytes but read %d bytes: %w", n_Length, err)
+	}
+	t.Length = uint16(binary.BigEndian.Uint16(tmpLength[:]))
+	return nil
+}
+
+func (t *LsaheaderChecksum) Decode(d []byte) (int, error) {
+	r := bytes.NewReader(d)
+	err := t.Read(r)
+	return int(int(r.Size()) - r.Len()), err
+}
+func (t *LsaheaderChecksum) DecodeExact(d []byte) error {
+	if n, err := t.Decode(d); err != nil {
+		return err
+	} else if n != len(d) {
+		return fmt.Errorf("decode LsaheaderChecksum: expect %d bytes but got %d bytes", len(d), n)
+	}
+	return nil
+}
+func (t *Lsaheader) Visit(v VisitorTIJJO) {
+	v.Visit(v, "LsAge", &t.LsAge)
+	v.Visit(v, "HeaderChecksum", &t.HeaderChecksum)
+}
+func (t *Lsaheader) MarshalJSON() ([]byte, error) {
+	return json.Marshal(VisitorTIJJOToMap(t))
+}
+func (t *Lsaheader) Write(w io.Writer) (err error) {
+	tmp47 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp47[:], uint16(t.LsAge))
+	if n, err := w.Write(tmp47[:]); err != nil || n != 2 {
+		return fmt.Errorf("encode t.LsAge: %w", err)
+	}
+	if err := t.HeaderChecksum.Write(w); err != nil {
+		return fmt.Errorf("encode HeaderChecksum: %w", err)
+	}
+	return nil
+}
+func (t *Lsaheader) Encode() ([]byte, error) {
+	w := bytes.NewBuffer(make([]byte, 0, 20))
+	if err := t.Write(w); err != nil {
+		return nil, err
+	}
+	return w.Bytes(), nil
+}
+func (t *Lsaheader) MustEncode() []byte {
+	buf, err := t.Encode()
+	if err != nil {
+		panic(err)
+	}
+	return buf
+}
+func (t *Lsaheader) Read(r io.Reader) (err error) {
+	tmpLsAge := [2]byte{}
+	n_LsAge, err := io.ReadFull(r, tmpLsAge[:])
+	if err != nil {
+		return fmt.Errorf("read LsAge: expect 2 bytes but read %d bytes: %w", n_LsAge, err)
+	}
+	t.LsAge = uint16(binary.BigEndian.Uint16(tmpLsAge[:]))
+	if err := t.HeaderChecksum.Read(r); err != nil {
+		return fmt.Errorf("read HeaderChecksum: %w", err)
+	}
+	return nil
+}
+
+func (t *Lsaheader) Decode(d []byte) (int, error) {
+	r := bytes.NewReader(d)
+	err := t.Read(r)
+	return int(int(r.Size()) - r.Len()), err
+}
+func (t *Lsaheader) DecodeExact(d []byte) error {
+	if n, err := t.Decode(d); err != nil {
+		return err
+	} else if n != len(d) {
+		return fmt.Errorf("decode Lsaheader: expect %d bytes but got %d bytes", len(d), n)
+	}
+	return nil
+}
 func (t *RouterLsa) Reserved() uint8 {
-	return ((t.flags34 & 0xe0) >> 5)
+	return ((t.flags48 & 0xe0) >> 5)
 }
 func (t *RouterLsa) SetReserved(v uint8) bool {
 	if v > 7 {
 		return false
 	}
-	t.flags34 = (t.flags34 & ^uint8(0xe0)) | ((v & 0x7) << 5)
+	t.flags48 = (t.flags48 & ^uint8(0xe0)) | ((v & 0x7) << 5)
 	return true
 }
-func (t *RouterLsa) Nt() bool {
-	return ((t.flags34 & 0x10) >> 4) == 1
+func (t *RouterLsa) Nssa() bool {
+	return ((t.flags48 & 0x10) >> 4) == 1
 }
-func (t *RouterLsa) SetNt(v bool) {
+func (t *RouterLsa) SetNssa(v bool) {
 	if v {
-		t.flags34 |= uint8(0x10)
+		t.flags48 |= uint8(0x10)
 	} else {
-		t.flags34 &= ^uint8(0x10)
+		t.flags48 &= ^uint8(0x10)
 	}
 }
 func (t *RouterLsa) X() bool {
-	return ((t.flags34 & 0x08) >> 3) == 1
+	return ((t.flags48 & 0x08) >> 3) == 1
 }
 func (t *RouterLsa) SetX(v bool) {
 	if v {
-		t.flags34 |= uint8(0x8)
+		t.flags48 |= uint8(0x8)
 	} else {
-		t.flags34 &= ^uint8(0x8)
+		t.flags48 &= ^uint8(0x8)
 	}
 }
-func (t *RouterLsa) V() bool {
-	return ((t.flags34 & 0x04) >> 2) == 1
+func (t *RouterLsa) AdjustVirtual() bool {
+	return ((t.flags48 & 0x04) >> 2) == 1
 }
-func (t *RouterLsa) SetV(v bool) {
+func (t *RouterLsa) SetAdjustVirtual(v bool) {
 	if v {
-		t.flags34 |= uint8(0x4)
+		t.flags48 |= uint8(0x4)
 	} else {
-		t.flags34 &= ^uint8(0x4)
+		t.flags48 &= ^uint8(0x4)
 	}
 }
-func (t *RouterLsa) E() bool {
-	return ((t.flags34 & 0x02) >> 1) == 1
+func (t *RouterLsa) AsBoundary() bool {
+	return ((t.flags48 & 0x02) >> 1) == 1
 }
-func (t *RouterLsa) SetE(v bool) {
+func (t *RouterLsa) SetAsBoundary(v bool) {
 	if v {
-		t.flags34 |= uint8(0x2)
+		t.flags48 |= uint8(0x2)
 	} else {
-		t.flags34 &= ^uint8(0x2)
+		t.flags48 &= ^uint8(0x2)
 	}
 }
-func (t *RouterLsa) B() bool {
-	return ((t.flags34 & 0x01) >> 0) == 1
+func (t *RouterLsa) AreaBoundary() bool {
+	return ((t.flags48 & 0x01) >> 0) == 1
 }
-func (t *RouterLsa) SetB(v bool) {
+func (t *RouterLsa) SetAreaBoundary(v bool) {
 	if v {
-		t.flags34 |= uint8(0x1)
+		t.flags48 |= uint8(0x1)
 	} else {
-		t.flags34 &= ^uint8(0x1)
+		t.flags48 &= ^uint8(0x1)
 	}
 }
 func (t *RouterLsa) Visit(v VisitorTIJJO) {
 	v.Visit(v, "Reserved", t.Reserved())
-	v.Visit(v, "Nt", (func() uint8 {
-		if t.Nt() {
+	v.Visit(v, "Nssa", (func() uint8 {
+		if t.Nssa() {
 			return 1
 		} else {
 			return 0
@@ -1437,22 +2748,22 @@ func (t *RouterLsa) Visit(v VisitorTIJJO) {
 			return 0
 		}
 	}()))
-	v.Visit(v, "V", (func() uint8 {
-		if t.V() {
+	v.Visit(v, "AdjustVirtual", (func() uint8 {
+		if t.AdjustVirtual() {
 			return 1
 		} else {
 			return 0
 		}
 	}()))
-	v.Visit(v, "E", (func() uint8 {
-		if t.E() {
+	v.Visit(v, "AsBoundary", (func() uint8 {
+		if t.AsBoundary() {
 			return 1
 		} else {
 			return 0
 		}
 	}()))
-	v.Visit(v, "B", (func() uint8 {
-		if t.B() {
+	v.Visit(v, "AreaBoundary", (func() uint8 {
+		if t.AreaBoundary() {
 			return 1
 		} else {
 			return 0
@@ -1465,8 +2776,8 @@ func (t *RouterLsa) MarshalJSON() ([]byte, error) {
 	return json.Marshal(VisitorTIJJOToMap(t))
 }
 func (t *RouterLsa) Write(w io.Writer) (err error) {
-	if n, err := w.Write([]byte{byte(t.flags34)}); err != nil || n != 1 {
-		return fmt.Errorf("encode t.flags34: %w", err)
+	if n, err := w.Write([]byte{byte(t.flags48)}); err != nil || n != 1 {
+		return fmt.Errorf("encode t.flags48: %w", err)
 	}
 	if err := t.Options.Write(w); err != nil {
 		return fmt.Errorf("encode Options: %w", err)
@@ -1493,34 +2804,34 @@ func (t *RouterLsa) MustEncode() []byte {
 	return buf
 }
 func (t *RouterLsa) Read(r io.Reader) (err error) {
-	tmpflags34 := [1]byte{}
-	n_flags34, err := io.ReadFull(r, tmpflags34[:])
+	tmpflags48 := [1]byte{}
+	n_flags48, err := io.ReadFull(r, tmpflags48[:])
 	if err != nil {
-		return fmt.Errorf("read flags34: expect 1 byte but read %d bytes: %w", n_flags34, err)
+		return fmt.Errorf("read flags48: expect 1 byte but read %d bytes: %w", n_flags48, err)
 	}
-	t.flags34 = uint8(tmpflags34[0])
+	t.flags48 = uint8(tmpflags48[0])
 	if err := t.Options.Read(r); err != nil {
 		return fmt.Errorf("read Options: %w", err)
 	}
-	tmp_byte_scanner35_ := bufio.NewReaderSize(r, 1)
+	tmp_byte_scanner49_ := bufio.NewReaderSize(r, 1)
 	old_r_LinkInfo := r
-	r = tmp_byte_scanner35_
+	r = tmp_byte_scanner49_
 	for {
-		_, err := tmp_byte_scanner35_.ReadByte()
+		_, err := tmp_byte_scanner49_.ReadByte()
 		if err != nil {
 			if err != io.EOF {
 				return fmt.Errorf("read LinkInfo: %w", err)
 			}
 			break
 		}
-		if err := tmp_byte_scanner35_.UnreadByte(); err != nil {
+		if err := tmp_byte_scanner49_.UnreadByte(); err != nil {
 			return fmt.Errorf("read LinkInfo: unexpected unread error: %w", err)
 		}
-		var tmp36_ RouterInfo
-		if err := tmp36_.Read(r); err != nil {
+		var tmp50_ RouterInfo
+		if err := tmp50_.Read(r); err != nil {
 			return fmt.Errorf("read LinkInfo: %w", err)
 		}
-		t.LinkInfo = append(t.LinkInfo, tmp36_)
+		t.LinkInfo = append(t.LinkInfo, tmp50_)
 	}
 	r = old_r_LinkInfo
 	return nil
@@ -1555,9 +2866,9 @@ func (t *NetworkLsa) Write(w io.Writer) (err error) {
 		return fmt.Errorf("encode Options: %w", err)
 	}
 	for _, v := range t.AttachedRouters {
-		tmp37 := [4]byte{}
-		binary.BigEndian.PutUint32(tmp37[:], uint32(v))
-		if n, err := w.Write(tmp37[:]); err != nil || n != 4 {
+		tmp51 := [4]byte{}
+		binary.BigEndian.PutUint32(tmp51[:], uint32(v))
+		if n, err := w.Write(tmp51[:]); err != nil || n != 4 {
 			return fmt.Errorf("encode v: %w", err)
 		}
 	}
@@ -1587,28 +2898,28 @@ func (t *NetworkLsa) Read(r io.Reader) (err error) {
 	if err := t.Options.Read(r); err != nil {
 		return fmt.Errorf("read Options: %w", err)
 	}
-	tmp_byte_scanner38_ := bufio.NewReaderSize(r, 1)
+	tmp_byte_scanner52_ := bufio.NewReaderSize(r, 1)
 	old_r_AttachedRouters := r
-	r = tmp_byte_scanner38_
+	r = tmp_byte_scanner52_
 	for {
-		_, err := tmp_byte_scanner38_.ReadByte()
+		_, err := tmp_byte_scanner52_.ReadByte()
 		if err != nil {
 			if err != io.EOF {
 				return fmt.Errorf("read AttachedRouters: %w", err)
 			}
 			break
 		}
-		if err := tmp_byte_scanner38_.UnreadByte(); err != nil {
+		if err := tmp_byte_scanner52_.UnreadByte(); err != nil {
 			return fmt.Errorf("read AttachedRouters: unexpected unread error: %w", err)
 		}
-		var tmp39_ uint32
+		var tmp53_ uint32
 		tmpAttachedRouters := [4]byte{}
 		n_AttachedRouters, err := io.ReadFull(r, tmpAttachedRouters[:])
 		if err != nil {
 			return fmt.Errorf("read AttachedRouters: expect 4 bytes but read %d bytes: %w", n_AttachedRouters, err)
 		}
-		tmp39_ = uint32(binary.BigEndian.Uint32(tmpAttachedRouters[:]))
-		t.AttachedRouters = append(t.AttachedRouters, tmp39_)
+		tmp53_ = uint32(binary.BigEndian.Uint32(tmpAttachedRouters[:]))
+		t.AttachedRouters = append(t.AttachedRouters, tmp53_)
 	}
 	r = old_r_AttachedRouters
 	return nil
@@ -1651,9 +2962,9 @@ func (t *AddressPrefix) Write(w io.Writer) (err error) {
 	if err := t.Options.Write(w); err != nil {
 		return fmt.Errorf("encode Options: %w", err)
 	}
-	tmp40 := [2]byte{}
-	binary.BigEndian.PutUint16(tmp40[:], uint16(t.Reserved2))
-	if n, err := w.Write(tmp40[:]); err != nil || n != 2 {
+	tmp54 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp54[:], uint16(t.Reserved2))
+	if n, err := w.Write(tmp54[:]); err != nil || n != 2 {
 		return fmt.Errorf("encode t.Reserved2: %w", err)
 	}
 	len_Prefix := int(t.PrefixLen)
@@ -1811,9 +3122,9 @@ func (t *InterAreaRouterLsa) Write(w io.Writer) (err error) {
 	if n, err := w.Write([]byte{byte(t.Metric >> 16), byte(t.Metric >> 8), byte(t.Metric)}); err != nil || n != 3 {
 		return fmt.Errorf("encode t.Metric: %w", err)
 	}
-	tmp41 := [4]byte{}
-	binary.BigEndian.PutUint32(tmp41[:], uint32(t.DestRouterId))
-	if n, err := w.Write(tmp41[:]); err != nil || n != 4 {
+	tmp55 := [4]byte{}
+	binary.BigEndian.PutUint32(tmp55[:], uint32(t.DestRouterId))
+	if n, err := w.Write(tmp55[:]); err != nil || n != 4 {
 		return fmt.Errorf("encode t.DestRouterId: %w", err)
 	}
 	return nil
@@ -1877,46 +3188,46 @@ func (t *InterAreaRouterLsa) DecodeExact(d []byte) error {
 	return nil
 }
 func (t *AsexternalLsa) Reserved() uint8 {
-	return ((t.flags42 & 0xf8) >> 3)
+	return ((t.flags56 & 0xf8) >> 3)
 }
 func (t *AsexternalLsa) SetReserved(v uint8) bool {
 	if v > 31 {
 		return false
 	}
-	t.flags42 = (t.flags42 & ^uint8(0xf8)) | ((v & 0x1f) << 3)
+	t.flags56 = (t.flags56 & ^uint8(0xf8)) | ((v & 0x1f) << 3)
 	return true
 }
 func (t *AsexternalLsa) External() bool {
-	return ((t.flags42 & 0x04) >> 2) == 1
+	return ((t.flags56 & 0x04) >> 2) == 1
 }
 func (t *AsexternalLsa) SetExternal(v bool) {
 	if v {
-		t.flags42 |= uint8(0x4)
+		t.flags56 |= uint8(0x4)
 	} else {
-		t.flags42 &= ^uint8(0x4)
+		t.flags56 &= ^uint8(0x4)
 	}
 }
 func (t *AsexternalLsa) HasForwardingAddress() bool {
-	return ((t.flags42 & 0x02) >> 1) == 1
+	return ((t.flags56 & 0x02) >> 1) == 1
 }
 func (t *AsexternalLsa) SetHasForwardingAddress(v bool) {
 	if v {
-		t.flags42 |= uint8(0x2)
+		t.flags56 |= uint8(0x2)
 	} else {
-		t.flags42 &= ^uint8(0x2)
+		t.flags56 &= ^uint8(0x2)
 	}
 }
 func (t *AsexternalLsa) HasExternalRouteTag() bool {
-	return ((t.flags42 & 0x01) >> 0) == 1
+	return ((t.flags56 & 0x01) >> 0) == 1
 }
 func (t *AsexternalLsa) SetHasExternalRouteTag(v bool) {
 	if v {
-		t.flags42 |= uint8(0x1)
+		t.flags56 |= uint8(0x1)
 	} else {
-		t.flags42 &= ^uint8(0x1)
+		t.flags56 &= ^uint8(0x1)
 	}
 }
-func (t *union_45_t) isunion43_() {}
+func (t *union_59_t) isunion57_() {}
 func (t *AsexternalLsa) ForwardingAddress() *[16]uint8 {
 	if true == ((func() uint8 {
 		if t.HasForwardingAddress() {
@@ -1925,10 +3236,10 @@ func (t *AsexternalLsa) ForwardingAddress() *[16]uint8 {
 			return 0
 		}
 	}()) == 1) {
-		if _, ok := t.union43_.(*union_45_t); !ok {
+		if _, ok := t.union57_.(*union_59_t); !ok {
 			return nil // not set
 		}
-		tmp := [16]uint8(t.union43_.(*union_45_t).ForwardingAddress[:])
+		tmp := [16]uint8(t.union57_.(*union_59_t).ForwardingAddress[:])
 		return &tmp
 	}
 	return nil
@@ -1941,15 +3252,15 @@ func (t *AsexternalLsa) SetForwardingAddress(v [16]uint8) bool {
 			return 0
 		}
 	}()) == 1) {
-		if _, ok := t.union43_.(*union_45_t); !ok {
-			t.union43_ = &union_45_t{}
+		if _, ok := t.union57_.(*union_59_t); !ok {
+			t.union57_ = &union_59_t{}
 		}
-		t.union43_.(*union_45_t).ForwardingAddress = [16]uint8(v)
+		t.union57_.(*union_59_t).ForwardingAddress = [16]uint8(v)
 		return true
 	}
 	return false
 }
-func (t *union_48_t) isunion46_() {}
+func (t *union_62_t) isunion60_() {}
 func (t *AsexternalLsa) ExternalRouteTag() *uint32 {
 	if true == ((func() uint8 {
 		if t.HasExternalRouteTag() {
@@ -1958,10 +3269,10 @@ func (t *AsexternalLsa) ExternalRouteTag() *uint32 {
 			return 0
 		}
 	}()) == 1) {
-		if _, ok := t.union46_.(*union_48_t); !ok {
+		if _, ok := t.union60_.(*union_62_t); !ok {
 			return nil // not set
 		}
-		tmp := uint32(t.union46_.(*union_48_t).ExternalRouteTag)
+		tmp := uint32(t.union60_.(*union_62_t).ExternalRouteTag)
 		return &tmp
 	}
 	return nil
@@ -1974,31 +3285,31 @@ func (t *AsexternalLsa) SetExternalRouteTag(v uint32) bool {
 			return 0
 		}
 	}()) == 1) {
-		if _, ok := t.union46_.(*union_48_t); !ok {
-			t.union46_ = &union_48_t{}
+		if _, ok := t.union60_.(*union_62_t); !ok {
+			t.union60_ = &union_62_t{}
 		}
-		t.union46_.(*union_48_t).ExternalRouteTag = uint32(v)
+		t.union60_.(*union_62_t).ExternalRouteTag = uint32(v)
 		return true
 	}
 	return false
 }
-func (t *union_51_t) isunion49_() {}
+func (t *union_65_t) isunion63_() {}
 func (t *AsexternalLsa) ReferencedLinkStateId() *uint32 {
 	if true == (t.ReferencedLsType != 0) {
-		if _, ok := t.union49_.(*union_51_t); !ok {
+		if _, ok := t.union63_.(*union_65_t); !ok {
 			return nil // not set
 		}
-		tmp := uint32(t.union49_.(*union_51_t).ReferencedLinkStateId)
+		tmp := uint32(t.union63_.(*union_65_t).ReferencedLinkStateId)
 		return &tmp
 	}
 	return nil
 }
 func (t *AsexternalLsa) SetReferencedLinkStateId(v uint32) bool {
 	if true == (t.ReferencedLsType != 0) {
-		if _, ok := t.union49_.(*union_51_t); !ok {
-			t.union49_ = &union_51_t{}
+		if _, ok := t.union63_.(*union_65_t); !ok {
+			t.union63_ = &union_65_t{}
 		}
-		t.union49_.(*union_51_t).ReferencedLinkStateId = uint32(v)
+		t.union63_.(*union_65_t).ReferencedLinkStateId = uint32(v)
 		return true
 	}
 	return false
@@ -2038,8 +3349,8 @@ func (t *AsexternalLsa) MarshalJSON() ([]byte, error) {
 	return json.Marshal(VisitorTIJJOToMap(t))
 }
 func (t *AsexternalLsa) Write(w io.Writer) (err error) {
-	if n, err := w.Write([]byte{byte(t.flags42)}); err != nil || n != 1 {
-		return fmt.Errorf("encode t.flags42: %w", err)
+	if n, err := w.Write([]byte{byte(t.flags56)}); err != nil || n != 1 {
+		return fmt.Errorf("encode t.flags56: %w", err)
 	}
 	if n, err := w.Write([]byte{byte(t.Metric >> 16), byte(t.Metric >> 8), byte(t.Metric)}); err != nil || n != 3 {
 		return fmt.Errorf("encode t.Metric: %w", err)
@@ -2050,9 +3361,9 @@ func (t *AsexternalLsa) Write(w io.Writer) (err error) {
 	if err := t.PrefixOptions.Write(w); err != nil {
 		return fmt.Errorf("encode PrefixOptions: %w", err)
 	}
-	tmp52 := [2]byte{}
-	binary.BigEndian.PutUint16(tmp52[:], uint16(t.ReferencedLsType))
-	if n, err := w.Write(tmp52[:]); err != nil || n != 2 {
+	tmp66 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp66[:], uint16(t.ReferencedLsType))
+	if n, err := w.Write(tmp66[:]); err != nil || n != 2 {
 		return fmt.Errorf("encode t.ReferencedLsType: %w", err)
 	}
 	if (func() uint8 {
@@ -2062,10 +3373,10 @@ func (t *AsexternalLsa) Write(w io.Writer) (err error) {
 			return 0
 		}
 	}()) == 1 {
-		if _, ok := t.union43_.(*union_45_t); !ok {
-			return fmt.Errorf("encode t.union43_: union is not set to union_45_t")
+		if _, ok := t.union57_.(*union_59_t); !ok {
+			return fmt.Errorf("encode t.union57_: union is not set to union_59_t")
 		}
-		if n, err := w.Write(t.union43_.(*union_45_t).ForwardingAddress[:]); err != nil || n != len(t.union43_.(*union_45_t).ForwardingAddress) {
+		if n, err := w.Write(t.union57_.(*union_59_t).ForwardingAddress[:]); err != nil || n != len(t.union57_.(*union_59_t).ForwardingAddress) {
 			return fmt.Errorf("encode ForwardingAddress: %w", err)
 		}
 	}
@@ -2076,23 +3387,23 @@ func (t *AsexternalLsa) Write(w io.Writer) (err error) {
 			return 0
 		}
 	}()) == 1 {
-		if _, ok := t.union46_.(*union_48_t); !ok {
-			return fmt.Errorf("encode t.union46_: union is not set to union_48_t")
+		if _, ok := t.union60_.(*union_62_t); !ok {
+			return fmt.Errorf("encode t.union60_: union is not set to union_62_t")
 		}
-		tmp53 := [4]byte{}
-		binary.BigEndian.PutUint32(tmp53[:], uint32(t.union46_.(*union_48_t).ExternalRouteTag))
-		if n, err := w.Write(tmp53[:]); err != nil || n != 4 {
-			return fmt.Errorf("encode t.union46_.(*union_48_t).ExternalRouteTag: %w", err)
+		tmp67 := [4]byte{}
+		binary.BigEndian.PutUint32(tmp67[:], uint32(t.union60_.(*union_62_t).ExternalRouteTag))
+		if n, err := w.Write(tmp67[:]); err != nil || n != 4 {
+			return fmt.Errorf("encode t.union60_.(*union_62_t).ExternalRouteTag: %w", err)
 		}
 	}
 	if t.ReferencedLsType != 0 {
-		if _, ok := t.union49_.(*union_51_t); !ok {
-			return fmt.Errorf("encode t.union49_: union is not set to union_51_t")
+		if _, ok := t.union63_.(*union_65_t); !ok {
+			return fmt.Errorf("encode t.union63_: union is not set to union_65_t")
 		}
-		tmp54 := [4]byte{}
-		binary.BigEndian.PutUint32(tmp54[:], uint32(t.union49_.(*union_51_t).ReferencedLinkStateId))
-		if n, err := w.Write(tmp54[:]); err != nil || n != 4 {
-			return fmt.Errorf("encode t.union49_.(*union_51_t).ReferencedLinkStateId: %w", err)
+		tmp68 := [4]byte{}
+		binary.BigEndian.PutUint32(tmp68[:], uint32(t.union63_.(*union_65_t).ReferencedLinkStateId))
+		if n, err := w.Write(tmp68[:]); err != nil || n != 4 {
+			return fmt.Errorf("encode t.union63_.(*union_65_t).ReferencedLinkStateId: %w", err)
 		}
 	}
 	return nil
@@ -2112,12 +3423,12 @@ func (t *AsexternalLsa) MustEncode() []byte {
 	return buf
 }
 func (t *AsexternalLsa) Read(r io.Reader) (err error) {
-	tmpflags42 := [1]byte{}
-	n_flags42, err := io.ReadFull(r, tmpflags42[:])
+	tmpflags56 := [1]byte{}
+	n_flags56, err := io.ReadFull(r, tmpflags56[:])
 	if err != nil {
-		return fmt.Errorf("read flags42: expect 1 byte but read %d bytes: %w", n_flags42, err)
+		return fmt.Errorf("read flags56: expect 1 byte but read %d bytes: %w", n_flags56, err)
 	}
-	t.flags42 = uint8(tmpflags42[0])
+	t.flags56 = uint8(tmpflags56[0])
 	tmpMetric := [3]byte{}
 	n_Metric, err := io.ReadFull(r, tmpMetric[:])
 	if err != nil {
@@ -2146,8 +3457,8 @@ func (t *AsexternalLsa) Read(r io.Reader) (err error) {
 			return 0
 		}
 	}()) == 1 {
-		t.union43_ = &union_45_t{}
-		n_ForwardingAddress, err := io.ReadFull(r, t.union43_.(*union_45_t).ForwardingAddress[:])
+		t.union57_ = &union_59_t{}
+		n_ForwardingAddress, err := io.ReadFull(r, t.union57_.(*union_59_t).ForwardingAddress[:])
 		if err != nil {
 			return fmt.Errorf("read ForwardingAddress: expect %d bytes but read %d bytes: %w", 16, n_ForwardingAddress, err)
 		}
@@ -2159,22 +3470,22 @@ func (t *AsexternalLsa) Read(r io.Reader) (err error) {
 			return 0
 		}
 	}()) == 1 {
-		t.union46_ = &union_48_t{}
+		t.union60_ = &union_62_t{}
 		tmpExternalRouteTag := [4]byte{}
 		n_ExternalRouteTag, err := io.ReadFull(r, tmpExternalRouteTag[:])
 		if err != nil {
 			return fmt.Errorf("read ExternalRouteTag: expect 4 bytes but read %d bytes: %w", n_ExternalRouteTag, err)
 		}
-		t.union46_.(*union_48_t).ExternalRouteTag = uint32(binary.BigEndian.Uint32(tmpExternalRouteTag[:]))
+		t.union60_.(*union_62_t).ExternalRouteTag = uint32(binary.BigEndian.Uint32(tmpExternalRouteTag[:]))
 	}
 	if t.ReferencedLsType != 0 {
-		t.union49_ = &union_51_t{}
+		t.union63_ = &union_65_t{}
 		tmpReferencedLinkStateId := [4]byte{}
 		n_ReferencedLinkStateId, err := io.ReadFull(r, tmpReferencedLinkStateId[:])
 		if err != nil {
 			return fmt.Errorf("read ReferencedLinkStateId: expect 4 bytes but read %d bytes: %w", n_ReferencedLinkStateId, err)
 		}
-		t.union49_.(*union_51_t).ReferencedLinkStateId = uint32(binary.BigEndian.Uint32(tmpReferencedLinkStateId[:]))
+		t.union63_.(*union_65_t).ReferencedLinkStateId = uint32(binary.BigEndian.Uint32(tmpReferencedLinkStateId[:]))
 	}
 	return nil
 }
@@ -2220,9 +3531,9 @@ func (t *LinkLsa) Write(w io.Writer) (err error) {
 	if n, err := w.Write(t.LinkLocalInterfaceAddress[:]); err != nil || n != len(t.LinkLocalInterfaceAddress) {
 		return fmt.Errorf("encode LinkLocalInterfaceAddress: %w", err)
 	}
-	tmp55 := [2]byte{}
-	binary.BigEndian.PutUint16(tmp55[:], uint16(t.NumPrefixes))
-	if n, err := w.Write(tmp55[:]); err != nil || n != 2 {
+	tmp69 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp69[:], uint16(t.NumPrefixes))
+	if n, err := w.Write(tmp69[:]); err != nil || n != 2 {
 		return fmt.Errorf("encode t.NumPrefixes: %w", err)
 	}
 	len_Prefixes := int(t.NumPrefixes)
@@ -2271,12 +3582,12 @@ func (t *LinkLsa) Read(r io.Reader) (err error) {
 	}
 	t.NumPrefixes = uint16(binary.BigEndian.Uint16(tmpNumPrefixes[:]))
 	len_Prefixes := int(t.NumPrefixes)
-	for i_56 := 0; i_56 < len_Prefixes; i_56++ {
-		var tmp57_ AddressPrefix
-		if err := tmp57_.Read(r); err != nil {
+	for i_70 := 0; i_70 < len_Prefixes; i_70++ {
+		var tmp71_ AddressPrefix
+		if err := tmp71_.Read(r); err != nil {
 			return fmt.Errorf("read Prefixes: %w", err)
 		}
-		t.Prefixes = append(t.Prefixes, tmp57_)
+		t.Prefixes = append(t.Prefixes, tmp71_)
 	}
 	return nil
 }
@@ -2312,19 +3623,19 @@ func (t *IntraAreaPrefixLsa) MarshalJSON() ([]byte, error) {
 	return json.Marshal(VisitorTIJJOToMap(t))
 }
 func (t *IntraAreaPrefixLsa) Write(w io.Writer) (err error) {
-	tmp58 := [2]byte{}
-	binary.BigEndian.PutUint16(tmp58[:], uint16(t.NumPrefixes))
-	if n, err := w.Write(tmp58[:]); err != nil || n != 2 {
+	tmp72 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp72[:], uint16(t.NumPrefixes))
+	if n, err := w.Write(tmp72[:]); err != nil || n != 2 {
 		return fmt.Errorf("encode t.NumPrefixes: %w", err)
 	}
-	tmp59 := [2]byte{}
-	binary.BigEndian.PutUint16(tmp59[:], uint16(t.ReferencedLsType))
-	if n, err := w.Write(tmp59[:]); err != nil || n != 2 {
+	tmp73 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp73[:], uint16(t.ReferencedLsType))
+	if n, err := w.Write(tmp73[:]); err != nil || n != 2 {
 		return fmt.Errorf("encode t.ReferencedLsType: %w", err)
 	}
-	tmp60 := [4]byte{}
-	binary.BigEndian.PutUint32(tmp60[:], uint32(t.ReferencedLinkStateId))
-	if n, err := w.Write(tmp60[:]); err != nil || n != 4 {
+	tmp74 := [4]byte{}
+	binary.BigEndian.PutUint32(tmp74[:], uint32(t.ReferencedLinkStateId))
+	if n, err := w.Write(tmp74[:]); err != nil || n != 4 {
 		return fmt.Errorf("encode t.ReferencedLinkStateId: %w", err)
 	}
 	len_Prefixes := int(t.NumPrefixes)
@@ -2372,12 +3683,12 @@ func (t *IntraAreaPrefixLsa) Read(r io.Reader) (err error) {
 	}
 	t.ReferencedLinkStateId = uint32(binary.BigEndian.Uint32(tmpReferencedLinkStateId[:]))
 	len_Prefixes := int(t.NumPrefixes)
-	for i_61 := 0; i_61 < len_Prefixes; i_61++ {
-		var tmp62_ AddressPrefix
-		if err := tmp62_.Read(r); err != nil {
+	for i_75 := 0; i_75 < len_Prefixes; i_75++ {
+		var tmp76_ AddressPrefix
+		if err := tmp76_.Read(r); err != nil {
 			return fmt.Errorf("read Prefixes: %w", err)
 		}
-		t.Prefixes = append(t.Prefixes, tmp62_)
+		t.Prefixes = append(t.Prefixes, tmp76_)
 	}
 	return nil
 }
@@ -2395,282 +3706,1905 @@ func (t *IntraAreaPrefixLsa) DecodeExact(d []byte) error {
 	}
 	return nil
 }
-func (t *union_65_t) isunion63_() {}
-func (t *union_66_t) isunion63_() {}
-func (t *union_67_t) isunion63_() {}
-func (t *union_68_t) isunion63_() {}
-func (t *union_69_t) isunion63_() {}
-func (t *union_70_t) isunion63_() {}
-func (t *union_71_t) isunion63_() {}
-func (t *union_72_t) isunion63_() {}
-func (t *Lsa) AsExternalLsa() *AsexternalLsa {
-	if t.LsaHeader.LsType == LsafunctionCode_RouterLsa {
-		return nil
-	} else if t.LsaHeader.LsType == LsafunctionCode_NetworkLsa {
-		return nil
-	} else if t.LsaHeader.LsType == LsafunctionCode_InterAreaPrefixLsa {
-		return nil
-	} else if t.LsaHeader.LsType == LsafunctionCode_InterAreaRouterLsa {
-		return nil
-	} else if t.LsaHeader.LsType == LsafunctionCode_AsExternalLsa {
-		if _, ok := t.union63_.(*union_69_t); !ok {
+func (t *Srv6Capabilities) Reserved2() bool {
+	return ((t.flags77 & 0x80) >> 7) == 1
+}
+func (t *Srv6Capabilities) SetReserved2(v bool) {
+	if v {
+		t.flags77 |= uint8(0x80)
+	} else {
+		t.flags77 &= ^uint8(0x80)
+	}
+}
+func (t *Srv6Capabilities) Oam() bool {
+	return ((t.flags77 & 0x40) >> 6) == 1
+}
+func (t *Srv6Capabilities) SetOam(v bool) {
+	if v {
+		t.flags77 |= uint8(0x40)
+	} else {
+		t.flags77 &= ^uint8(0x40)
+	}
+}
+func (t *Srv6Capabilities) Reserved3() uint8 {
+	return ((t.flags77 & 0x3f) >> 0)
+}
+func (t *Srv6Capabilities) SetReserved3(v uint8) bool {
+	if v > 63 {
+		return false
+	}
+	t.flags77 = (t.flags77 & ^uint8(0x3f)) | ((v & 0x3f) << 0)
+	return true
+}
+func (t *Srv6Capabilities) Visit(v VisitorTIJJO) {
+	v.Visit(v, "Reserved1", &t.Reserved1)
+	v.Visit(v, "Reserved2", (func() uint8 {
+		if t.Reserved2() {
+			return 1
+		} else {
+			return 0
+		}
+	}()))
+	v.Visit(v, "Oam", (func() uint8 {
+		if t.Oam() {
+			return 1
+		} else {
+			return 0
+		}
+	}()))
+	v.Visit(v, "Reserved3", t.Reserved3())
+	v.Visit(v, "Reserved4", &t.Reserved4)
+	v.Visit(v, "Tlvs", &t.Tlvs)
+}
+func (t *Srv6Capabilities) MarshalJSON() ([]byte, error) {
+	return json.Marshal(VisitorTIJJOToMap(t))
+}
+func (t *Srv6Capabilities) Write(w io.Writer) (err error) {
+	if n, err := w.Write([]byte{byte(t.Reserved1)}); err != nil || n != 1 {
+		return fmt.Errorf("encode t.Reserved1: %w", err)
+	}
+	if n, err := w.Write([]byte{byte(t.flags77)}); err != nil || n != 1 {
+		return fmt.Errorf("encode t.flags77: %w", err)
+	}
+	tmp78 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp78[:], uint16(t.Reserved4))
+	if n, err := w.Write(tmp78[:]); err != nil || n != 2 {
+		return fmt.Errorf("encode t.Reserved4: %w", err)
+	}
+	for _, v := range t.Tlvs {
+		if err := v.Write(w); err != nil {
+			return fmt.Errorf("encode Tlvs: %w", err)
+		}
+	}
+	return nil
+}
+func (t *Srv6Capabilities) Encode() ([]byte, error) {
+	w := bytes.NewBuffer(make([]byte, 0, 4))
+	if err := t.Write(w); err != nil {
+		return nil, err
+	}
+	return w.Bytes(), nil
+}
+func (t *Srv6Capabilities) MustEncode() []byte {
+	buf, err := t.Encode()
+	if err != nil {
+		panic(err)
+	}
+	return buf
+}
+func (t *Srv6Capabilities) Read(r io.Reader) (err error) {
+	tmpReserved1 := [1]byte{}
+	n_Reserved1, err := io.ReadFull(r, tmpReserved1[:])
+	if err != nil {
+		return fmt.Errorf("read Reserved1: expect 1 byte but read %d bytes: %w", n_Reserved1, err)
+	}
+	t.Reserved1 = uint8(tmpReserved1[0])
+	tmpflags77 := [1]byte{}
+	n_flags77, err := io.ReadFull(r, tmpflags77[:])
+	if err != nil {
+		return fmt.Errorf("read flags77: expect 1 byte but read %d bytes: %w", n_flags77, err)
+	}
+	t.flags77 = uint8(tmpflags77[0])
+	tmpReserved4 := [2]byte{}
+	n_Reserved4, err := io.ReadFull(r, tmpReserved4[:])
+	if err != nil {
+		return fmt.Errorf("read Reserved4: expect 2 bytes but read %d bytes: %w", n_Reserved4, err)
+	}
+	t.Reserved4 = uint16(binary.BigEndian.Uint16(tmpReserved4[:]))
+	tmp_byte_scanner79_ := bufio.NewReaderSize(r, 1)
+	old_r_Tlvs := r
+	r = tmp_byte_scanner79_
+	for {
+		_, err := tmp_byte_scanner79_.ReadByte()
+		if err != nil {
+			if err != io.EOF {
+				return fmt.Errorf("read Tlvs: %w", err)
+			}
+			break
+		}
+		if err := tmp_byte_scanner79_.UnreadByte(); err != nil {
+			return fmt.Errorf("read Tlvs: unexpected unread error: %w", err)
+		}
+		var tmp80_ Srv6CapabilitiesSubTlv
+		if err := tmp80_.Read(r); err != nil {
+			return fmt.Errorf("read Tlvs: %w", err)
+		}
+		t.Tlvs = append(t.Tlvs, tmp80_)
+	}
+	r = old_r_Tlvs
+	return nil
+}
+
+func (t *Srv6Capabilities) Decode(d []byte) (int, error) {
+	r := bytes.NewReader(d)
+	err := t.Read(r)
+	return int(int(r.Size()) - r.Len()), err
+}
+func (t *Srv6Capabilities) DecodeExact(d []byte) error {
+	if n, err := t.Decode(d); err != nil {
+		return err
+	} else if n != len(d) {
+		return fmt.Errorf("decode Srv6Capabilities: expect %d bytes but got %d bytes", len(d), n)
+	}
+	return nil
+}
+func (t *union_83_t) isunion81_() {}
+func (t *union_84_t) isunion81_() {}
+func (t *union_85_t) isunion81_() {}
+func (t *union_86_t) isunion81_() {}
+func (t *RouterInfoOpaqueLsatlv) Capabilities() *RouterInformationCapabilities {
+	if t.Type == RouterInfoTlvtype_Capabilities {
+		if _, ok := t.union81_.(*union_83_t); !ok {
 			return nil // not set
 		}
-		tmp := AsexternalLsa(t.union63_.(*union_69_t).AsExternalLsa)
+		tmp := RouterInformationCapabilities(t.union81_.(*union_83_t).Capabilities)
+		return &tmp
+	}
+	return nil
+}
+func (t *RouterInfoOpaqueLsatlv) SetCapabilities(v RouterInformationCapabilities) bool {
+	if t.Type == RouterInfoTlvtype_Capabilities {
+		if _, ok := t.union81_.(*union_83_t); !ok {
+			t.union81_ = &union_83_t{}
+		}
+		t.union81_.(*union_83_t).Capabilities = RouterInformationCapabilities(v)
+		return true
+	}
+	return false
+}
+func (t *RouterInfoOpaqueLsatlv) FunctionalCapabilities() *FunctionalCapabilities {
+	if t.Type == RouterInfoTlvtype_Capabilities {
+		return nil
+	} else if t.Type == RouterInfoTlvtype_FunctionalCapabilities {
+		if _, ok := t.union81_.(*union_84_t); !ok {
+			return nil // not set
+		}
+		tmp := FunctionalCapabilities(t.union81_.(*union_84_t).FunctionalCapabilities)
+		return &tmp
+	}
+	return nil
+}
+func (t *RouterInfoOpaqueLsatlv) SetFunctionalCapabilities(v FunctionalCapabilities) bool {
+	if t.Type == RouterInfoTlvtype_Capabilities {
+		return false
+	} else if t.Type == RouterInfoTlvtype_FunctionalCapabilities {
+		if _, ok := t.union81_.(*union_84_t); !ok {
+			t.union81_ = &union_84_t{}
+		}
+		t.union81_.(*union_84_t).FunctionalCapabilities = FunctionalCapabilities(v)
+		return true
+	}
+	return false
+}
+func (t *RouterInfoOpaqueLsatlv) Srv6Capabilities() *Srv6Capabilities {
+	if t.Type == RouterInfoTlvtype_Capabilities {
+		return nil
+	} else if t.Type == RouterInfoTlvtype_FunctionalCapabilities {
+		return nil
+	} else if t.Type == RouterInfoTlvtype_Srv6Capabilities {
+		if _, ok := t.union81_.(*union_85_t); !ok {
+			return nil // not set
+		}
+		tmp := Srv6Capabilities(t.union81_.(*union_85_t).Srv6Capabilities)
+		return &tmp
+	}
+	return nil
+}
+func (t *RouterInfoOpaqueLsatlv) SetSrv6Capabilities(v Srv6Capabilities) bool {
+	if t.Type == RouterInfoTlvtype_Capabilities {
+		return false
+	} else if t.Type == RouterInfoTlvtype_FunctionalCapabilities {
+		return false
+	} else if t.Type == RouterInfoTlvtype_Srv6Capabilities {
+		if _, ok := t.union81_.(*union_85_t); !ok {
+			t.union81_ = &union_85_t{}
+		}
+		t.union81_.(*union_85_t).Srv6Capabilities = Srv6Capabilities(v)
+		return true
+	}
+	return false
+}
+func (t *RouterInfoOpaqueLsatlv) Value() *[]uint8 {
+	if t.Type == RouterInfoTlvtype_Capabilities {
+		return nil
+	} else if t.Type == RouterInfoTlvtype_FunctionalCapabilities {
+		return nil
+	} else if t.Type == RouterInfoTlvtype_Srv6Capabilities {
+		return nil
+	} else if true {
+		if _, ok := t.union81_.(*union_86_t); !ok {
+			return nil // not set
+		}
+		tmp := []uint8(t.union81_.(*union_86_t).Value)
+		return &tmp
+	}
+	return nil
+}
+func (t *RouterInfoOpaqueLsatlv) SetValue(v []uint8) bool {
+	if t.Type == RouterInfoTlvtype_Capabilities {
+		return false
+	} else if t.Type == RouterInfoTlvtype_FunctionalCapabilities {
+		return false
+	} else if t.Type == RouterInfoTlvtype_Srv6Capabilities {
+		return false
+	} else if true {
+		if len(v) > int(^uint16(0)) {
+			return false
+		}
+		if _, ok := t.union81_.(*union_86_t); !ok {
+			t.union81_ = &union_86_t{}
+		}
+		t.Length = uint16(len(v))
+		t.union81_.(*union_86_t).Value = []uint8(v)
+		return true
+	}
+	return false
+}
+func (t *RouterInfoOpaqueLsatlv) Visit(v VisitorTIJJO) {
+	v.Visit(v, "Type", &t.Type)
+	v.Visit(v, "Length", &t.Length)
+	v.Visit(v, "Capabilities", (t.Capabilities()))
+	v.Visit(v, "FunctionalCapabilities", (t.FunctionalCapabilities()))
+	v.Visit(v, "Srv6Capabilities", (t.Srv6Capabilities()))
+	v.Visit(v, "Value", (t.Value()))
+}
+func (t *RouterInfoOpaqueLsatlv) MarshalJSON() ([]byte, error) {
+	return json.Marshal(VisitorTIJJOToMap(t))
+}
+func (t *RouterInfoOpaqueLsatlv) Write(w io.Writer) (err error) {
+	tmp87 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp87[:], uint16(t.Type))
+	if n, err := w.Write(tmp87[:]); err != nil || n != 2 {
+		return fmt.Errorf("encode t.Type: %w", err)
+	}
+	tmp88 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp88[:], uint16(t.Length))
+	if n, err := w.Write(tmp88[:]); err != nil || n != 2 {
+		return fmt.Errorf("encode t.Length: %w", err)
+	}
+	switch {
+	case (t.Type == RouterInfoTlvtype_Capabilities):
+		if _, ok := t.union81_.(*union_83_t); !ok {
+			return fmt.Errorf("encode t.union81_: union is not set to union_83_t")
+		}
+		new_buf_89 := bytes.NewBuffer(nil)
+		old_buf_89_w := w
+		w = new_buf_89
+		if err := t.union81_.(*union_83_t).Capabilities.Write(w); err != nil {
+			return fmt.Errorf("encode Capabilities: %w", err)
+		}
+		if new_buf_89.Len() != int(t.Length) {
+			return fmt.Errorf("encode Capabilities: expect %d bytes but got %d bytes", new_buf_89.Len(), int(t.Length))
+		}
+		_, err = new_buf_89.WriteTo(old_buf_89_w)
+		if err != nil {
+			return err
+		}
+		w = old_buf_89_w
+	case (t.Type == RouterInfoTlvtype_FunctionalCapabilities):
+		if _, ok := t.union81_.(*union_84_t); !ok {
+			return fmt.Errorf("encode t.union81_: union is not set to union_84_t")
+		}
+		new_buf_90 := bytes.NewBuffer(nil)
+		old_buf_90_w := w
+		w = new_buf_90
+		if err := t.union81_.(*union_84_t).FunctionalCapabilities.Write(w); err != nil {
+			return fmt.Errorf("encode FunctionalCapabilities: %w", err)
+		}
+		if new_buf_90.Len() != int(t.Length) {
+			return fmt.Errorf("encode FunctionalCapabilities: expect %d bytes but got %d bytes", new_buf_90.Len(), int(t.Length))
+		}
+		_, err = new_buf_90.WriteTo(old_buf_90_w)
+		if err != nil {
+			return err
+		}
+		w = old_buf_90_w
+	case (t.Type == RouterInfoTlvtype_Srv6Capabilities):
+		if _, ok := t.union81_.(*union_85_t); !ok {
+			return fmt.Errorf("encode t.union81_: union is not set to union_85_t")
+		}
+		new_buf_91 := bytes.NewBuffer(nil)
+		old_buf_91_w := w
+		w = new_buf_91
+		if err := t.union81_.(*union_85_t).Srv6Capabilities.Write(w); err != nil {
+			return fmt.Errorf("encode Srv6Capabilities: %w", err)
+		}
+		if new_buf_91.Len() != int(t.Length) {
+			return fmt.Errorf("encode Srv6Capabilities: expect %d bytes but got %d bytes", new_buf_91.Len(), int(t.Length))
+		}
+		_, err = new_buf_91.WriteTo(old_buf_91_w)
+		if err != nil {
+			return err
+		}
+		w = old_buf_91_w
+	default:
+		if _, ok := t.union81_.(*union_86_t); !ok {
+			return fmt.Errorf("encode t.union81_: union is not set to union_86_t")
+		}
+		len_Value := int(t.Length)
+		if len(t.union81_.(*union_86_t).Value) != len_Value {
+			return fmt.Errorf("encode Value: expect %d bytes but got %d bytes", len_Value, len(t.union81_.(*union_86_t).Value))
+		}
+		if n, err := w.Write(t.union81_.(*union_86_t).Value); err != nil || n != len(t.union81_.(*union_86_t).Value) {
+			return fmt.Errorf("encode Value: %w", err)
+		}
+	}
+	return nil
+}
+func (t *RouterInfoOpaqueLsatlv) Encode() ([]byte, error) {
+	w := bytes.NewBuffer(make([]byte, 0, 4))
+	if err := t.Write(w); err != nil {
+		return nil, err
+	}
+	return w.Bytes(), nil
+}
+func (t *RouterInfoOpaqueLsatlv) MustEncode() []byte {
+	buf, err := t.Encode()
+	if err != nil {
+		panic(err)
+	}
+	return buf
+}
+func (t *RouterInfoOpaqueLsatlv) Read(r io.Reader) (err error) {
+	tmpType := [2]byte{}
+	n_Type, err := io.ReadFull(r, tmpType[:])
+	if err != nil {
+		return fmt.Errorf("read Type: expect 2 bytes but read %d bytes: %w", n_Type, err)
+	}
+	t.Type = RouterInfoTlvtype(binary.BigEndian.Uint16(tmpType[:]))
+	tmpLength := [2]byte{}
+	n_Length, err := io.ReadFull(r, tmpLength[:])
+	if err != nil {
+		return fmt.Errorf("read Length: expect 2 bytes but read %d bytes: %w", n_Length, err)
+	}
+	t.Length = uint16(binary.BigEndian.Uint16(tmpLength[:]))
+	switch {
+	case (t.Type == RouterInfoTlvtype_Capabilities):
+		t.union81_ = &union_83_t{}
+		sub_byte_len_Capabilities := int64(t.Length)
+		sub_byte_r_Capabilities := io.LimitReader(r, int64(sub_byte_len_Capabilities))
+		tmp_old_r_Capabilities_92 := r
+		r = sub_byte_r_Capabilities
+		if err := t.union81_.(*union_83_t).Capabilities.Read(r); err != nil {
+			return fmt.Errorf("read Capabilities: %w", err)
+		}
+		if sub_byte_r_Capabilities.(*io.LimitedReader).N != 0 {
+			return fmt.Errorf("read Capabilities: expect %d bytes but got %d bytes", sub_byte_len_Capabilities, sub_byte_len_Capabilities-sub_byte_r_Capabilities.(*io.LimitedReader).N)
+		}
+		r = tmp_old_r_Capabilities_92
+	case (t.Type == RouterInfoTlvtype_FunctionalCapabilities):
+		t.union81_ = &union_84_t{}
+		sub_byte_len_FunctionalCapabilities := int64(t.Length)
+		sub_byte_r_FunctionalCapabilities := io.LimitReader(r, int64(sub_byte_len_FunctionalCapabilities))
+		tmp_old_r_FunctionalCapabilities_93 := r
+		r = sub_byte_r_FunctionalCapabilities
+		if err := t.union81_.(*union_84_t).FunctionalCapabilities.Read(r); err != nil {
+			return fmt.Errorf("read FunctionalCapabilities: %w", err)
+		}
+		if sub_byte_r_FunctionalCapabilities.(*io.LimitedReader).N != 0 {
+			return fmt.Errorf("read FunctionalCapabilities: expect %d bytes but got %d bytes", sub_byte_len_FunctionalCapabilities, sub_byte_len_FunctionalCapabilities-sub_byte_r_FunctionalCapabilities.(*io.LimitedReader).N)
+		}
+		r = tmp_old_r_FunctionalCapabilities_93
+	case (t.Type == RouterInfoTlvtype_Srv6Capabilities):
+		t.union81_ = &union_85_t{}
+		sub_byte_len_Srv6Capabilities := int64(t.Length)
+		sub_byte_r_Srv6Capabilities := io.LimitReader(r, int64(sub_byte_len_Srv6Capabilities))
+		tmp_old_r_Srv6Capabilities_94 := r
+		r = sub_byte_r_Srv6Capabilities
+		if err := t.union81_.(*union_85_t).Srv6Capabilities.Read(r); err != nil {
+			return fmt.Errorf("read Srv6Capabilities: %w", err)
+		}
+		if sub_byte_r_Srv6Capabilities.(*io.LimitedReader).N != 0 {
+			return fmt.Errorf("read Srv6Capabilities: expect %d bytes but got %d bytes", sub_byte_len_Srv6Capabilities, sub_byte_len_Srv6Capabilities-sub_byte_r_Srv6Capabilities.(*io.LimitedReader).N)
+		}
+		r = tmp_old_r_Srv6Capabilities_94
+	default:
+		t.union81_ = &union_86_t{}
+		len_Value := int(t.Length)
+		if len_Value != 0 {
+			tmpValue := make([]byte, len_Value)
+			n_Value, err := io.ReadFull(r, tmpValue[:])
+			if err != nil {
+				return fmt.Errorf("read Value: expect %d bytes but read %d bytes: %w", len_Value, n_Value, err)
+			}
+			t.union81_.(*union_86_t).Value = tmpValue[:]
+		} else {
+			t.union81_.(*union_86_t).Value = nil
+		}
+	}
+	return nil
+}
+
+func (t *RouterInfoOpaqueLsatlv) Decode(d []byte) (int, error) {
+	r := bytes.NewReader(d)
+	err := t.Read(r)
+	return int(int(r.Size()) - r.Len()), err
+}
+func (t *RouterInfoOpaqueLsatlv) DecodeExact(d []byte) error {
+	if n, err := t.Decode(d); err != nil {
+		return err
+	} else if n != len(d) {
+		return fmt.Errorf("decode RouterInfoOpaqueLsatlv: expect %d bytes but got %d bytes", len(d), n)
+	}
+	return nil
+}
+func (t *RouterInfoOpaqueLsa) Visit(v VisitorTIJJO) {
+	v.Visit(v, "Tlvs", &t.Tlvs)
+}
+func (t *RouterInfoOpaqueLsa) MarshalJSON() ([]byte, error) {
+	return json.Marshal(VisitorTIJJOToMap(t))
+}
+func (t *RouterInfoOpaqueLsa) Write(w io.Writer) (err error) {
+	for _, v := range t.Tlvs {
+		if err := v.Write(w); err != nil {
+			return fmt.Errorf("encode Tlvs: %w", err)
+		}
+	}
+	return nil
+}
+func (t *RouterInfoOpaqueLsa) Encode() ([]byte, error) {
+	w := bytes.NewBuffer(make([]byte, 0, 0))
+	if err := t.Write(w); err != nil {
+		return nil, err
+	}
+	return w.Bytes(), nil
+}
+func (t *RouterInfoOpaqueLsa) MustEncode() []byte {
+	buf, err := t.Encode()
+	if err != nil {
+		panic(err)
+	}
+	return buf
+}
+func (t *RouterInfoOpaqueLsa) Read(r io.Reader) (err error) {
+	tmp_byte_scanner95_ := bufio.NewReaderSize(r, 1)
+	old_r_Tlvs := r
+	r = tmp_byte_scanner95_
+	for {
+		_, err := tmp_byte_scanner95_.ReadByte()
+		if err != nil {
+			if err != io.EOF {
+				return fmt.Errorf("read Tlvs: %w", err)
+			}
+			break
+		}
+		if err := tmp_byte_scanner95_.UnreadByte(); err != nil {
+			return fmt.Errorf("read Tlvs: unexpected unread error: %w", err)
+		}
+		var tmp96_ RouterInfoOpaqueLsatlv
+		if err := tmp96_.Read(r); err != nil {
+			return fmt.Errorf("read Tlvs: %w", err)
+		}
+		t.Tlvs = append(t.Tlvs, tmp96_)
+	}
+	r = old_r_Tlvs
+	return nil
+}
+
+func (t *RouterInfoOpaqueLsa) Decode(d []byte) (int, error) {
+	r := bytes.NewReader(d)
+	err := t.Read(r)
+	return int(int(r.Size()) - r.Len()), err
+}
+func (t *RouterInfoOpaqueLsa) DecodeExact(d []byte) error {
+	if n, err := t.Decode(d); err != nil {
+		return err
+	} else if n != len(d) {
+		return fmt.Errorf("decode RouterInfoOpaqueLsa: expect %d bytes but got %d bytes", len(d), n)
+	}
+	return nil
+}
+func (t *Srv6EndSid) Visit(v VisitorTIJJO) {
+	v.Visit(v, "Flags", &t.Flags)
+	v.Visit(v, "Reserved", &t.Reserved)
+	v.Visit(v, "Behavior", &t.Behavior)
+	v.Visit(v, "Sid", &t.Sid)
+	v.Visit(v, "SubTlvs", &t.SubTlvs)
+}
+func (t *Srv6EndSid) MarshalJSON() ([]byte, error) {
+	return json.Marshal(VisitorTIJJOToMap(t))
+}
+func (t *Srv6EndSid) Write(w io.Writer) (err error) {
+	if n, err := w.Write([]byte{byte(t.Flags)}); err != nil || n != 1 {
+		return fmt.Errorf("encode t.Flags: %w", err)
+	}
+	if n, err := w.Write([]byte{byte(t.Reserved)}); err != nil || n != 1 {
+		return fmt.Errorf("encode t.Reserved: %w", err)
+	}
+	tmp97 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp97[:], uint16(t.Behavior))
+	if n, err := w.Write(tmp97[:]); err != nil || n != 2 {
+		return fmt.Errorf("encode t.Behavior: %w", err)
+	}
+	if n, err := w.Write(t.Sid[:]); err != nil || n != len(t.Sid) {
+		return fmt.Errorf("encode Sid: %w", err)
+	}
+	for _, v := range t.SubTlvs {
+		if err := v.Write(w); err != nil {
+			return fmt.Errorf("encode SubTlvs: %w", err)
+		}
+	}
+	return nil
+}
+func (t *Srv6EndSid) Encode() ([]byte, error) {
+	w := bytes.NewBuffer(make([]byte, 0, 20))
+	if err := t.Write(w); err != nil {
+		return nil, err
+	}
+	return w.Bytes(), nil
+}
+func (t *Srv6EndSid) MustEncode() []byte {
+	buf, err := t.Encode()
+	if err != nil {
+		panic(err)
+	}
+	return buf
+}
+func (t *Srv6EndSid) Read(r io.Reader) (err error) {
+	tmpFlags := [1]byte{}
+	n_Flags, err := io.ReadFull(r, tmpFlags[:])
+	if err != nil {
+		return fmt.Errorf("read Flags: expect 1 byte but read %d bytes: %w", n_Flags, err)
+	}
+	t.Flags = uint8(tmpFlags[0])
+	tmpReserved := [1]byte{}
+	n_Reserved, err := io.ReadFull(r, tmpReserved[:])
+	if err != nil {
+		return fmt.Errorf("read Reserved: expect 1 byte but read %d bytes: %w", n_Reserved, err)
+	}
+	t.Reserved = uint8(tmpReserved[0])
+	tmpBehavior := [2]byte{}
+	n_Behavior, err := io.ReadFull(r, tmpBehavior[:])
+	if err != nil {
+		return fmt.Errorf("read Behavior: expect 2 bytes but read %d bytes: %w", n_Behavior, err)
+	}
+	t.Behavior = EndpointBehavior(binary.BigEndian.Uint16(tmpBehavior[:]))
+	n_Sid, err := io.ReadFull(r, t.Sid[:])
+	if err != nil {
+		return fmt.Errorf("read Sid: expect %d bytes but read %d bytes: %w", 16, n_Sid, err)
+	}
+	tmp_byte_scanner98_ := bufio.NewReaderSize(r, 1)
+	old_r_SubTlvs := r
+	r = tmp_byte_scanner98_
+	for {
+		_, err := tmp_byte_scanner98_.ReadByte()
+		if err != nil {
+			if err != io.EOF {
+				return fmt.Errorf("read SubTlvs: %w", err)
+			}
+			break
+		}
+		if err := tmp_byte_scanner98_.UnreadByte(); err != nil {
+			return fmt.Errorf("read SubTlvs: unexpected unread error: %w", err)
+		}
+		var tmp99_ Srv6EndSidsubTlv
+		if err := tmp99_.Read(r); err != nil {
+			return fmt.Errorf("read SubTlvs: %w", err)
+		}
+		t.SubTlvs = append(t.SubTlvs, tmp99_)
+	}
+	r = old_r_SubTlvs
+	return nil
+}
+
+func (t *Srv6EndSid) Decode(d []byte) (int, error) {
+	r := bytes.NewReader(d)
+	err := t.Read(r)
+	return int(int(r.Size()) - r.Len()), err
+}
+func (t *Srv6EndSid) DecodeExact(d []byte) error {
+	if n, err := t.Decode(d); err != nil {
+		return err
+	} else if n != len(d) {
+		return fmt.Errorf("decode Srv6EndSid: expect %d bytes but got %d bytes", len(d), n)
+	}
+	return nil
+}
+func (t *union_102_t) isunion100_() {}
+func (t *union_103_t) isunion100_() {}
+func (t *union_104_t) isunion100_() {}
+func (t *union_105_t) isunion100_() {}
+func (t *union_106_t) isunion100_() {}
+func (t *union_107_t) isunion100_() {}
+func (t *union_108_t) isunion100_() {}
+func (t *LocatorTlvsubTlv) Ipv6ForwardingAddress() *Ipv6ForwardingAddress {
+	if t.Type == LocatorTlvsubTlvtype_Srv6EndSid {
+		return nil
+	} else if t.Type == LocatorTlvsubTlvtype_Ipv6ForwardingAddress {
+		if _, ok := t.union100_.(*union_103_t); !ok {
+			return nil // not set
+		}
+		tmp := Ipv6ForwardingAddress(t.union100_.(*union_103_t).Ipv6ForwardingAddress)
+		return &tmp
+	}
+	return nil
+}
+func (t *LocatorTlvsubTlv) SetIpv6ForwardingAddress(v Ipv6ForwardingAddress) bool {
+	if t.Type == LocatorTlvsubTlvtype_Srv6EndSid {
+		return false
+	} else if t.Type == LocatorTlvsubTlvtype_Ipv6ForwardingAddress {
+		if _, ok := t.union100_.(*union_103_t); !ok {
+			t.union100_ = &union_103_t{}
+		}
+		t.union100_.(*union_103_t).Ipv6ForwardingAddress = Ipv6ForwardingAddress(v)
+		return true
+	}
+	return false
+}
+func (t *LocatorTlvsubTlv) PrefixSourceOspfRouterAddress() *PrefixSourceRouterAddress {
+	if t.Type == LocatorTlvsubTlvtype_Srv6EndSid {
+		return nil
+	} else if t.Type == LocatorTlvsubTlvtype_Ipv6ForwardingAddress {
+		return nil
+	} else if t.Type == LocatorTlvsubTlvtype_RouteTag {
+		return nil
+	} else if t.Type == LocatorTlvsubTlvtype_PrefixSourceOspfRouterId {
+		return nil
+	} else if t.Type == LocatorTlvsubTlvtype_PrefixSourceOspfRouterAddress {
+		if _, ok := t.union100_.(*union_106_t); !ok {
+			return nil // not set
+		}
+		tmp := PrefixSourceRouterAddress(t.union100_.(*union_106_t).PrefixSourceOspfRouterAddress)
+		return &tmp
+	}
+	return nil
+}
+func (t *LocatorTlvsubTlv) SetPrefixSourceOspfRouterAddress(v PrefixSourceRouterAddress) bool {
+	if t.Type == LocatorTlvsubTlvtype_Srv6EndSid {
+		return false
+	} else if t.Type == LocatorTlvsubTlvtype_Ipv6ForwardingAddress {
+		return false
+	} else if t.Type == LocatorTlvsubTlvtype_RouteTag {
+		return false
+	} else if t.Type == LocatorTlvsubTlvtype_PrefixSourceOspfRouterId {
+		return false
+	} else if t.Type == LocatorTlvsubTlvtype_PrefixSourceOspfRouterAddress {
+		if _, ok := t.union100_.(*union_106_t); !ok {
+			t.union100_ = &union_106_t{}
+		}
+		t.union100_.(*union_106_t).PrefixSourceOspfRouterAddress = PrefixSourceRouterAddress(v)
+		return true
+	}
+	return false
+}
+func (t *LocatorTlvsubTlv) PrefixSourceOspfRouterId() *PrefixSourceRouterId {
+	if t.Type == LocatorTlvsubTlvtype_Srv6EndSid {
+		return nil
+	} else if t.Type == LocatorTlvsubTlvtype_Ipv6ForwardingAddress {
+		return nil
+	} else if t.Type == LocatorTlvsubTlvtype_RouteTag {
+		return nil
+	} else if t.Type == LocatorTlvsubTlvtype_PrefixSourceOspfRouterId {
+		if _, ok := t.union100_.(*union_105_t); !ok {
+			return nil // not set
+		}
+		tmp := PrefixSourceRouterId(t.union100_.(*union_105_t).PrefixSourceOspfRouterId)
+		return &tmp
+	}
+	return nil
+}
+func (t *LocatorTlvsubTlv) SetPrefixSourceOspfRouterId(v PrefixSourceRouterId) bool {
+	if t.Type == LocatorTlvsubTlvtype_Srv6EndSid {
+		return false
+	} else if t.Type == LocatorTlvsubTlvtype_Ipv6ForwardingAddress {
+		return false
+	} else if t.Type == LocatorTlvsubTlvtype_RouteTag {
+		return false
+	} else if t.Type == LocatorTlvsubTlvtype_PrefixSourceOspfRouterId {
+		if _, ok := t.union100_.(*union_105_t); !ok {
+			t.union100_ = &union_105_t{}
+		}
+		t.union100_.(*union_105_t).PrefixSourceOspfRouterId = PrefixSourceRouterId(v)
+		return true
+	}
+	return false
+}
+func (t *LocatorTlvsubTlv) RouteTag() *RouteTag {
+	if t.Type == LocatorTlvsubTlvtype_Srv6EndSid {
+		return nil
+	} else if t.Type == LocatorTlvsubTlvtype_Ipv6ForwardingAddress {
+		return nil
+	} else if t.Type == LocatorTlvsubTlvtype_RouteTag {
+		if _, ok := t.union100_.(*union_104_t); !ok {
+			return nil // not set
+		}
+		tmp := RouteTag(t.union100_.(*union_104_t).RouteTag)
+		return &tmp
+	}
+	return nil
+}
+func (t *LocatorTlvsubTlv) SetRouteTag(v RouteTag) bool {
+	if t.Type == LocatorTlvsubTlvtype_Srv6EndSid {
+		return false
+	} else if t.Type == LocatorTlvsubTlvtype_Ipv6ForwardingAddress {
+		return false
+	} else if t.Type == LocatorTlvsubTlvtype_RouteTag {
+		if _, ok := t.union100_.(*union_104_t); !ok {
+			t.union100_ = &union_104_t{}
+		}
+		t.union100_.(*union_104_t).RouteTag = RouteTag(v)
+		return true
+	}
+	return false
+}
+func (t *LocatorTlvsubTlv) Srv6EndSid() *Srv6EndSid {
+	if t.Type == LocatorTlvsubTlvtype_Srv6EndSid {
+		if _, ok := t.union100_.(*union_102_t); !ok {
+			return nil // not set
+		}
+		tmp := Srv6EndSid(t.union100_.(*union_102_t).Srv6EndSid)
+		return &tmp
+	}
+	return nil
+}
+func (t *LocatorTlvsubTlv) SetSrv6EndSid(v Srv6EndSid) bool {
+	if t.Type == LocatorTlvsubTlvtype_Srv6EndSid {
+		if _, ok := t.union100_.(*union_102_t); !ok {
+			t.union100_ = &union_102_t{}
+		}
+		t.union100_.(*union_102_t).Srv6EndSid = Srv6EndSid(v)
+		return true
+	}
+	return false
+}
+func (t *LocatorTlvsubTlv) Srv6SidStructure() *Srv6SidstructureSubTlv {
+	if t.Type == LocatorTlvsubTlvtype_Srv6EndSid {
+		return nil
+	} else if t.Type == LocatorTlvsubTlvtype_Ipv6ForwardingAddress {
+		return nil
+	} else if t.Type == LocatorTlvsubTlvtype_RouteTag {
+		return nil
+	} else if t.Type == LocatorTlvsubTlvtype_PrefixSourceOspfRouterId {
+		return nil
+	} else if t.Type == LocatorTlvsubTlvtype_PrefixSourceOspfRouterAddress {
+		return nil
+	} else if t.Type == LocatorTlvsubTlvtype_Srv6SidStructure {
+		if _, ok := t.union100_.(*union_107_t); !ok {
+			return nil // not set
+		}
+		tmp := Srv6SidstructureSubTlv(t.union100_.(*union_107_t).Srv6SidStructure)
+		return &tmp
+	}
+	return nil
+}
+func (t *LocatorTlvsubTlv) SetSrv6SidStructure(v Srv6SidstructureSubTlv) bool {
+	if t.Type == LocatorTlvsubTlvtype_Srv6EndSid {
+		return false
+	} else if t.Type == LocatorTlvsubTlvtype_Ipv6ForwardingAddress {
+		return false
+	} else if t.Type == LocatorTlvsubTlvtype_RouteTag {
+		return false
+	} else if t.Type == LocatorTlvsubTlvtype_PrefixSourceOspfRouterId {
+		return false
+	} else if t.Type == LocatorTlvsubTlvtype_PrefixSourceOspfRouterAddress {
+		return false
+	} else if t.Type == LocatorTlvsubTlvtype_Srv6SidStructure {
+		if _, ok := t.union100_.(*union_107_t); !ok {
+			t.union100_ = &union_107_t{}
+		}
+		t.union100_.(*union_107_t).Srv6SidStructure = Srv6SidstructureSubTlv(v)
+		return true
+	}
+	return false
+}
+func (t *LocatorTlvsubTlv) Value() *[]uint8 {
+	if t.Type == LocatorTlvsubTlvtype_Srv6EndSid {
+		return nil
+	} else if t.Type == LocatorTlvsubTlvtype_Ipv6ForwardingAddress {
+		return nil
+	} else if t.Type == LocatorTlvsubTlvtype_RouteTag {
+		return nil
+	} else if t.Type == LocatorTlvsubTlvtype_PrefixSourceOspfRouterId {
+		return nil
+	} else if t.Type == LocatorTlvsubTlvtype_PrefixSourceOspfRouterAddress {
+		return nil
+	} else if t.Type == LocatorTlvsubTlvtype_Srv6SidStructure {
+		return nil
+	} else if true {
+		if _, ok := t.union100_.(*union_108_t); !ok {
+			return nil // not set
+		}
+		tmp := []uint8(t.union100_.(*union_108_t).Value)
+		return &tmp
+	}
+	return nil
+}
+func (t *LocatorTlvsubTlv) SetValue(v []uint8) bool {
+	if t.Type == LocatorTlvsubTlvtype_Srv6EndSid {
+		return false
+	} else if t.Type == LocatorTlvsubTlvtype_Ipv6ForwardingAddress {
+		return false
+	} else if t.Type == LocatorTlvsubTlvtype_RouteTag {
+		return false
+	} else if t.Type == LocatorTlvsubTlvtype_PrefixSourceOspfRouterId {
+		return false
+	} else if t.Type == LocatorTlvsubTlvtype_PrefixSourceOspfRouterAddress {
+		return false
+	} else if t.Type == LocatorTlvsubTlvtype_Srv6SidStructure {
+		return false
+	} else if true {
+		if len(v) > int(^uint16(0)) {
+			return false
+		}
+		if _, ok := t.union100_.(*union_108_t); !ok {
+			t.union100_ = &union_108_t{}
+		}
+		t.Length = uint16(len(v))
+		t.union100_.(*union_108_t).Value = []uint8(v)
+		return true
+	}
+	return false
+}
+func (t *LocatorTlvsubTlv) Visit(v VisitorTIJJO) {
+	v.Visit(v, "Type", &t.Type)
+	v.Visit(v, "Length", &t.Length)
+	v.Visit(v, "Ipv6ForwardingAddress", (t.Ipv6ForwardingAddress()))
+	v.Visit(v, "PrefixSourceOspfRouterAddress", (t.PrefixSourceOspfRouterAddress()))
+	v.Visit(v, "PrefixSourceOspfRouterId", (t.PrefixSourceOspfRouterId()))
+	v.Visit(v, "RouteTag", (t.RouteTag()))
+	v.Visit(v, "Srv6EndSid", (t.Srv6EndSid()))
+	v.Visit(v, "Srv6SidStructure", (t.Srv6SidStructure()))
+	v.Visit(v, "Value", (t.Value()))
+}
+func (t *LocatorTlvsubTlv) MarshalJSON() ([]byte, error) {
+	return json.Marshal(VisitorTIJJOToMap(t))
+}
+func (t *LocatorTlvsubTlv) Write(w io.Writer) (err error) {
+	tmp109 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp109[:], uint16(t.Type))
+	if n, err := w.Write(tmp109[:]); err != nil || n != 2 {
+		return fmt.Errorf("encode t.Type: %w", err)
+	}
+	tmp110 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp110[:], uint16(t.Length))
+	if n, err := w.Write(tmp110[:]); err != nil || n != 2 {
+		return fmt.Errorf("encode t.Length: %w", err)
+	}
+	switch {
+	case (t.Type == LocatorTlvsubTlvtype_Srv6EndSid):
+		if _, ok := t.union100_.(*union_102_t); !ok {
+			return fmt.Errorf("encode t.union100_: union is not set to union_102_t")
+		}
+		new_buf_111 := bytes.NewBuffer(nil)
+		old_buf_111_w := w
+		w = new_buf_111
+		if err := t.union100_.(*union_102_t).Srv6EndSid.Write(w); err != nil {
+			return fmt.Errorf("encode Srv6EndSid: %w", err)
+		}
+		if new_buf_111.Len() != int(t.Length) {
+			return fmt.Errorf("encode Srv6EndSid: expect %d bytes but got %d bytes", new_buf_111.Len(), int(t.Length))
+		}
+		_, err = new_buf_111.WriteTo(old_buf_111_w)
+		if err != nil {
+			return err
+		}
+		w = old_buf_111_w
+	case (t.Type == LocatorTlvsubTlvtype_Ipv6ForwardingAddress):
+		if _, ok := t.union100_.(*union_103_t); !ok {
+			return fmt.Errorf("encode t.union100_: union is not set to union_103_t")
+		}
+		new_buf_112 := bytes.NewBuffer(nil)
+		old_buf_112_w := w
+		w = new_buf_112
+		if err := t.union100_.(*union_103_t).Ipv6ForwardingAddress.Write(w); err != nil {
+			return fmt.Errorf("encode Ipv6ForwardingAddress: %w", err)
+		}
+		if new_buf_112.Len() != int(t.Length) {
+			return fmt.Errorf("encode Ipv6ForwardingAddress: expect %d bytes but got %d bytes", new_buf_112.Len(), int(t.Length))
+		}
+		_, err = new_buf_112.WriteTo(old_buf_112_w)
+		if err != nil {
+			return err
+		}
+		w = old_buf_112_w
+	case (t.Type == LocatorTlvsubTlvtype_RouteTag):
+		if _, ok := t.union100_.(*union_104_t); !ok {
+			return fmt.Errorf("encode t.union100_: union is not set to union_104_t")
+		}
+		new_buf_113 := bytes.NewBuffer(nil)
+		old_buf_113_w := w
+		w = new_buf_113
+		if err := t.union100_.(*union_104_t).RouteTag.Write(w); err != nil {
+			return fmt.Errorf("encode RouteTag: %w", err)
+		}
+		if new_buf_113.Len() != int(t.Length) {
+			return fmt.Errorf("encode RouteTag: expect %d bytes but got %d bytes", new_buf_113.Len(), int(t.Length))
+		}
+		_, err = new_buf_113.WriteTo(old_buf_113_w)
+		if err != nil {
+			return err
+		}
+		w = old_buf_113_w
+	case (t.Type == LocatorTlvsubTlvtype_PrefixSourceOspfRouterId):
+		if _, ok := t.union100_.(*union_105_t); !ok {
+			return fmt.Errorf("encode t.union100_: union is not set to union_105_t")
+		}
+		new_buf_114 := bytes.NewBuffer(nil)
+		old_buf_114_w := w
+		w = new_buf_114
+		if err := t.union100_.(*union_105_t).PrefixSourceOspfRouterId.Write(w); err != nil {
+			return fmt.Errorf("encode PrefixSourceOspfRouterId: %w", err)
+		}
+		if new_buf_114.Len() != int(t.Length) {
+			return fmt.Errorf("encode PrefixSourceOspfRouterId: expect %d bytes but got %d bytes", new_buf_114.Len(), int(t.Length))
+		}
+		_, err = new_buf_114.WriteTo(old_buf_114_w)
+		if err != nil {
+			return err
+		}
+		w = old_buf_114_w
+	case (t.Type == LocatorTlvsubTlvtype_PrefixSourceOspfRouterAddress):
+		if _, ok := t.union100_.(*union_106_t); !ok {
+			return fmt.Errorf("encode t.union100_: union is not set to union_106_t")
+		}
+		new_buf_115 := bytes.NewBuffer(nil)
+		old_buf_115_w := w
+		w = new_buf_115
+		if err := t.union100_.(*union_106_t).PrefixSourceOspfRouterAddress.Write(w); err != nil {
+			return fmt.Errorf("encode PrefixSourceOspfRouterAddress: %w", err)
+		}
+		if new_buf_115.Len() != int(t.Length) {
+			return fmt.Errorf("encode PrefixSourceOspfRouterAddress: expect %d bytes but got %d bytes", new_buf_115.Len(), int(t.Length))
+		}
+		_, err = new_buf_115.WriteTo(old_buf_115_w)
+		if err != nil {
+			return err
+		}
+		w = old_buf_115_w
+	case (t.Type == LocatorTlvsubTlvtype_Srv6SidStructure):
+		if _, ok := t.union100_.(*union_107_t); !ok {
+			return fmt.Errorf("encode t.union100_: union is not set to union_107_t")
+		}
+		new_buf_116 := bytes.NewBuffer(nil)
+		old_buf_116_w := w
+		w = new_buf_116
+		if err := t.union100_.(*union_107_t).Srv6SidStructure.Write(w); err != nil {
+			return fmt.Errorf("encode Srv6SidStructure: %w", err)
+		}
+		if new_buf_116.Len() != int(t.Length) {
+			return fmt.Errorf("encode Srv6SidStructure: expect %d bytes but got %d bytes", new_buf_116.Len(), int(t.Length))
+		}
+		_, err = new_buf_116.WriteTo(old_buf_116_w)
+		if err != nil {
+			return err
+		}
+		w = old_buf_116_w
+	default:
+		if _, ok := t.union100_.(*union_108_t); !ok {
+			return fmt.Errorf("encode t.union100_: union is not set to union_108_t")
+		}
+		len_Value := int(t.Length)
+		if len(t.union100_.(*union_108_t).Value) != len_Value {
+			return fmt.Errorf("encode Value: expect %d bytes but got %d bytes", len_Value, len(t.union100_.(*union_108_t).Value))
+		}
+		if n, err := w.Write(t.union100_.(*union_108_t).Value); err != nil || n != len(t.union100_.(*union_108_t).Value) {
+			return fmt.Errorf("encode Value: %w", err)
+		}
+	}
+	return nil
+}
+func (t *LocatorTlvsubTlv) Encode() ([]byte, error) {
+	w := bytes.NewBuffer(make([]byte, 0, 4))
+	if err := t.Write(w); err != nil {
+		return nil, err
+	}
+	return w.Bytes(), nil
+}
+func (t *LocatorTlvsubTlv) MustEncode() []byte {
+	buf, err := t.Encode()
+	if err != nil {
+		panic(err)
+	}
+	return buf
+}
+func (t *LocatorTlvsubTlv) Read(r io.Reader) (err error) {
+	tmpType := [2]byte{}
+	n_Type, err := io.ReadFull(r, tmpType[:])
+	if err != nil {
+		return fmt.Errorf("read Type: expect 2 bytes but read %d bytes: %w", n_Type, err)
+	}
+	t.Type = LocatorTlvsubTlvtype(binary.BigEndian.Uint16(tmpType[:]))
+	tmpLength := [2]byte{}
+	n_Length, err := io.ReadFull(r, tmpLength[:])
+	if err != nil {
+		return fmt.Errorf("read Length: expect 2 bytes but read %d bytes: %w", n_Length, err)
+	}
+	t.Length = uint16(binary.BigEndian.Uint16(tmpLength[:]))
+	switch {
+	case (t.Type == LocatorTlvsubTlvtype_Srv6EndSid):
+		t.union100_ = &union_102_t{}
+		sub_byte_len_Srv6EndSid := int64(t.Length)
+		sub_byte_r_Srv6EndSid := io.LimitReader(r, int64(sub_byte_len_Srv6EndSid))
+		tmp_old_r_Srv6EndSid_117 := r
+		r = sub_byte_r_Srv6EndSid
+		if err := t.union100_.(*union_102_t).Srv6EndSid.Read(r); err != nil {
+			return fmt.Errorf("read Srv6EndSid: %w", err)
+		}
+		if sub_byte_r_Srv6EndSid.(*io.LimitedReader).N != 0 {
+			return fmt.Errorf("read Srv6EndSid: expect %d bytes but got %d bytes", sub_byte_len_Srv6EndSid, sub_byte_len_Srv6EndSid-sub_byte_r_Srv6EndSid.(*io.LimitedReader).N)
+		}
+		r = tmp_old_r_Srv6EndSid_117
+	case (t.Type == LocatorTlvsubTlvtype_Ipv6ForwardingAddress):
+		t.union100_ = &union_103_t{}
+		sub_byte_len_Ipv6ForwardingAddress := int64(t.Length)
+		sub_byte_r_Ipv6ForwardingAddress := io.LimitReader(r, int64(sub_byte_len_Ipv6ForwardingAddress))
+		tmp_old_r_Ipv6ForwardingAddress_118 := r
+		r = sub_byte_r_Ipv6ForwardingAddress
+		if err := t.union100_.(*union_103_t).Ipv6ForwardingAddress.Read(r); err != nil {
+			return fmt.Errorf("read Ipv6ForwardingAddress: %w", err)
+		}
+		if sub_byte_r_Ipv6ForwardingAddress.(*io.LimitedReader).N != 0 {
+			return fmt.Errorf("read Ipv6ForwardingAddress: expect %d bytes but got %d bytes", sub_byte_len_Ipv6ForwardingAddress, sub_byte_len_Ipv6ForwardingAddress-sub_byte_r_Ipv6ForwardingAddress.(*io.LimitedReader).N)
+		}
+		r = tmp_old_r_Ipv6ForwardingAddress_118
+	case (t.Type == LocatorTlvsubTlvtype_RouteTag):
+		t.union100_ = &union_104_t{}
+		sub_byte_len_RouteTag := int64(t.Length)
+		sub_byte_r_RouteTag := io.LimitReader(r, int64(sub_byte_len_RouteTag))
+		tmp_old_r_RouteTag_119 := r
+		r = sub_byte_r_RouteTag
+		if err := t.union100_.(*union_104_t).RouteTag.Read(r); err != nil {
+			return fmt.Errorf("read RouteTag: %w", err)
+		}
+		if sub_byte_r_RouteTag.(*io.LimitedReader).N != 0 {
+			return fmt.Errorf("read RouteTag: expect %d bytes but got %d bytes", sub_byte_len_RouteTag, sub_byte_len_RouteTag-sub_byte_r_RouteTag.(*io.LimitedReader).N)
+		}
+		r = tmp_old_r_RouteTag_119
+	case (t.Type == LocatorTlvsubTlvtype_PrefixSourceOspfRouterId):
+		t.union100_ = &union_105_t{}
+		sub_byte_len_PrefixSourceOspfRouterId := int64(t.Length)
+		sub_byte_r_PrefixSourceOspfRouterId := io.LimitReader(r, int64(sub_byte_len_PrefixSourceOspfRouterId))
+		tmp_old_r_PrefixSourceOspfRouterId_120 := r
+		r = sub_byte_r_PrefixSourceOspfRouterId
+		if err := t.union100_.(*union_105_t).PrefixSourceOspfRouterId.Read(r); err != nil {
+			return fmt.Errorf("read PrefixSourceOspfRouterId: %w", err)
+		}
+		if sub_byte_r_PrefixSourceOspfRouterId.(*io.LimitedReader).N != 0 {
+			return fmt.Errorf("read PrefixSourceOspfRouterId: expect %d bytes but got %d bytes", sub_byte_len_PrefixSourceOspfRouterId, sub_byte_len_PrefixSourceOspfRouterId-sub_byte_r_PrefixSourceOspfRouterId.(*io.LimitedReader).N)
+		}
+		r = tmp_old_r_PrefixSourceOspfRouterId_120
+	case (t.Type == LocatorTlvsubTlvtype_PrefixSourceOspfRouterAddress):
+		t.union100_ = &union_106_t{}
+		sub_byte_len_PrefixSourceOspfRouterAddress := int64(t.Length)
+		sub_byte_r_PrefixSourceOspfRouterAddress := io.LimitReader(r, int64(sub_byte_len_PrefixSourceOspfRouterAddress))
+		tmp_old_r_PrefixSourceOspfRouterAddress_121 := r
+		r = sub_byte_r_PrefixSourceOspfRouterAddress
+		if err := t.union100_.(*union_106_t).PrefixSourceOspfRouterAddress.Read(r); err != nil {
+			return fmt.Errorf("read PrefixSourceOspfRouterAddress: %w", err)
+		}
+		if sub_byte_r_PrefixSourceOspfRouterAddress.(*io.LimitedReader).N != 0 {
+			return fmt.Errorf("read PrefixSourceOspfRouterAddress: expect %d bytes but got %d bytes", sub_byte_len_PrefixSourceOspfRouterAddress, sub_byte_len_PrefixSourceOspfRouterAddress-sub_byte_r_PrefixSourceOspfRouterAddress.(*io.LimitedReader).N)
+		}
+		r = tmp_old_r_PrefixSourceOspfRouterAddress_121
+	case (t.Type == LocatorTlvsubTlvtype_Srv6SidStructure):
+		t.union100_ = &union_107_t{}
+		sub_byte_len_Srv6SidStructure := int64(t.Length)
+		sub_byte_r_Srv6SidStructure := io.LimitReader(r, int64(sub_byte_len_Srv6SidStructure))
+		tmp_old_r_Srv6SidStructure_122 := r
+		r = sub_byte_r_Srv6SidStructure
+		if err := t.union100_.(*union_107_t).Srv6SidStructure.Read(r); err != nil {
+			return fmt.Errorf("read Srv6SidStructure: %w", err)
+		}
+		if sub_byte_r_Srv6SidStructure.(*io.LimitedReader).N != 0 {
+			return fmt.Errorf("read Srv6SidStructure: expect %d bytes but got %d bytes", sub_byte_len_Srv6SidStructure, sub_byte_len_Srv6SidStructure-sub_byte_r_Srv6SidStructure.(*io.LimitedReader).N)
+		}
+		r = tmp_old_r_Srv6SidStructure_122
+	default:
+		t.union100_ = &union_108_t{}
+		len_Value := int(t.Length)
+		if len_Value != 0 {
+			tmpValue := make([]byte, len_Value)
+			n_Value, err := io.ReadFull(r, tmpValue[:])
+			if err != nil {
+				return fmt.Errorf("read Value: expect %d bytes but read %d bytes: %w", len_Value, n_Value, err)
+			}
+			t.union100_.(*union_108_t).Value = tmpValue[:]
+		} else {
+			t.union100_.(*union_108_t).Value = nil
+		}
+	}
+	return nil
+}
+
+func (t *LocatorTlvsubTlv) Decode(d []byte) (int, error) {
+	r := bytes.NewReader(d)
+	err := t.Read(r)
+	return int(int(r.Size()) - r.Len()), err
+}
+func (t *LocatorTlvsubTlv) DecodeExact(d []byte) error {
+	if n, err := t.Decode(d); err != nil {
+		return err
+	} else if n != len(d) {
+		return fmt.Errorf("decode LocatorTlvsubTlv: expect %d bytes but got %d bytes", len(d), n)
+	}
+	return nil
+}
+func (t *LocatorTlv) SetLocator(v []uint8) bool {
+	t.Locator = v
+	return true
+}
+func (t *LocatorTlv) Visit(v VisitorTIJJO) {
+	v.Visit(v, "RouteType", &t.RouteType)
+	v.Visit(v, "Algorithm", &t.Algorithm)
+	v.Visit(v, "LocatorLength", &t.LocatorLength)
+	v.Visit(v, "PrefixOptions", &t.PrefixOptions)
+	v.Visit(v, "Metric", &t.Metric)
+	v.Visit(v, "Locator", &t.Locator)
+	v.Visit(v, "SubTlvs", &t.SubTlvs)
+}
+func (t *LocatorTlv) MarshalJSON() ([]byte, error) {
+	return json.Marshal(VisitorTIJJOToMap(t))
+}
+func (t *LocatorTlv) Write(w io.Writer) (err error) {
+	if n, err := w.Write([]byte{byte(t.RouteType)}); err != nil || n != 1 {
+		return fmt.Errorf("encode t.RouteType: %w", err)
+	}
+	if n, err := w.Write([]byte{byte(t.Algorithm)}); err != nil || n != 1 {
+		return fmt.Errorf("encode t.Algorithm: %w", err)
+	}
+	if n, err := w.Write([]byte{byte(t.LocatorLength)}); err != nil || n != 1 {
+		return fmt.Errorf("encode t.LocatorLength: %w", err)
+	}
+	if err := t.PrefixOptions.Write(w); err != nil {
+		return fmt.Errorf("encode PrefixOptions: %w", err)
+	}
+	tmp123 := [4]byte{}
+	binary.BigEndian.PutUint32(tmp123[:], uint32(t.Metric))
+	if n, err := w.Write(tmp123[:]); err != nil || n != 4 {
+		return fmt.Errorf("encode t.Metric: %w", err)
+	}
+	LocatorInByte := ((t.LocatorLength + 7) / 8)
+	len_Locator := int(LocatorInByte)
+	if len(t.Locator) != len_Locator {
+		return fmt.Errorf("encode Locator: expect %d bytes but got %d bytes", len_Locator, len(t.Locator))
+	}
+	if n, err := w.Write(t.Locator); err != nil || n != len(t.Locator) {
+		return fmt.Errorf("encode Locator: %w", err)
+	}
+	for _, v := range t.SubTlvs {
+		if err := v.Write(w); err != nil {
+			return fmt.Errorf("encode SubTlvs: %w", err)
+		}
+	}
+	return nil
+}
+func (t *LocatorTlv) Encode() ([]byte, error) {
+	w := bytes.NewBuffer(make([]byte, 0, 8))
+	if err := t.Write(w); err != nil {
+		return nil, err
+	}
+	return w.Bytes(), nil
+}
+func (t *LocatorTlv) MustEncode() []byte {
+	buf, err := t.Encode()
+	if err != nil {
+		panic(err)
+	}
+	return buf
+}
+func (t *LocatorTlv) Read(r io.Reader) (err error) {
+	tmpRouteType := [1]byte{}
+	n_RouteType, err := io.ReadFull(r, tmpRouteType[:])
+	if err != nil {
+		return fmt.Errorf("read RouteType: expect 1 byte but read %d bytes: %w", n_RouteType, err)
+	}
+	t.RouteType = OspfrouteType(tmpRouteType[0])
+	tmpAlgorithm := [1]byte{}
+	n_Algorithm, err := io.ReadFull(r, tmpAlgorithm[:])
+	if err != nil {
+		return fmt.Errorf("read Algorithm: expect 1 byte but read %d bytes: %w", n_Algorithm, err)
+	}
+	t.Algorithm = uint8(tmpAlgorithm[0])
+	tmpLocatorLength := [1]byte{}
+	n_LocatorLength, err := io.ReadFull(r, tmpLocatorLength[:])
+	if err != nil {
+		return fmt.Errorf("read LocatorLength: expect 1 byte but read %d bytes: %w", n_LocatorLength, err)
+	}
+	t.LocatorLength = uint8(tmpLocatorLength[0])
+	if err := t.PrefixOptions.Read(r); err != nil {
+		return fmt.Errorf("read PrefixOptions: %w", err)
+	}
+	tmpMetric := [4]byte{}
+	n_Metric, err := io.ReadFull(r, tmpMetric[:])
+	if err != nil {
+		return fmt.Errorf("read Metric: expect 4 bytes but read %d bytes: %w", n_Metric, err)
+	}
+	t.Metric = uint32(binary.BigEndian.Uint32(tmpMetric[:]))
+	LocatorInByte := ((t.LocatorLength + 7) / 8)
+	len_Locator := int(LocatorInByte)
+	if len_Locator != 0 {
+		tmpLocator := make([]byte, len_Locator)
+		n_Locator, err := io.ReadFull(r, tmpLocator[:])
+		if err != nil {
+			return fmt.Errorf("read Locator: expect %d bytes but read %d bytes: %w", len_Locator, n_Locator, err)
+		}
+		t.Locator = tmpLocator[:]
+	} else {
+		t.Locator = nil
+	}
+	tmp_byte_scanner124_ := bufio.NewReaderSize(r, 1)
+	old_r_SubTlvs := r
+	r = tmp_byte_scanner124_
+	for {
+		_, err := tmp_byte_scanner124_.ReadByte()
+		if err != nil {
+			if err != io.EOF {
+				return fmt.Errorf("read SubTlvs: %w", err)
+			}
+			break
+		}
+		if err := tmp_byte_scanner124_.UnreadByte(); err != nil {
+			return fmt.Errorf("read SubTlvs: unexpected unread error: %w", err)
+		}
+		var tmp125_ LocatorTlvsubTlv
+		if err := tmp125_.Read(r); err != nil {
+			return fmt.Errorf("read SubTlvs: %w", err)
+		}
+		t.SubTlvs = append(t.SubTlvs, tmp125_)
+	}
+	r = old_r_SubTlvs
+	return nil
+}
+
+func (t *LocatorTlv) Decode(d []byte) (int, error) {
+	r := bytes.NewReader(d)
+	err := t.Read(r)
+	return int(int(r.Size()) - r.Len()), err
+}
+func (t *LocatorTlv) DecodeExact(d []byte) error {
+	if n, err := t.Decode(d); err != nil {
+		return err
+	} else if n != len(d) {
+		return fmt.Errorf("decode LocatorTlv: expect %d bytes but got %d bytes", len(d), n)
+	}
+	return nil
+}
+func (t *union_128_t) isunion126_() {}
+func (t *union_129_t) isunion126_() {}
+func (t *Srv6LocatorLsatlv) Locator() *LocatorTlv {
+	if t.Type == Srv6LocatorLsatlvtype_Locator {
+		if _, ok := t.union126_.(*union_128_t); !ok {
+			return nil // not set
+		}
+		tmp := LocatorTlv(t.union126_.(*union_128_t).Locator)
+		return &tmp
+	}
+	return nil
+}
+func (t *Srv6LocatorLsatlv) SetLocator(v LocatorTlv) bool {
+	if t.Type == Srv6LocatorLsatlvtype_Locator {
+		if _, ok := t.union126_.(*union_128_t); !ok {
+			t.union126_ = &union_128_t{}
+		}
+		t.union126_.(*union_128_t).Locator = LocatorTlv(v)
+		return true
+	}
+	return false
+}
+func (t *Srv6LocatorLsatlv) Value() *[]uint8 {
+	if t.Type == Srv6LocatorLsatlvtype_Locator {
+		return nil
+	} else if true {
+		if _, ok := t.union126_.(*union_129_t); !ok {
+			return nil // not set
+		}
+		tmp := []uint8(t.union126_.(*union_129_t).Value)
+		return &tmp
+	}
+	return nil
+}
+func (t *Srv6LocatorLsatlv) SetValue(v []uint8) bool {
+	if t.Type == Srv6LocatorLsatlvtype_Locator {
+		return false
+	} else if true {
+		if len(v) > int(^uint16(0)) {
+			return false
+		}
+		if _, ok := t.union126_.(*union_129_t); !ok {
+			t.union126_ = &union_129_t{}
+		}
+		t.Length = uint16(len(v))
+		t.union126_.(*union_129_t).Value = []uint8(v)
+		return true
+	}
+	return false
+}
+func (t *Srv6LocatorLsatlv) Visit(v VisitorTIJJO) {
+	v.Visit(v, "Type", &t.Type)
+	v.Visit(v, "Length", &t.Length)
+	v.Visit(v, "Locator", (t.Locator()))
+	v.Visit(v, "Value", (t.Value()))
+}
+func (t *Srv6LocatorLsatlv) MarshalJSON() ([]byte, error) {
+	return json.Marshal(VisitorTIJJOToMap(t))
+}
+func (t *Srv6LocatorLsatlv) Write(w io.Writer) (err error) {
+	tmp130 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp130[:], uint16(t.Type))
+	if n, err := w.Write(tmp130[:]); err != nil || n != 2 {
+		return fmt.Errorf("encode t.Type: %w", err)
+	}
+	tmp131 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp131[:], uint16(t.Length))
+	if n, err := w.Write(tmp131[:]); err != nil || n != 2 {
+		return fmt.Errorf("encode t.Length: %w", err)
+	}
+	switch {
+	case (t.Type == Srv6LocatorLsatlvtype_Locator):
+		if _, ok := t.union126_.(*union_128_t); !ok {
+			return fmt.Errorf("encode t.union126_: union is not set to union_128_t")
+		}
+		new_buf_132 := bytes.NewBuffer(nil)
+		old_buf_132_w := w
+		w = new_buf_132
+		if err := t.union126_.(*union_128_t).Locator.Write(w); err != nil {
+			return fmt.Errorf("encode Locator: %w", err)
+		}
+		if new_buf_132.Len() != int(t.Length) {
+			return fmt.Errorf("encode Locator: expect %d bytes but got %d bytes", new_buf_132.Len(), int(t.Length))
+		}
+		_, err = new_buf_132.WriteTo(old_buf_132_w)
+		if err != nil {
+			return err
+		}
+		w = old_buf_132_w
+	default:
+		if _, ok := t.union126_.(*union_129_t); !ok {
+			return fmt.Errorf("encode t.union126_: union is not set to union_129_t")
+		}
+		len_Value := int(t.Length)
+		if len(t.union126_.(*union_129_t).Value) != len_Value {
+			return fmt.Errorf("encode Value: expect %d bytes but got %d bytes", len_Value, len(t.union126_.(*union_129_t).Value))
+		}
+		if n, err := w.Write(t.union126_.(*union_129_t).Value); err != nil || n != len(t.union126_.(*union_129_t).Value) {
+			return fmt.Errorf("encode Value: %w", err)
+		}
+	}
+	return nil
+}
+func (t *Srv6LocatorLsatlv) Encode() ([]byte, error) {
+	w := bytes.NewBuffer(make([]byte, 0, 4))
+	if err := t.Write(w); err != nil {
+		return nil, err
+	}
+	return w.Bytes(), nil
+}
+func (t *Srv6LocatorLsatlv) MustEncode() []byte {
+	buf, err := t.Encode()
+	if err != nil {
+		panic(err)
+	}
+	return buf
+}
+func (t *Srv6LocatorLsatlv) Read(r io.Reader) (err error) {
+	tmpType := [2]byte{}
+	n_Type, err := io.ReadFull(r, tmpType[:])
+	if err != nil {
+		return fmt.Errorf("read Type: expect 2 bytes but read %d bytes: %w", n_Type, err)
+	}
+	t.Type = Srv6LocatorLsatlvtype(binary.BigEndian.Uint16(tmpType[:]))
+	tmpLength := [2]byte{}
+	n_Length, err := io.ReadFull(r, tmpLength[:])
+	if err != nil {
+		return fmt.Errorf("read Length: expect 2 bytes but read %d bytes: %w", n_Length, err)
+	}
+	t.Length = uint16(binary.BigEndian.Uint16(tmpLength[:]))
+	switch {
+	case (t.Type == Srv6LocatorLsatlvtype_Locator):
+		t.union126_ = &union_128_t{}
+		sub_byte_len_Locator := int64(t.Length)
+		sub_byte_r_Locator := io.LimitReader(r, int64(sub_byte_len_Locator))
+		tmp_old_r_Locator_133 := r
+		r = sub_byte_r_Locator
+		if err := t.union126_.(*union_128_t).Locator.Read(r); err != nil {
+			return fmt.Errorf("read Locator: %w", err)
+		}
+		if sub_byte_r_Locator.(*io.LimitedReader).N != 0 {
+			return fmt.Errorf("read Locator: expect %d bytes but got %d bytes", sub_byte_len_Locator, sub_byte_len_Locator-sub_byte_r_Locator.(*io.LimitedReader).N)
+		}
+		r = tmp_old_r_Locator_133
+	default:
+		t.union126_ = &union_129_t{}
+		len_Value := int(t.Length)
+		if len_Value != 0 {
+			tmpValue := make([]byte, len_Value)
+			n_Value, err := io.ReadFull(r, tmpValue[:])
+			if err != nil {
+				return fmt.Errorf("read Value: expect %d bytes but read %d bytes: %w", len_Value, n_Value, err)
+			}
+			t.union126_.(*union_129_t).Value = tmpValue[:]
+		} else {
+			t.union126_.(*union_129_t).Value = nil
+		}
+	}
+	return nil
+}
+
+func (t *Srv6LocatorLsatlv) Decode(d []byte) (int, error) {
+	r := bytes.NewReader(d)
+	err := t.Read(r)
+	return int(int(r.Size()) - r.Len()), err
+}
+func (t *Srv6LocatorLsatlv) DecodeExact(d []byte) error {
+	if n, err := t.Decode(d); err != nil {
+		return err
+	} else if n != len(d) {
+		return fmt.Errorf("decode Srv6LocatorLsatlv: expect %d bytes but got %d bytes", len(d), n)
+	}
+	return nil
+}
+func (t *Srv6LocatorLsa) Visit(v VisitorTIJJO) {
+	v.Visit(v, "Tlvs", &t.Tlvs)
+}
+func (t *Srv6LocatorLsa) MarshalJSON() ([]byte, error) {
+	return json.Marshal(VisitorTIJJOToMap(t))
+}
+func (t *Srv6LocatorLsa) Write(w io.Writer) (err error) {
+	for _, v := range t.Tlvs {
+		if err := v.Write(w); err != nil {
+			return fmt.Errorf("encode Tlvs: %w", err)
+		}
+	}
+	return nil
+}
+func (t *Srv6LocatorLsa) Encode() ([]byte, error) {
+	w := bytes.NewBuffer(make([]byte, 0, 0))
+	if err := t.Write(w); err != nil {
+		return nil, err
+	}
+	return w.Bytes(), nil
+}
+func (t *Srv6LocatorLsa) MustEncode() []byte {
+	buf, err := t.Encode()
+	if err != nil {
+		panic(err)
+	}
+	return buf
+}
+func (t *Srv6LocatorLsa) Read(r io.Reader) (err error) {
+	tmp_byte_scanner134_ := bufio.NewReaderSize(r, 1)
+	old_r_Tlvs := r
+	r = tmp_byte_scanner134_
+	for {
+		_, err := tmp_byte_scanner134_.ReadByte()
+		if err != nil {
+			if err != io.EOF {
+				return fmt.Errorf("read Tlvs: %w", err)
+			}
+			break
+		}
+		if err := tmp_byte_scanner134_.UnreadByte(); err != nil {
+			return fmt.Errorf("read Tlvs: unexpected unread error: %w", err)
+		}
+		var tmp135_ Srv6LocatorLsatlv
+		if err := tmp135_.Read(r); err != nil {
+			return fmt.Errorf("read Tlvs: %w", err)
+		}
+		t.Tlvs = append(t.Tlvs, tmp135_)
+	}
+	r = old_r_Tlvs
+	return nil
+}
+
+func (t *Srv6LocatorLsa) Decode(d []byte) (int, error) {
+	r := bytes.NewReader(d)
+	err := t.Read(r)
+	return int(int(r.Size()) - r.Len()), err
+}
+func (t *Srv6LocatorLsa) DecodeExact(d []byte) error {
+	if n, err := t.Decode(d); err != nil {
+		return err
+	} else if n != len(d) {
+		return fmt.Errorf("decode Srv6LocatorLsa: expect %d bytes but got %d bytes", len(d), n)
+	}
+	return nil
+}
+func (t *union_138_t) isunion136_() {}
+func (t *union_139_t) isunion136_() {}
+func (t *union_140_t) isunion136_() {}
+func (t *union_141_t) isunion136_() {}
+func (t *union_142_t) isunion136_() {}
+func (t *union_143_t) isunion136_() {}
+func (t *union_144_t) isunion136_() {}
+func (t *union_145_t) isunion136_() {}
+func (t *union_146_t) isunion136_() {}
+func (t *union_147_t) isunion136_() {}
+func (t *Lsa) AsExternalLsa() *AsexternalLsa {
+	if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_RouterLsa {
+		return nil
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_NetworkLsa {
+		return nil
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_InterAreaPrefixLsa {
+		return nil
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_InterAreaRouterLsa {
+		return nil
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_AsExternalLsa {
+		if _, ok := t.union136_.(*union_142_t); !ok {
+			return nil // not set
+		}
+		tmp := AsexternalLsa(t.union136_.(*union_142_t).AsExternalLsa)
 		return &tmp
 	}
 	return nil
 }
 func (t *Lsa) SetAsExternalLsa(v AsexternalLsa) bool {
-	if t.LsaHeader.LsType == LsafunctionCode_RouterLsa {
+	if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_RouterLsa {
 		return false
-	} else if t.LsaHeader.LsType == LsafunctionCode_NetworkLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_NetworkLsa {
 		return false
-	} else if t.LsaHeader.LsType == LsafunctionCode_InterAreaPrefixLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_InterAreaPrefixLsa {
 		return false
-	} else if t.LsaHeader.LsType == LsafunctionCode_InterAreaRouterLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_InterAreaRouterLsa {
 		return false
-	} else if t.LsaHeader.LsType == LsafunctionCode_AsExternalLsa {
-		if _, ok := t.union63_.(*union_69_t); !ok {
-			t.union63_ = &union_69_t{}
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_AsExternalLsa {
+		if _, ok := t.union136_.(*union_142_t); !ok {
+			t.union136_ = &union_142_t{}
 		}
-		t.union63_.(*union_69_t).AsExternalLsa = AsexternalLsa(v)
+		t.union136_.(*union_142_t).AsExternalLsa = AsexternalLsa(v)
 		return true
 	}
 	return false
 }
 func (t *Lsa) Data() *[]uint8 {
-	if t.LsaHeader.LsType == LsafunctionCode_RouterLsa {
+	if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_RouterLsa {
 		return nil
-	} else if t.LsaHeader.LsType == LsafunctionCode_NetworkLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_NetworkLsa {
 		return nil
-	} else if t.LsaHeader.LsType == LsafunctionCode_InterAreaPrefixLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_InterAreaPrefixLsa {
 		return nil
-	} else if t.LsaHeader.LsType == LsafunctionCode_InterAreaRouterLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_InterAreaRouterLsa {
 		return nil
-	} else if t.LsaHeader.LsType == LsafunctionCode_AsExternalLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_AsExternalLsa {
 		return nil
-	} else if t.LsaHeader.LsType == LsafunctionCode_LinkLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_LinkLsa {
 		return nil
-	} else if t.LsaHeader.LsType == LsafunctionCode_IntraAreaPrefixLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_IntraAreaPrefixLsa {
+		return nil
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_RouterInfoOpaqueLsa {
+		return nil
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_Srv6LocatorLsa {
 		return nil
 	} else if true {
-		if _, ok := t.union63_.(*union_72_t); !ok {
+		if _, ok := t.union136_.(*union_147_t); !ok {
 			return nil // not set
 		}
-		tmp := []uint8(t.union63_.(*union_72_t).Data)
+		tmp := []uint8(t.union136_.(*union_147_t).Data)
 		return &tmp
 	}
 	return nil
 }
 func (t *Lsa) SetData(v []uint8) bool {
-	if t.LsaHeader.LsType == LsafunctionCode_RouterLsa {
+	if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_RouterLsa {
 		return false
-	} else if t.LsaHeader.LsType == LsafunctionCode_NetworkLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_NetworkLsa {
 		return false
-	} else if t.LsaHeader.LsType == LsafunctionCode_InterAreaPrefixLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_InterAreaPrefixLsa {
 		return false
-	} else if t.LsaHeader.LsType == LsafunctionCode_InterAreaRouterLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_InterAreaRouterLsa {
 		return false
-	} else if t.LsaHeader.LsType == LsafunctionCode_AsExternalLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_AsExternalLsa {
 		return false
-	} else if t.LsaHeader.LsType == LsafunctionCode_LinkLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_LinkLsa {
 		return false
-	} else if t.LsaHeader.LsType == LsafunctionCode_IntraAreaPrefixLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_IntraAreaPrefixLsa {
+		return false
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_RouterInfoOpaqueLsa {
+		return false
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_Srv6LocatorLsa {
 		return false
 	} else if true {
-		if _, ok := t.union63_.(*union_72_t); !ok {
-			t.union63_ = &union_72_t{}
+		if _, ok := t.union136_.(*union_147_t); !ok {
+			t.union136_ = &union_147_t{}
 		}
-		t.union63_.(*union_72_t).Data = []uint8(v)
+		t.union136_.(*union_147_t).Data = []uint8(v)
 		return true
 	}
 	return false
 }
 func (t *Lsa) InterAreaPrefixLsa() *InterAreaPrefixLsa {
-	if t.LsaHeader.LsType == LsafunctionCode_RouterLsa {
+	if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_RouterLsa {
 		return nil
-	} else if t.LsaHeader.LsType == LsafunctionCode_NetworkLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_NetworkLsa {
 		return nil
-	} else if t.LsaHeader.LsType == LsafunctionCode_InterAreaPrefixLsa {
-		if _, ok := t.union63_.(*union_67_t); !ok {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_InterAreaPrefixLsa {
+		if _, ok := t.union136_.(*union_140_t); !ok {
 			return nil // not set
 		}
-		tmp := InterAreaPrefixLsa(t.union63_.(*union_67_t).InterAreaPrefixLsa)
+		tmp := InterAreaPrefixLsa(t.union136_.(*union_140_t).InterAreaPrefixLsa)
 		return &tmp
 	}
 	return nil
 }
 func (t *Lsa) SetInterAreaPrefixLsa(v InterAreaPrefixLsa) bool {
-	if t.LsaHeader.LsType == LsafunctionCode_RouterLsa {
+	if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_RouterLsa {
 		return false
-	} else if t.LsaHeader.LsType == LsafunctionCode_NetworkLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_NetworkLsa {
 		return false
-	} else if t.LsaHeader.LsType == LsafunctionCode_InterAreaPrefixLsa {
-		if _, ok := t.union63_.(*union_67_t); !ok {
-			t.union63_ = &union_67_t{}
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_InterAreaPrefixLsa {
+		if _, ok := t.union136_.(*union_140_t); !ok {
+			t.union136_ = &union_140_t{}
 		}
-		t.union63_.(*union_67_t).InterAreaPrefixLsa = InterAreaPrefixLsa(v)
+		t.union136_.(*union_140_t).InterAreaPrefixLsa = InterAreaPrefixLsa(v)
 		return true
 	}
 	return false
 }
 func (t *Lsa) InterAreaRouterLsa() *InterAreaRouterLsa {
-	if t.LsaHeader.LsType == LsafunctionCode_RouterLsa {
+	if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_RouterLsa {
 		return nil
-	} else if t.LsaHeader.LsType == LsafunctionCode_NetworkLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_NetworkLsa {
 		return nil
-	} else if t.LsaHeader.LsType == LsafunctionCode_InterAreaPrefixLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_InterAreaPrefixLsa {
 		return nil
-	} else if t.LsaHeader.LsType == LsafunctionCode_InterAreaRouterLsa {
-		if _, ok := t.union63_.(*union_68_t); !ok {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_InterAreaRouterLsa {
+		if _, ok := t.union136_.(*union_141_t); !ok {
 			return nil // not set
 		}
-		tmp := InterAreaRouterLsa(t.union63_.(*union_68_t).InterAreaRouterLsa)
+		tmp := InterAreaRouterLsa(t.union136_.(*union_141_t).InterAreaRouterLsa)
 		return &tmp
 	}
 	return nil
 }
 func (t *Lsa) SetInterAreaRouterLsa(v InterAreaRouterLsa) bool {
-	if t.LsaHeader.LsType == LsafunctionCode_RouterLsa {
+	if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_RouterLsa {
 		return false
-	} else if t.LsaHeader.LsType == LsafunctionCode_NetworkLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_NetworkLsa {
 		return false
-	} else if t.LsaHeader.LsType == LsafunctionCode_InterAreaPrefixLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_InterAreaPrefixLsa {
 		return false
-	} else if t.LsaHeader.LsType == LsafunctionCode_InterAreaRouterLsa {
-		if _, ok := t.union63_.(*union_68_t); !ok {
-			t.union63_ = &union_68_t{}
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_InterAreaRouterLsa {
+		if _, ok := t.union136_.(*union_141_t); !ok {
+			t.union136_ = &union_141_t{}
 		}
-		t.union63_.(*union_68_t).InterAreaRouterLsa = InterAreaRouterLsa(v)
+		t.union136_.(*union_141_t).InterAreaRouterLsa = InterAreaRouterLsa(v)
 		return true
 	}
 	return false
 }
 func (t *Lsa) IntraAreaPrefixLsa() *IntraAreaPrefixLsa {
-	if t.LsaHeader.LsType == LsafunctionCode_RouterLsa {
+	if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_RouterLsa {
 		return nil
-	} else if t.LsaHeader.LsType == LsafunctionCode_NetworkLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_NetworkLsa {
 		return nil
-	} else if t.LsaHeader.LsType == LsafunctionCode_InterAreaPrefixLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_InterAreaPrefixLsa {
 		return nil
-	} else if t.LsaHeader.LsType == LsafunctionCode_InterAreaRouterLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_InterAreaRouterLsa {
 		return nil
-	} else if t.LsaHeader.LsType == LsafunctionCode_AsExternalLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_AsExternalLsa {
 		return nil
-	} else if t.LsaHeader.LsType == LsafunctionCode_LinkLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_LinkLsa {
 		return nil
-	} else if t.LsaHeader.LsType == LsafunctionCode_IntraAreaPrefixLsa {
-		if _, ok := t.union63_.(*union_71_t); !ok {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_IntraAreaPrefixLsa {
+		if _, ok := t.union136_.(*union_144_t); !ok {
 			return nil // not set
 		}
-		tmp := IntraAreaPrefixLsa(t.union63_.(*union_71_t).IntraAreaPrefixLsa)
+		tmp := IntraAreaPrefixLsa(t.union136_.(*union_144_t).IntraAreaPrefixLsa)
 		return &tmp
 	}
 	return nil
 }
 func (t *Lsa) SetIntraAreaPrefixLsa(v IntraAreaPrefixLsa) bool {
-	if t.LsaHeader.LsType == LsafunctionCode_RouterLsa {
+	if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_RouterLsa {
 		return false
-	} else if t.LsaHeader.LsType == LsafunctionCode_NetworkLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_NetworkLsa {
 		return false
-	} else if t.LsaHeader.LsType == LsafunctionCode_InterAreaPrefixLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_InterAreaPrefixLsa {
 		return false
-	} else if t.LsaHeader.LsType == LsafunctionCode_InterAreaRouterLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_InterAreaRouterLsa {
 		return false
-	} else if t.LsaHeader.LsType == LsafunctionCode_AsExternalLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_AsExternalLsa {
 		return false
-	} else if t.LsaHeader.LsType == LsafunctionCode_LinkLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_LinkLsa {
 		return false
-	} else if t.LsaHeader.LsType == LsafunctionCode_IntraAreaPrefixLsa {
-		if _, ok := t.union63_.(*union_71_t); !ok {
-			t.union63_ = &union_71_t{}
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_IntraAreaPrefixLsa {
+		if _, ok := t.union136_.(*union_144_t); !ok {
+			t.union136_ = &union_144_t{}
 		}
-		t.union63_.(*union_71_t).IntraAreaPrefixLsa = IntraAreaPrefixLsa(v)
+		t.union136_.(*union_144_t).IntraAreaPrefixLsa = IntraAreaPrefixLsa(v)
 		return true
 	}
 	return false
 }
 func (t *Lsa) LinkLsa() *LinkLsa {
-	if t.LsaHeader.LsType == LsafunctionCode_RouterLsa {
+	if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_RouterLsa {
 		return nil
-	} else if t.LsaHeader.LsType == LsafunctionCode_NetworkLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_NetworkLsa {
 		return nil
-	} else if t.LsaHeader.LsType == LsafunctionCode_InterAreaPrefixLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_InterAreaPrefixLsa {
 		return nil
-	} else if t.LsaHeader.LsType == LsafunctionCode_InterAreaRouterLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_InterAreaRouterLsa {
 		return nil
-	} else if t.LsaHeader.LsType == LsafunctionCode_AsExternalLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_AsExternalLsa {
 		return nil
-	} else if t.LsaHeader.LsType == LsafunctionCode_LinkLsa {
-		if _, ok := t.union63_.(*union_70_t); !ok {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_LinkLsa {
+		if _, ok := t.union136_.(*union_143_t); !ok {
 			return nil // not set
 		}
-		tmp := LinkLsa(t.union63_.(*union_70_t).LinkLsa)
+		tmp := LinkLsa(t.union136_.(*union_143_t).LinkLsa)
 		return &tmp
 	}
 	return nil
 }
 func (t *Lsa) SetLinkLsa(v LinkLsa) bool {
-	if t.LsaHeader.LsType == LsafunctionCode_RouterLsa {
+	if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_RouterLsa {
 		return false
-	} else if t.LsaHeader.LsType == LsafunctionCode_NetworkLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_NetworkLsa {
 		return false
-	} else if t.LsaHeader.LsType == LsafunctionCode_InterAreaPrefixLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_InterAreaPrefixLsa {
 		return false
-	} else if t.LsaHeader.LsType == LsafunctionCode_InterAreaRouterLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_InterAreaRouterLsa {
 		return false
-	} else if t.LsaHeader.LsType == LsafunctionCode_AsExternalLsa {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_AsExternalLsa {
 		return false
-	} else if t.LsaHeader.LsType == LsafunctionCode_LinkLsa {
-		if _, ok := t.union63_.(*union_70_t); !ok {
-			t.union63_ = &union_70_t{}
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_LinkLsa {
+		if _, ok := t.union136_.(*union_143_t); !ok {
+			t.union136_ = &union_143_t{}
 		}
-		t.union63_.(*union_70_t).LinkLsa = LinkLsa(v)
+		t.union136_.(*union_143_t).LinkLsa = LinkLsa(v)
 		return true
 	}
 	return false
 }
 func (t *Lsa) NetworkLsa() *NetworkLsa {
-	if t.LsaHeader.LsType == LsafunctionCode_RouterLsa {
+	if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_RouterLsa {
 		return nil
-	} else if t.LsaHeader.LsType == LsafunctionCode_NetworkLsa {
-		if _, ok := t.union63_.(*union_66_t); !ok {
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_NetworkLsa {
+		if _, ok := t.union136_.(*union_139_t); !ok {
 			return nil // not set
 		}
-		tmp := NetworkLsa(t.union63_.(*union_66_t).NetworkLsa)
+		tmp := NetworkLsa(t.union136_.(*union_139_t).NetworkLsa)
 		return &tmp
 	}
 	return nil
 }
 func (t *Lsa) SetNetworkLsa(v NetworkLsa) bool {
-	if t.LsaHeader.LsType == LsafunctionCode_RouterLsa {
+	if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_RouterLsa {
 		return false
-	} else if t.LsaHeader.LsType == LsafunctionCode_NetworkLsa {
-		if _, ok := t.union63_.(*union_66_t); !ok {
-			t.union63_ = &union_66_t{}
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_NetworkLsa {
+		if _, ok := t.union136_.(*union_139_t); !ok {
+			t.union136_ = &union_139_t{}
 		}
-		t.union63_.(*union_66_t).NetworkLsa = NetworkLsa(v)
+		t.union136_.(*union_139_t).NetworkLsa = NetworkLsa(v)
+		return true
+	}
+	return false
+}
+func (t *Lsa) RouterInfoOpaqueLsa() *RouterInfoOpaqueLsa {
+	if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_RouterLsa {
+		return nil
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_NetworkLsa {
+		return nil
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_InterAreaPrefixLsa {
+		return nil
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_InterAreaRouterLsa {
+		return nil
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_AsExternalLsa {
+		return nil
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_LinkLsa {
+		return nil
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_IntraAreaPrefixLsa {
+		return nil
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_RouterInfoOpaqueLsa {
+		if _, ok := t.union136_.(*union_145_t); !ok {
+			return nil // not set
+		}
+		tmp := RouterInfoOpaqueLsa(t.union136_.(*union_145_t).RouterInfoOpaqueLsa)
+		return &tmp
+	}
+	return nil
+}
+func (t *Lsa) SetRouterInfoOpaqueLsa(v RouterInfoOpaqueLsa) bool {
+	if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_RouterLsa {
+		return false
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_NetworkLsa {
+		return false
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_InterAreaPrefixLsa {
+		return false
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_InterAreaRouterLsa {
+		return false
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_AsExternalLsa {
+		return false
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_LinkLsa {
+		return false
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_IntraAreaPrefixLsa {
+		return false
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_RouterInfoOpaqueLsa {
+		if _, ok := t.union136_.(*union_145_t); !ok {
+			t.union136_ = &union_145_t{}
+		}
+		t.union136_.(*union_145_t).RouterInfoOpaqueLsa = RouterInfoOpaqueLsa(v)
 		return true
 	}
 	return false
 }
 func (t *Lsa) RouterLsa() *RouterLsa {
-	if t.LsaHeader.LsType == LsafunctionCode_RouterLsa {
-		if _, ok := t.union63_.(*union_65_t); !ok {
+	if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_RouterLsa {
+		if _, ok := t.union136_.(*union_138_t); !ok {
 			return nil // not set
 		}
-		tmp := RouterLsa(t.union63_.(*union_65_t).RouterLsa)
+		tmp := RouterLsa(t.union136_.(*union_138_t).RouterLsa)
 		return &tmp
 	}
 	return nil
 }
 func (t *Lsa) SetRouterLsa(v RouterLsa) bool {
-	if t.LsaHeader.LsType == LsafunctionCode_RouterLsa {
-		if _, ok := t.union63_.(*union_65_t); !ok {
-			t.union63_ = &union_65_t{}
+	if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_RouterLsa {
+		if _, ok := t.union136_.(*union_138_t); !ok {
+			t.union136_ = &union_138_t{}
 		}
-		t.union63_.(*union_65_t).RouterLsa = RouterLsa(v)
+		t.union136_.(*union_138_t).RouterLsa = RouterLsa(v)
+		return true
+	}
+	return false
+}
+func (t *Lsa) Srv6LocatorLsa() *Srv6LocatorLsa {
+	if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_RouterLsa {
+		return nil
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_NetworkLsa {
+		return nil
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_InterAreaPrefixLsa {
+		return nil
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_InterAreaRouterLsa {
+		return nil
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_AsExternalLsa {
+		return nil
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_LinkLsa {
+		return nil
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_IntraAreaPrefixLsa {
+		return nil
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_RouterInfoOpaqueLsa {
+		return nil
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_Srv6LocatorLsa {
+		if _, ok := t.union136_.(*union_146_t); !ok {
+			return nil // not set
+		}
+		tmp := Srv6LocatorLsa(t.union136_.(*union_146_t).Srv6LocatorLsa)
+		return &tmp
+	}
+	return nil
+}
+func (t *Lsa) SetSrv6LocatorLsa(v Srv6LocatorLsa) bool {
+	if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_RouterLsa {
+		return false
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_NetworkLsa {
+		return false
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_InterAreaPrefixLsa {
+		return false
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_InterAreaRouterLsa {
+		return false
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_AsExternalLsa {
+		return false
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_LinkLsa {
+		return false
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_IntraAreaPrefixLsa {
+		return false
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_RouterInfoOpaqueLsa {
+		return false
+	} else if t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_Srv6LocatorLsa {
+		if _, ok := t.union136_.(*union_146_t); !ok {
+			t.union136_ = &union_146_t{}
+		}
+		t.union136_.(*union_146_t).Srv6LocatorLsa = Srv6LocatorLsa(v)
 		return true
 	}
 	return false
@@ -2684,7 +5618,9 @@ func (t *Lsa) Visit(v VisitorTIJJO) {
 	v.Visit(v, "IntraAreaPrefixLsa", (t.IntraAreaPrefixLsa()))
 	v.Visit(v, "LinkLsa", (t.LinkLsa()))
 	v.Visit(v, "NetworkLsa", (t.NetworkLsa()))
+	v.Visit(v, "RouterInfoOpaqueLsa", (t.RouterInfoOpaqueLsa()))
 	v.Visit(v, "RouterLsa", (t.RouterLsa()))
+	v.Visit(v, "Srv6LocatorLsa", (t.Srv6LocatorLsa()))
 }
 func (t *Lsa) MarshalJSON() ([]byte, error) {
 	return json.Marshal(VisitorTIJJOToMap(t))
@@ -2694,141 +5630,177 @@ func (t *Lsa) Write(w io.Writer) (err error) {
 		return fmt.Errorf("encode LsaHeader: %w", err)
 	}
 	switch {
-	case (t.LsaHeader.LsType == LsafunctionCode_RouterLsa):
-		if _, ok := t.union63_.(*union_65_t); !ok {
-			return fmt.Errorf("encode t.union63_: union is not set to union_65_t")
+	case (t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_RouterLsa):
+		if _, ok := t.union136_.(*union_138_t); !ok {
+			return fmt.Errorf("encode t.union136_: union is not set to union_138_t")
 		}
-		new_buf_73 := bytes.NewBuffer(nil)
-		old_buf_73_w := w
-		w = new_buf_73
-		if err := t.union63_.(*union_65_t).RouterLsa.Write(w); err != nil {
+		new_buf_148 := bytes.NewBuffer(nil)
+		old_buf_148_w := w
+		w = new_buf_148
+		if err := t.union136_.(*union_138_t).RouterLsa.Write(w); err != nil {
 			return fmt.Errorf("encode RouterLsa: %w", err)
 		}
-		if new_buf_73.Len() != int((t.LsaHeader.Length - 20)) {
-			return fmt.Errorf("encode RouterLsa: expect %d bytes but got %d bytes", new_buf_73.Len(), int((t.LsaHeader.Length - 20)))
+		if new_buf_148.Len() != int((t.LsaHeader.HeaderChecksum.Length - 20)) {
+			return fmt.Errorf("encode RouterLsa: expect %d bytes but got %d bytes", new_buf_148.Len(), int((t.LsaHeader.HeaderChecksum.Length - 20)))
 		}
-		_, err = new_buf_73.WriteTo(old_buf_73_w)
+		_, err = new_buf_148.WriteTo(old_buf_148_w)
 		if err != nil {
 			return err
 		}
-		w = old_buf_73_w
-	case (t.LsaHeader.LsType == LsafunctionCode_NetworkLsa):
-		if _, ok := t.union63_.(*union_66_t); !ok {
-			return fmt.Errorf("encode t.union63_: union is not set to union_66_t")
+		w = old_buf_148_w
+	case (t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_NetworkLsa):
+		if _, ok := t.union136_.(*union_139_t); !ok {
+			return fmt.Errorf("encode t.union136_: union is not set to union_139_t")
 		}
-		new_buf_74 := bytes.NewBuffer(nil)
-		old_buf_74_w := w
-		w = new_buf_74
-		if err := t.union63_.(*union_66_t).NetworkLsa.Write(w); err != nil {
+		new_buf_149 := bytes.NewBuffer(nil)
+		old_buf_149_w := w
+		w = new_buf_149
+		if err := t.union136_.(*union_139_t).NetworkLsa.Write(w); err != nil {
 			return fmt.Errorf("encode NetworkLsa: %w", err)
 		}
-		if new_buf_74.Len() != int((t.LsaHeader.Length - 20)) {
-			return fmt.Errorf("encode NetworkLsa: expect %d bytes but got %d bytes", new_buf_74.Len(), int((t.LsaHeader.Length - 20)))
+		if new_buf_149.Len() != int((t.LsaHeader.HeaderChecksum.Length - 20)) {
+			return fmt.Errorf("encode NetworkLsa: expect %d bytes but got %d bytes", new_buf_149.Len(), int((t.LsaHeader.HeaderChecksum.Length - 20)))
 		}
-		_, err = new_buf_74.WriteTo(old_buf_74_w)
+		_, err = new_buf_149.WriteTo(old_buf_149_w)
 		if err != nil {
 			return err
 		}
-		w = old_buf_74_w
-	case (t.LsaHeader.LsType == LsafunctionCode_InterAreaPrefixLsa):
-		if _, ok := t.union63_.(*union_67_t); !ok {
-			return fmt.Errorf("encode t.union63_: union is not set to union_67_t")
+		w = old_buf_149_w
+	case (t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_InterAreaPrefixLsa):
+		if _, ok := t.union136_.(*union_140_t); !ok {
+			return fmt.Errorf("encode t.union136_: union is not set to union_140_t")
 		}
-		new_buf_75 := bytes.NewBuffer(nil)
-		old_buf_75_w := w
-		w = new_buf_75
-		if err := t.union63_.(*union_67_t).InterAreaPrefixLsa.Write(w); err != nil {
+		new_buf_150 := bytes.NewBuffer(nil)
+		old_buf_150_w := w
+		w = new_buf_150
+		if err := t.union136_.(*union_140_t).InterAreaPrefixLsa.Write(w); err != nil {
 			return fmt.Errorf("encode InterAreaPrefixLsa: %w", err)
 		}
-		if new_buf_75.Len() != int((t.LsaHeader.Length - 20)) {
-			return fmt.Errorf("encode InterAreaPrefixLsa: expect %d bytes but got %d bytes", new_buf_75.Len(), int((t.LsaHeader.Length - 20)))
+		if new_buf_150.Len() != int((t.LsaHeader.HeaderChecksum.Length - 20)) {
+			return fmt.Errorf("encode InterAreaPrefixLsa: expect %d bytes but got %d bytes", new_buf_150.Len(), int((t.LsaHeader.HeaderChecksum.Length - 20)))
 		}
-		_, err = new_buf_75.WriteTo(old_buf_75_w)
+		_, err = new_buf_150.WriteTo(old_buf_150_w)
 		if err != nil {
 			return err
 		}
-		w = old_buf_75_w
-	case (t.LsaHeader.LsType == LsafunctionCode_InterAreaRouterLsa):
-		if _, ok := t.union63_.(*union_68_t); !ok {
-			return fmt.Errorf("encode t.union63_: union is not set to union_68_t")
+		w = old_buf_150_w
+	case (t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_InterAreaRouterLsa):
+		if _, ok := t.union136_.(*union_141_t); !ok {
+			return fmt.Errorf("encode t.union136_: union is not set to union_141_t")
 		}
-		new_buf_76 := bytes.NewBuffer(nil)
-		old_buf_76_w := w
-		w = new_buf_76
-		if err := t.union63_.(*union_68_t).InterAreaRouterLsa.Write(w); err != nil {
+		new_buf_151 := bytes.NewBuffer(nil)
+		old_buf_151_w := w
+		w = new_buf_151
+		if err := t.union136_.(*union_141_t).InterAreaRouterLsa.Write(w); err != nil {
 			return fmt.Errorf("encode InterAreaRouterLsa: %w", err)
 		}
-		if new_buf_76.Len() != int((t.LsaHeader.Length - 20)) {
-			return fmt.Errorf("encode InterAreaRouterLsa: expect %d bytes but got %d bytes", new_buf_76.Len(), int((t.LsaHeader.Length - 20)))
+		if new_buf_151.Len() != int((t.LsaHeader.HeaderChecksum.Length - 20)) {
+			return fmt.Errorf("encode InterAreaRouterLsa: expect %d bytes but got %d bytes", new_buf_151.Len(), int((t.LsaHeader.HeaderChecksum.Length - 20)))
 		}
-		_, err = new_buf_76.WriteTo(old_buf_76_w)
+		_, err = new_buf_151.WriteTo(old_buf_151_w)
 		if err != nil {
 			return err
 		}
-		w = old_buf_76_w
-	case (t.LsaHeader.LsType == LsafunctionCode_AsExternalLsa):
-		if _, ok := t.union63_.(*union_69_t); !ok {
-			return fmt.Errorf("encode t.union63_: union is not set to union_69_t")
+		w = old_buf_151_w
+	case (t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_AsExternalLsa):
+		if _, ok := t.union136_.(*union_142_t); !ok {
+			return fmt.Errorf("encode t.union136_: union is not set to union_142_t")
 		}
-		new_buf_77 := bytes.NewBuffer(nil)
-		old_buf_77_w := w
-		w = new_buf_77
-		if err := t.union63_.(*union_69_t).AsExternalLsa.Write(w); err != nil {
+		new_buf_152 := bytes.NewBuffer(nil)
+		old_buf_152_w := w
+		w = new_buf_152
+		if err := t.union136_.(*union_142_t).AsExternalLsa.Write(w); err != nil {
 			return fmt.Errorf("encode AsExternalLsa: %w", err)
 		}
-		if new_buf_77.Len() != int((t.LsaHeader.Length - 20)) {
-			return fmt.Errorf("encode AsExternalLsa: expect %d bytes but got %d bytes", new_buf_77.Len(), int((t.LsaHeader.Length - 20)))
+		if new_buf_152.Len() != int((t.LsaHeader.HeaderChecksum.Length - 20)) {
+			return fmt.Errorf("encode AsExternalLsa: expect %d bytes but got %d bytes", new_buf_152.Len(), int((t.LsaHeader.HeaderChecksum.Length - 20)))
 		}
-		_, err = new_buf_77.WriteTo(old_buf_77_w)
+		_, err = new_buf_152.WriteTo(old_buf_152_w)
 		if err != nil {
 			return err
 		}
-		w = old_buf_77_w
-	case (t.LsaHeader.LsType == LsafunctionCode_LinkLsa):
-		if _, ok := t.union63_.(*union_70_t); !ok {
-			return fmt.Errorf("encode t.union63_: union is not set to union_70_t")
+		w = old_buf_152_w
+	case (t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_LinkLsa):
+		if _, ok := t.union136_.(*union_143_t); !ok {
+			return fmt.Errorf("encode t.union136_: union is not set to union_143_t")
 		}
-		new_buf_78 := bytes.NewBuffer(nil)
-		old_buf_78_w := w
-		w = new_buf_78
-		if err := t.union63_.(*union_70_t).LinkLsa.Write(w); err != nil {
+		new_buf_153 := bytes.NewBuffer(nil)
+		old_buf_153_w := w
+		w = new_buf_153
+		if err := t.union136_.(*union_143_t).LinkLsa.Write(w); err != nil {
 			return fmt.Errorf("encode LinkLsa: %w", err)
 		}
-		if new_buf_78.Len() != int((t.LsaHeader.Length - 20)) {
-			return fmt.Errorf("encode LinkLsa: expect %d bytes but got %d bytes", new_buf_78.Len(), int((t.LsaHeader.Length - 20)))
+		if new_buf_153.Len() != int((t.LsaHeader.HeaderChecksum.Length - 20)) {
+			return fmt.Errorf("encode LinkLsa: expect %d bytes but got %d bytes", new_buf_153.Len(), int((t.LsaHeader.HeaderChecksum.Length - 20)))
 		}
-		_, err = new_buf_78.WriteTo(old_buf_78_w)
+		_, err = new_buf_153.WriteTo(old_buf_153_w)
 		if err != nil {
 			return err
 		}
-		w = old_buf_78_w
-	case (t.LsaHeader.LsType == LsafunctionCode_IntraAreaPrefixLsa):
-		if _, ok := t.union63_.(*union_71_t); !ok {
-			return fmt.Errorf("encode t.union63_: union is not set to union_71_t")
+		w = old_buf_153_w
+	case (t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_IntraAreaPrefixLsa):
+		if _, ok := t.union136_.(*union_144_t); !ok {
+			return fmt.Errorf("encode t.union136_: union is not set to union_144_t")
 		}
-		new_buf_79 := bytes.NewBuffer(nil)
-		old_buf_79_w := w
-		w = new_buf_79
-		if err := t.union63_.(*union_71_t).IntraAreaPrefixLsa.Write(w); err != nil {
+		new_buf_154 := bytes.NewBuffer(nil)
+		old_buf_154_w := w
+		w = new_buf_154
+		if err := t.union136_.(*union_144_t).IntraAreaPrefixLsa.Write(w); err != nil {
 			return fmt.Errorf("encode IntraAreaPrefixLsa: %w", err)
 		}
-		if new_buf_79.Len() != int((t.LsaHeader.Length - 20)) {
-			return fmt.Errorf("encode IntraAreaPrefixLsa: expect %d bytes but got %d bytes", new_buf_79.Len(), int((t.LsaHeader.Length - 20)))
+		if new_buf_154.Len() != int((t.LsaHeader.HeaderChecksum.Length - 20)) {
+			return fmt.Errorf("encode IntraAreaPrefixLsa: expect %d bytes but got %d bytes", new_buf_154.Len(), int((t.LsaHeader.HeaderChecksum.Length - 20)))
 		}
-		_, err = new_buf_79.WriteTo(old_buf_79_w)
+		_, err = new_buf_154.WriteTo(old_buf_154_w)
 		if err != nil {
 			return err
 		}
-		w = old_buf_79_w
+		w = old_buf_154_w
+	case (t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_RouterInfoOpaqueLsa):
+		if _, ok := t.union136_.(*union_145_t); !ok {
+			return fmt.Errorf("encode t.union136_: union is not set to union_145_t")
+		}
+		new_buf_155 := bytes.NewBuffer(nil)
+		old_buf_155_w := w
+		w = new_buf_155
+		if err := t.union136_.(*union_145_t).RouterInfoOpaqueLsa.Write(w); err != nil {
+			return fmt.Errorf("encode RouterInfoOpaqueLsa: %w", err)
+		}
+		if new_buf_155.Len() != int((t.LsaHeader.HeaderChecksum.Length - 20)) {
+			return fmt.Errorf("encode RouterInfoOpaqueLsa: expect %d bytes but got %d bytes", new_buf_155.Len(), int((t.LsaHeader.HeaderChecksum.Length - 20)))
+		}
+		_, err = new_buf_155.WriteTo(old_buf_155_w)
+		if err != nil {
+			return err
+		}
+		w = old_buf_155_w
+	case (t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_Srv6LocatorLsa):
+		if _, ok := t.union136_.(*union_146_t); !ok {
+			return fmt.Errorf("encode t.union136_: union is not set to union_146_t")
+		}
+		new_buf_156 := bytes.NewBuffer(nil)
+		old_buf_156_w := w
+		w = new_buf_156
+		if err := t.union136_.(*union_146_t).Srv6LocatorLsa.Write(w); err != nil {
+			return fmt.Errorf("encode Srv6LocatorLsa: %w", err)
+		}
+		if new_buf_156.Len() != int((t.LsaHeader.HeaderChecksum.Length - 20)) {
+			return fmt.Errorf("encode Srv6LocatorLsa: expect %d bytes but got %d bytes", new_buf_156.Len(), int((t.LsaHeader.HeaderChecksum.Length - 20)))
+		}
+		_, err = new_buf_156.WriteTo(old_buf_156_w)
+		if err != nil {
+			return err
+		}
+		w = old_buf_156_w
 	default:
-		if _, ok := t.union63_.(*union_72_t); !ok {
-			return fmt.Errorf("encode t.union63_: union is not set to union_72_t")
+		if _, ok := t.union136_.(*union_147_t); !ok {
+			return fmt.Errorf("encode t.union136_: union is not set to union_147_t")
 		}
-		len_Data := int((t.LsaHeader.Length - 20))
-		if len(t.union63_.(*union_72_t).Data) != len_Data {
-			return fmt.Errorf("encode Data: expect %d bytes but got %d bytes", len_Data, len(t.union63_.(*union_72_t).Data))
+		len_Data := int((t.LsaHeader.HeaderChecksum.Length - 20))
+		if len(t.union136_.(*union_147_t).Data) != len_Data {
+			return fmt.Errorf("encode Data: expect %d bytes but got %d bytes", len_Data, len(t.union136_.(*union_147_t).Data))
 		}
-		if n, err := w.Write(t.union63_.(*union_72_t).Data); err != nil || n != len(t.union63_.(*union_72_t).Data) {
+		if n, err := w.Write(t.union136_.(*union_147_t).Data); err != nil || n != len(t.union136_.(*union_147_t).Data) {
 			return fmt.Errorf("encode Data: %w", err)
 		}
 	}
@@ -2853,109 +5825,135 @@ func (t *Lsa) Read(r io.Reader) (err error) {
 		return fmt.Errorf("read LsaHeader: %w", err)
 	}
 	switch {
-	case (t.LsaHeader.LsType == LsafunctionCode_RouterLsa):
-		t.union63_ = &union_65_t{}
-		sub_byte_len_RouterLsa := int64((t.LsaHeader.Length - 20))
+	case (t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_RouterLsa):
+		t.union136_ = &union_138_t{}
+		sub_byte_len_RouterLsa := int64((t.LsaHeader.HeaderChecksum.Length - 20))
 		sub_byte_r_RouterLsa := io.LimitReader(r, int64(sub_byte_len_RouterLsa))
-		tmp_old_r_RouterLsa_80 := r
+		tmp_old_r_RouterLsa_157 := r
 		r = sub_byte_r_RouterLsa
-		if err := t.union63_.(*union_65_t).RouterLsa.Read(r); err != nil {
+		if err := t.union136_.(*union_138_t).RouterLsa.Read(r); err != nil {
 			return fmt.Errorf("read RouterLsa: %w", err)
 		}
 		if sub_byte_r_RouterLsa.(*io.LimitedReader).N != 0 {
 			return fmt.Errorf("read RouterLsa: expect %d bytes but got %d bytes", sub_byte_len_RouterLsa, sub_byte_len_RouterLsa-sub_byte_r_RouterLsa.(*io.LimitedReader).N)
 		}
-		r = tmp_old_r_RouterLsa_80
-	case (t.LsaHeader.LsType == LsafunctionCode_NetworkLsa):
-		t.union63_ = &union_66_t{}
-		sub_byte_len_NetworkLsa := int64((t.LsaHeader.Length - 20))
+		r = tmp_old_r_RouterLsa_157
+	case (t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_NetworkLsa):
+		t.union136_ = &union_139_t{}
+		sub_byte_len_NetworkLsa := int64((t.LsaHeader.HeaderChecksum.Length - 20))
 		sub_byte_r_NetworkLsa := io.LimitReader(r, int64(sub_byte_len_NetworkLsa))
-		tmp_old_r_NetworkLsa_81 := r
+		tmp_old_r_NetworkLsa_158 := r
 		r = sub_byte_r_NetworkLsa
-		if err := t.union63_.(*union_66_t).NetworkLsa.Read(r); err != nil {
+		if err := t.union136_.(*union_139_t).NetworkLsa.Read(r); err != nil {
 			return fmt.Errorf("read NetworkLsa: %w", err)
 		}
 		if sub_byte_r_NetworkLsa.(*io.LimitedReader).N != 0 {
 			return fmt.Errorf("read NetworkLsa: expect %d bytes but got %d bytes", sub_byte_len_NetworkLsa, sub_byte_len_NetworkLsa-sub_byte_r_NetworkLsa.(*io.LimitedReader).N)
 		}
-		r = tmp_old_r_NetworkLsa_81
-	case (t.LsaHeader.LsType == LsafunctionCode_InterAreaPrefixLsa):
-		t.union63_ = &union_67_t{}
-		sub_byte_len_InterAreaPrefixLsa := int64((t.LsaHeader.Length - 20))
+		r = tmp_old_r_NetworkLsa_158
+	case (t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_InterAreaPrefixLsa):
+		t.union136_ = &union_140_t{}
+		sub_byte_len_InterAreaPrefixLsa := int64((t.LsaHeader.HeaderChecksum.Length - 20))
 		sub_byte_r_InterAreaPrefixLsa := io.LimitReader(r, int64(sub_byte_len_InterAreaPrefixLsa))
-		tmp_old_r_InterAreaPrefixLsa_82 := r
+		tmp_old_r_InterAreaPrefixLsa_159 := r
 		r = sub_byte_r_InterAreaPrefixLsa
-		if err := t.union63_.(*union_67_t).InterAreaPrefixLsa.Read(r); err != nil {
+		if err := t.union136_.(*union_140_t).InterAreaPrefixLsa.Read(r); err != nil {
 			return fmt.Errorf("read InterAreaPrefixLsa: %w", err)
 		}
 		if sub_byte_r_InterAreaPrefixLsa.(*io.LimitedReader).N != 0 {
 			return fmt.Errorf("read InterAreaPrefixLsa: expect %d bytes but got %d bytes", sub_byte_len_InterAreaPrefixLsa, sub_byte_len_InterAreaPrefixLsa-sub_byte_r_InterAreaPrefixLsa.(*io.LimitedReader).N)
 		}
-		r = tmp_old_r_InterAreaPrefixLsa_82
-	case (t.LsaHeader.LsType == LsafunctionCode_InterAreaRouterLsa):
-		t.union63_ = &union_68_t{}
-		sub_byte_len_InterAreaRouterLsa := int64((t.LsaHeader.Length - 20))
+		r = tmp_old_r_InterAreaPrefixLsa_159
+	case (t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_InterAreaRouterLsa):
+		t.union136_ = &union_141_t{}
+		sub_byte_len_InterAreaRouterLsa := int64((t.LsaHeader.HeaderChecksum.Length - 20))
 		sub_byte_r_InterAreaRouterLsa := io.LimitReader(r, int64(sub_byte_len_InterAreaRouterLsa))
-		tmp_old_r_InterAreaRouterLsa_83 := r
+		tmp_old_r_InterAreaRouterLsa_160 := r
 		r = sub_byte_r_InterAreaRouterLsa
-		if err := t.union63_.(*union_68_t).InterAreaRouterLsa.Read(r); err != nil {
+		if err := t.union136_.(*union_141_t).InterAreaRouterLsa.Read(r); err != nil {
 			return fmt.Errorf("read InterAreaRouterLsa: %w", err)
 		}
 		if sub_byte_r_InterAreaRouterLsa.(*io.LimitedReader).N != 0 {
 			return fmt.Errorf("read InterAreaRouterLsa: expect %d bytes but got %d bytes", sub_byte_len_InterAreaRouterLsa, sub_byte_len_InterAreaRouterLsa-sub_byte_r_InterAreaRouterLsa.(*io.LimitedReader).N)
 		}
-		r = tmp_old_r_InterAreaRouterLsa_83
-	case (t.LsaHeader.LsType == LsafunctionCode_AsExternalLsa):
-		t.union63_ = &union_69_t{}
-		sub_byte_len_AsExternalLsa := int64((t.LsaHeader.Length - 20))
+		r = tmp_old_r_InterAreaRouterLsa_160
+	case (t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_AsExternalLsa):
+		t.union136_ = &union_142_t{}
+		sub_byte_len_AsExternalLsa := int64((t.LsaHeader.HeaderChecksum.Length - 20))
 		sub_byte_r_AsExternalLsa := io.LimitReader(r, int64(sub_byte_len_AsExternalLsa))
-		tmp_old_r_AsExternalLsa_84 := r
+		tmp_old_r_AsExternalLsa_161 := r
 		r = sub_byte_r_AsExternalLsa
-		if err := t.union63_.(*union_69_t).AsExternalLsa.Read(r); err != nil {
+		if err := t.union136_.(*union_142_t).AsExternalLsa.Read(r); err != nil {
 			return fmt.Errorf("read AsExternalLsa: %w", err)
 		}
 		if sub_byte_r_AsExternalLsa.(*io.LimitedReader).N != 0 {
 			return fmt.Errorf("read AsExternalLsa: expect %d bytes but got %d bytes", sub_byte_len_AsExternalLsa, sub_byte_len_AsExternalLsa-sub_byte_r_AsExternalLsa.(*io.LimitedReader).N)
 		}
-		r = tmp_old_r_AsExternalLsa_84
-	case (t.LsaHeader.LsType == LsafunctionCode_LinkLsa):
-		t.union63_ = &union_70_t{}
-		sub_byte_len_LinkLsa := int64((t.LsaHeader.Length - 20))
+		r = tmp_old_r_AsExternalLsa_161
+	case (t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_LinkLsa):
+		t.union136_ = &union_143_t{}
+		sub_byte_len_LinkLsa := int64((t.LsaHeader.HeaderChecksum.Length - 20))
 		sub_byte_r_LinkLsa := io.LimitReader(r, int64(sub_byte_len_LinkLsa))
-		tmp_old_r_LinkLsa_85 := r
+		tmp_old_r_LinkLsa_162 := r
 		r = sub_byte_r_LinkLsa
-		if err := t.union63_.(*union_70_t).LinkLsa.Read(r); err != nil {
+		if err := t.union136_.(*union_143_t).LinkLsa.Read(r); err != nil {
 			return fmt.Errorf("read LinkLsa: %w", err)
 		}
 		if sub_byte_r_LinkLsa.(*io.LimitedReader).N != 0 {
 			return fmt.Errorf("read LinkLsa: expect %d bytes but got %d bytes", sub_byte_len_LinkLsa, sub_byte_len_LinkLsa-sub_byte_r_LinkLsa.(*io.LimitedReader).N)
 		}
-		r = tmp_old_r_LinkLsa_85
-	case (t.LsaHeader.LsType == LsafunctionCode_IntraAreaPrefixLsa):
-		t.union63_ = &union_71_t{}
-		sub_byte_len_IntraAreaPrefixLsa := int64((t.LsaHeader.Length - 20))
+		r = tmp_old_r_LinkLsa_162
+	case (t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_IntraAreaPrefixLsa):
+		t.union136_ = &union_144_t{}
+		sub_byte_len_IntraAreaPrefixLsa := int64((t.LsaHeader.HeaderChecksum.Length - 20))
 		sub_byte_r_IntraAreaPrefixLsa := io.LimitReader(r, int64(sub_byte_len_IntraAreaPrefixLsa))
-		tmp_old_r_IntraAreaPrefixLsa_86 := r
+		tmp_old_r_IntraAreaPrefixLsa_163 := r
 		r = sub_byte_r_IntraAreaPrefixLsa
-		if err := t.union63_.(*union_71_t).IntraAreaPrefixLsa.Read(r); err != nil {
+		if err := t.union136_.(*union_144_t).IntraAreaPrefixLsa.Read(r); err != nil {
 			return fmt.Errorf("read IntraAreaPrefixLsa: %w", err)
 		}
 		if sub_byte_r_IntraAreaPrefixLsa.(*io.LimitedReader).N != 0 {
 			return fmt.Errorf("read IntraAreaPrefixLsa: expect %d bytes but got %d bytes", sub_byte_len_IntraAreaPrefixLsa, sub_byte_len_IntraAreaPrefixLsa-sub_byte_r_IntraAreaPrefixLsa.(*io.LimitedReader).N)
 		}
-		r = tmp_old_r_IntraAreaPrefixLsa_86
+		r = tmp_old_r_IntraAreaPrefixLsa_163
+	case (t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_RouterInfoOpaqueLsa):
+		t.union136_ = &union_145_t{}
+		sub_byte_len_RouterInfoOpaqueLsa := int64((t.LsaHeader.HeaderChecksum.Length - 20))
+		sub_byte_r_RouterInfoOpaqueLsa := io.LimitReader(r, int64(sub_byte_len_RouterInfoOpaqueLsa))
+		tmp_old_r_RouterInfoOpaqueLsa_164 := r
+		r = sub_byte_r_RouterInfoOpaqueLsa
+		if err := t.union136_.(*union_145_t).RouterInfoOpaqueLsa.Read(r); err != nil {
+			return fmt.Errorf("read RouterInfoOpaqueLsa: %w", err)
+		}
+		if sub_byte_r_RouterInfoOpaqueLsa.(*io.LimitedReader).N != 0 {
+			return fmt.Errorf("read RouterInfoOpaqueLsa: expect %d bytes but got %d bytes", sub_byte_len_RouterInfoOpaqueLsa, sub_byte_len_RouterInfoOpaqueLsa-sub_byte_r_RouterInfoOpaqueLsa.(*io.LimitedReader).N)
+		}
+		r = tmp_old_r_RouterInfoOpaqueLsa_164
+	case (t.LsaHeader.HeaderChecksum.LsType.Code() == LsafunctionCode_Srv6LocatorLsa):
+		t.union136_ = &union_146_t{}
+		sub_byte_len_Srv6LocatorLsa := int64((t.LsaHeader.HeaderChecksum.Length - 20))
+		sub_byte_r_Srv6LocatorLsa := io.LimitReader(r, int64(sub_byte_len_Srv6LocatorLsa))
+		tmp_old_r_Srv6LocatorLsa_165 := r
+		r = sub_byte_r_Srv6LocatorLsa
+		if err := t.union136_.(*union_146_t).Srv6LocatorLsa.Read(r); err != nil {
+			return fmt.Errorf("read Srv6LocatorLsa: %w", err)
+		}
+		if sub_byte_r_Srv6LocatorLsa.(*io.LimitedReader).N != 0 {
+			return fmt.Errorf("read Srv6LocatorLsa: expect %d bytes but got %d bytes", sub_byte_len_Srv6LocatorLsa, sub_byte_len_Srv6LocatorLsa-sub_byte_r_Srv6LocatorLsa.(*io.LimitedReader).N)
+		}
+		r = tmp_old_r_Srv6LocatorLsa_165
 	default:
-		t.union63_ = &union_72_t{}
-		len_Data := int((t.LsaHeader.Length - 20))
+		t.union136_ = &union_147_t{}
+		len_Data := int((t.LsaHeader.HeaderChecksum.Length - 20))
 		if len_Data != 0 {
 			tmpData := make([]byte, len_Data)
 			n_Data, err := io.ReadFull(r, tmpData[:])
 			if err != nil {
 				return fmt.Errorf("read Data: expect %d bytes but read %d bytes: %w", len_Data, n_Data, err)
 			}
-			t.union63_.(*union_72_t).Data = tmpData[:]
+			t.union136_.(*union_147_t).Data = tmpData[:]
 		} else {
-			t.union63_.(*union_72_t).Data = nil
+			t.union136_.(*union_147_t).Data = nil
 		}
 	}
 	return nil
@@ -2990,9 +5988,9 @@ func (t *OspflinkStateUpdatePacket) MarshalJSON() ([]byte, error) {
 	return json.Marshal(VisitorTIJJOToMap(t))
 }
 func (t *OspflinkStateUpdatePacket) Write(w io.Writer) (err error) {
-	tmp87 := [4]byte{}
-	binary.BigEndian.PutUint32(tmp87[:], uint32(t.NumLsa))
-	if n, err := w.Write(tmp87[:]); err != nil || n != 4 {
+	tmp166 := [4]byte{}
+	binary.BigEndian.PutUint32(tmp166[:], uint32(t.NumLsa))
+	if n, err := w.Write(tmp166[:]); err != nil || n != 4 {
 		return fmt.Errorf("encode t.NumLsa: %w", err)
 	}
 	len_LsaHeaders := int(t.NumLsa)
@@ -3028,12 +6026,12 @@ func (t *OspflinkStateUpdatePacket) Read(r io.Reader) (err error) {
 	}
 	t.NumLsa = uint32(binary.BigEndian.Uint32(tmpNumLsa[:]))
 	len_LsaHeaders := int(t.NumLsa)
-	for i_88 := 0; i_88 < len_LsaHeaders; i_88++ {
-		var tmp89_ Lsa
-		if err := tmp89_.Read(r); err != nil {
+	for i_167 := 0; i_167 < len_LsaHeaders; i_167++ {
+		var tmp168_ Lsa
+		if err := tmp168_.Read(r); err != nil {
 			return fmt.Errorf("read LsaHeaders: %w", err)
 		}
-		t.LsaHeaders = append(t.LsaHeaders, tmp89_)
+		t.LsaHeaders = append(t.LsaHeaders, tmp168_)
 	}
 	return nil
 }
@@ -3080,25 +6078,25 @@ func (t *OspflinkStateAcknowledgementPacket) MustEncode() []byte {
 	return buf
 }
 func (t *OspflinkStateAcknowledgementPacket) Read(r io.Reader) (err error) {
-	tmp_byte_scanner90_ := bufio.NewReaderSize(r, 1)
+	tmp_byte_scanner169_ := bufio.NewReaderSize(r, 1)
 	old_r_LsaHeaders := r
-	r = tmp_byte_scanner90_
+	r = tmp_byte_scanner169_
 	for {
-		_, err := tmp_byte_scanner90_.ReadByte()
+		_, err := tmp_byte_scanner169_.ReadByte()
 		if err != nil {
 			if err != io.EOF {
 				return fmt.Errorf("read LsaHeaders: %w", err)
 			}
 			break
 		}
-		if err := tmp_byte_scanner90_.UnreadByte(); err != nil {
+		if err := tmp_byte_scanner169_.UnreadByte(); err != nil {
 			return fmt.Errorf("read LsaHeaders: unexpected unread error: %w", err)
 		}
-		var tmp91_ Lsaheader
-		if err := tmp91_.Read(r); err != nil {
+		var tmp170_ Lsaheader
+		if err := tmp170_.Read(r); err != nil {
 			return fmt.Errorf("read LsaHeaders: %w", err)
 		}
-		t.LsaHeaders = append(t.LsaHeaders, tmp91_)
+		t.LsaHeaders = append(t.LsaHeaders, tmp170_)
 	}
 	r = old_r_LsaHeaders
 	return nil
@@ -3117,44 +6115,332 @@ func (t *OspflinkStateAcknowledgementPacket) DecodeExact(d []byte) error {
 	}
 	return nil
 }
+func (t *Srv6EndXsidsubTlv) Visit(v VisitorTIJJO) {
+	v.Visit(v, "Behavior", &t.Behavior)
+	v.Visit(v, "Flags", &t.Flags)
+	v.Visit(v, "Reserved", &t.Reserved)
+	v.Visit(v, "Algorithm", &t.Algorithm)
+	v.Visit(v, "Weight", &t.Weight)
+	v.Visit(v, "Reserved2", &t.Reserved2)
+	v.Visit(v, "Sid", &t.Sid)
+	v.Visit(v, "SubTlvs", &t.SubTlvs)
+}
+func (t *Srv6EndXsidsubTlv) MarshalJSON() ([]byte, error) {
+	return json.Marshal(VisitorTIJJOToMap(t))
+}
+func (t *Srv6EndXsidsubTlv) Write(w io.Writer) (err error) {
+	tmp171 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp171[:], uint16(t.Behavior))
+	if n, err := w.Write(tmp171[:]); err != nil || n != 2 {
+		return fmt.Errorf("encode t.Behavior: %w", err)
+	}
+	if n, err := w.Write([]byte{byte(t.Flags)}); err != nil || n != 1 {
+		return fmt.Errorf("encode t.Flags: %w", err)
+	}
+	if n, err := w.Write([]byte{byte(t.Reserved)}); err != nil || n != 1 {
+		return fmt.Errorf("encode t.Reserved: %w", err)
+	}
+	if n, err := w.Write([]byte{byte(t.Algorithm)}); err != nil || n != 1 {
+		return fmt.Errorf("encode t.Algorithm: %w", err)
+	}
+	if n, err := w.Write([]byte{byte(t.Weight)}); err != nil || n != 1 {
+		return fmt.Errorf("encode t.Weight: %w", err)
+	}
+	tmp172 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp172[:], uint16(t.Reserved2))
+	if n, err := w.Write(tmp172[:]); err != nil || n != 2 {
+		return fmt.Errorf("encode t.Reserved2: %w", err)
+	}
+	if n, err := w.Write(t.Sid[:]); err != nil || n != len(t.Sid) {
+		return fmt.Errorf("encode Sid: %w", err)
+	}
+	for _, v := range t.SubTlvs {
+		if err := v.Write(w); err != nil {
+			return fmt.Errorf("encode SubTlvs: %w", err)
+		}
+	}
+	return nil
+}
+func (t *Srv6EndXsidsubTlv) Encode() ([]byte, error) {
+	w := bytes.NewBuffer(make([]byte, 0, 24))
+	if err := t.Write(w); err != nil {
+		return nil, err
+	}
+	return w.Bytes(), nil
+}
+func (t *Srv6EndXsidsubTlv) MustEncode() []byte {
+	buf, err := t.Encode()
+	if err != nil {
+		panic(err)
+	}
+	return buf
+}
+func (t *Srv6EndXsidsubTlv) Read(r io.Reader) (err error) {
+	tmpBehavior := [2]byte{}
+	n_Behavior, err := io.ReadFull(r, tmpBehavior[:])
+	if err != nil {
+		return fmt.Errorf("read Behavior: expect 2 bytes but read %d bytes: %w", n_Behavior, err)
+	}
+	t.Behavior = EndpointBehavior(binary.BigEndian.Uint16(tmpBehavior[:]))
+	tmpFlags := [1]byte{}
+	n_Flags, err := io.ReadFull(r, tmpFlags[:])
+	if err != nil {
+		return fmt.Errorf("read Flags: expect 1 byte but read %d bytes: %w", n_Flags, err)
+	}
+	t.Flags = uint8(tmpFlags[0])
+	tmpReserved := [1]byte{}
+	n_Reserved, err := io.ReadFull(r, tmpReserved[:])
+	if err != nil {
+		return fmt.Errorf("read Reserved: expect 1 byte but read %d bytes: %w", n_Reserved, err)
+	}
+	t.Reserved = uint8(tmpReserved[0])
+	tmpAlgorithm := [1]byte{}
+	n_Algorithm, err := io.ReadFull(r, tmpAlgorithm[:])
+	if err != nil {
+		return fmt.Errorf("read Algorithm: expect 1 byte but read %d bytes: %w", n_Algorithm, err)
+	}
+	t.Algorithm = uint8(tmpAlgorithm[0])
+	tmpWeight := [1]byte{}
+	n_Weight, err := io.ReadFull(r, tmpWeight[:])
+	if err != nil {
+		return fmt.Errorf("read Weight: expect 1 byte but read %d bytes: %w", n_Weight, err)
+	}
+	t.Weight = uint8(tmpWeight[0])
+	tmpReserved2 := [2]byte{}
+	n_Reserved2, err := io.ReadFull(r, tmpReserved2[:])
+	if err != nil {
+		return fmt.Errorf("read Reserved2: expect 2 bytes but read %d bytes: %w", n_Reserved2, err)
+	}
+	t.Reserved2 = uint16(binary.BigEndian.Uint16(tmpReserved2[:]))
+	n_Sid, err := io.ReadFull(r, t.Sid[:])
+	if err != nil {
+		return fmt.Errorf("read Sid: expect %d bytes but read %d bytes: %w", 16, n_Sid, err)
+	}
+	tmp_byte_scanner173_ := bufio.NewReaderSize(r, 1)
+	old_r_SubTlvs := r
+	r = tmp_byte_scanner173_
+	for {
+		_, err := tmp_byte_scanner173_.ReadByte()
+		if err != nil {
+			if err != io.EOF {
+				return fmt.Errorf("read SubTlvs: %w", err)
+			}
+			break
+		}
+		if err := tmp_byte_scanner173_.UnreadByte(); err != nil {
+			return fmt.Errorf("read SubTlvs: unexpected unread error: %w", err)
+		}
+		var tmp174_ Srv6EndXsidsubTlvsubTlv
+		if err := tmp174_.Read(r); err != nil {
+			return fmt.Errorf("read SubTlvs: %w", err)
+		}
+		t.SubTlvs = append(t.SubTlvs, tmp174_)
+	}
+	r = old_r_SubTlvs
+	return nil
+}
+
+func (t *Srv6EndXsidsubTlv) Decode(d []byte) (int, error) {
+	r := bytes.NewReader(d)
+	err := t.Read(r)
+	return int(int(r.Size()) - r.Len()), err
+}
+func (t *Srv6EndXsidsubTlv) DecodeExact(d []byte) error {
+	if n, err := t.Decode(d); err != nil {
+		return err
+	} else if n != len(d) {
+		return fmt.Errorf("decode Srv6EndXsidsubTlv: expect %d bytes but got %d bytes", len(d), n)
+	}
+	return nil
+}
+func (t *Srv6LanEndXsidsubTlv) Visit(v VisitorTIJJO) {
+	v.Visit(v, "Behavior", &t.Behavior)
+	v.Visit(v, "Flags", &t.Flags)
+	v.Visit(v, "Reserved", &t.Reserved)
+	v.Visit(v, "Algorithm", &t.Algorithm)
+	v.Visit(v, "Weight", &t.Weight)
+	v.Visit(v, "Reserved2", &t.Reserved2)
+	v.Visit(v, "NeighborRouterId", &t.NeighborRouterId)
+	v.Visit(v, "Sid", &t.Sid)
+	v.Visit(v, "SubTlvs", &t.SubTlvs)
+}
+func (t *Srv6LanEndXsidsubTlv) MarshalJSON() ([]byte, error) {
+	return json.Marshal(VisitorTIJJOToMap(t))
+}
+func (t *Srv6LanEndXsidsubTlv) Write(w io.Writer) (err error) {
+	tmp175 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp175[:], uint16(t.Behavior))
+	if n, err := w.Write(tmp175[:]); err != nil || n != 2 {
+		return fmt.Errorf("encode t.Behavior: %w", err)
+	}
+	if n, err := w.Write([]byte{byte(t.Flags)}); err != nil || n != 1 {
+		return fmt.Errorf("encode t.Flags: %w", err)
+	}
+	if n, err := w.Write([]byte{byte(t.Reserved)}); err != nil || n != 1 {
+		return fmt.Errorf("encode t.Reserved: %w", err)
+	}
+	if n, err := w.Write([]byte{byte(t.Algorithm)}); err != nil || n != 1 {
+		return fmt.Errorf("encode t.Algorithm: %w", err)
+	}
+	if n, err := w.Write([]byte{byte(t.Weight)}); err != nil || n != 1 {
+		return fmt.Errorf("encode t.Weight: %w", err)
+	}
+	tmp176 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp176[:], uint16(t.Reserved2))
+	if n, err := w.Write(tmp176[:]); err != nil || n != 2 {
+		return fmt.Errorf("encode t.Reserved2: %w", err)
+	}
+	tmp177 := [4]byte{}
+	binary.BigEndian.PutUint32(tmp177[:], uint32(t.NeighborRouterId))
+	if n, err := w.Write(tmp177[:]); err != nil || n != 4 {
+		return fmt.Errorf("encode t.NeighborRouterId: %w", err)
+	}
+	if n, err := w.Write(t.Sid[:]); err != nil || n != len(t.Sid) {
+		return fmt.Errorf("encode Sid: %w", err)
+	}
+	for _, v := range t.SubTlvs {
+		if err := v.Write(w); err != nil {
+			return fmt.Errorf("encode SubTlvs: %w", err)
+		}
+	}
+	return nil
+}
+func (t *Srv6LanEndXsidsubTlv) Encode() ([]byte, error) {
+	w := bytes.NewBuffer(make([]byte, 0, 28))
+	if err := t.Write(w); err != nil {
+		return nil, err
+	}
+	return w.Bytes(), nil
+}
+func (t *Srv6LanEndXsidsubTlv) MustEncode() []byte {
+	buf, err := t.Encode()
+	if err != nil {
+		panic(err)
+	}
+	return buf
+}
+func (t *Srv6LanEndXsidsubTlv) Read(r io.Reader) (err error) {
+	tmpBehavior := [2]byte{}
+	n_Behavior, err := io.ReadFull(r, tmpBehavior[:])
+	if err != nil {
+		return fmt.Errorf("read Behavior: expect 2 bytes but read %d bytes: %w", n_Behavior, err)
+	}
+	t.Behavior = EndpointBehavior(binary.BigEndian.Uint16(tmpBehavior[:]))
+	tmpFlags := [1]byte{}
+	n_Flags, err := io.ReadFull(r, tmpFlags[:])
+	if err != nil {
+		return fmt.Errorf("read Flags: expect 1 byte but read %d bytes: %w", n_Flags, err)
+	}
+	t.Flags = uint8(tmpFlags[0])
+	tmpReserved := [1]byte{}
+	n_Reserved, err := io.ReadFull(r, tmpReserved[:])
+	if err != nil {
+		return fmt.Errorf("read Reserved: expect 1 byte but read %d bytes: %w", n_Reserved, err)
+	}
+	t.Reserved = uint8(tmpReserved[0])
+	tmpAlgorithm := [1]byte{}
+	n_Algorithm, err := io.ReadFull(r, tmpAlgorithm[:])
+	if err != nil {
+		return fmt.Errorf("read Algorithm: expect 1 byte but read %d bytes: %w", n_Algorithm, err)
+	}
+	t.Algorithm = uint8(tmpAlgorithm[0])
+	tmpWeight := [1]byte{}
+	n_Weight, err := io.ReadFull(r, tmpWeight[:])
+	if err != nil {
+		return fmt.Errorf("read Weight: expect 1 byte but read %d bytes: %w", n_Weight, err)
+	}
+	t.Weight = uint8(tmpWeight[0])
+	tmpReserved2 := [2]byte{}
+	n_Reserved2, err := io.ReadFull(r, tmpReserved2[:])
+	if err != nil {
+		return fmt.Errorf("read Reserved2: expect 2 bytes but read %d bytes: %w", n_Reserved2, err)
+	}
+	t.Reserved2 = uint16(binary.BigEndian.Uint16(tmpReserved2[:]))
+	tmpNeighborRouterId := [4]byte{}
+	n_NeighborRouterId, err := io.ReadFull(r, tmpNeighborRouterId[:])
+	if err != nil {
+		return fmt.Errorf("read NeighborRouterId: expect 4 bytes but read %d bytes: %w", n_NeighborRouterId, err)
+	}
+	t.NeighborRouterId = uint32(binary.BigEndian.Uint32(tmpNeighborRouterId[:]))
+	n_Sid, err := io.ReadFull(r, t.Sid[:])
+	if err != nil {
+		return fmt.Errorf("read Sid: expect %d bytes but read %d bytes: %w", 16, n_Sid, err)
+	}
+	tmp_byte_scanner178_ := bufio.NewReaderSize(r, 1)
+	old_r_SubTlvs := r
+	r = tmp_byte_scanner178_
+	for {
+		_, err := tmp_byte_scanner178_.ReadByte()
+		if err != nil {
+			if err != io.EOF {
+				return fmt.Errorf("read SubTlvs: %w", err)
+			}
+			break
+		}
+		if err := tmp_byte_scanner178_.UnreadByte(); err != nil {
+			return fmt.Errorf("read SubTlvs: unexpected unread error: %w", err)
+		}
+		var tmp179_ Srv6LanEndXsidsubTlvsubTlv
+		if err := tmp179_.Read(r); err != nil {
+			return fmt.Errorf("read SubTlvs: %w", err)
+		}
+		t.SubTlvs = append(t.SubTlvs, tmp179_)
+	}
+	r = old_r_SubTlvs
+	return nil
+}
+
+func (t *Srv6LanEndXsidsubTlv) Decode(d []byte) (int, error) {
+	r := bytes.NewReader(d)
+	err := t.Read(r)
+	return int(int(r.Size()) - r.Len()), err
+}
+func (t *Srv6LanEndXsidsubTlv) DecodeExact(d []byte) error {
+	if n, err := t.Decode(d); err != nil {
+		return err
+	} else if n != len(d) {
+		return fmt.Errorf("decode Srv6LanEndXsidsubTlv: expect %d bytes but got %d bytes", len(d), n)
+	}
+	return nil
+}
 func (t *DatabaseDescriptionPacket) Reserved3() uint8 {
-	return ((t.flags92 & 0xf8) >> 3)
+	return ((t.flags180 & 0xf8) >> 3)
 }
 func (t *DatabaseDescriptionPacket) SetReserved3(v uint8) bool {
 	if v > 31 {
 		return false
 	}
-	t.flags92 = (t.flags92 & ^uint8(0xf8)) | ((v & 0x1f) << 3)
+	t.flags180 = (t.flags180 & ^uint8(0xf8)) | ((v & 0x1f) << 3)
 	return true
 }
 func (t *DatabaseDescriptionPacket) Init() bool {
-	return ((t.flags92 & 0x04) >> 2) == 1
+	return ((t.flags180 & 0x04) >> 2) == 1
 }
 func (t *DatabaseDescriptionPacket) SetInit(v bool) {
 	if v {
-		t.flags92 |= uint8(0x4)
+		t.flags180 |= uint8(0x4)
 	} else {
-		t.flags92 &= ^uint8(0x4)
+		t.flags180 &= ^uint8(0x4)
 	}
 }
 func (t *DatabaseDescriptionPacket) More() bool {
-	return ((t.flags92 & 0x02) >> 1) == 1
+	return ((t.flags180 & 0x02) >> 1) == 1
 }
 func (t *DatabaseDescriptionPacket) SetMore(v bool) {
 	if v {
-		t.flags92 |= uint8(0x2)
+		t.flags180 |= uint8(0x2)
 	} else {
-		t.flags92 &= ^uint8(0x2)
+		t.flags180 &= ^uint8(0x2)
 	}
 }
 func (t *DatabaseDescriptionPacket) Master() bool {
-	return ((t.flags92 & 0x01) >> 0) == 1
+	return ((t.flags180 & 0x01) >> 0) == 1
 }
 func (t *DatabaseDescriptionPacket) SetMaster(v bool) {
 	if v {
-		t.flags92 |= uint8(0x1)
+		t.flags180 |= uint8(0x1)
 	} else {
-		t.flags92 &= ^uint8(0x1)
+		t.flags180 &= ^uint8(0x1)
 	}
 }
 func (t *DatabaseDescriptionPacket) Visit(v VisitorTIJJO) {
@@ -3197,20 +6483,20 @@ func (t *DatabaseDescriptionPacket) Write(w io.Writer) (err error) {
 	if err := t.Options.Write(w); err != nil {
 		return fmt.Errorf("encode Options: %w", err)
 	}
-	tmp93 := [2]byte{}
-	binary.BigEndian.PutUint16(tmp93[:], uint16(t.InterfaceMtu))
-	if n, err := w.Write(tmp93[:]); err != nil || n != 2 {
+	tmp181 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp181[:], uint16(t.InterfaceMtu))
+	if n, err := w.Write(tmp181[:]); err != nil || n != 2 {
 		return fmt.Errorf("encode t.InterfaceMtu: %w", err)
 	}
 	if n, err := w.Write([]byte{byte(t.Reserved2)}); err != nil || n != 1 {
 		return fmt.Errorf("encode t.Reserved2: %w", err)
 	}
-	if n, err := w.Write([]byte{byte(t.flags92)}); err != nil || n != 1 {
-		return fmt.Errorf("encode t.flags92: %w", err)
+	if n, err := w.Write([]byte{byte(t.flags180)}); err != nil || n != 1 {
+		return fmt.Errorf("encode t.flags180: %w", err)
 	}
-	tmp94 := [4]byte{}
-	binary.BigEndian.PutUint32(tmp94[:], uint32(t.DdSequenceNumber))
-	if n, err := w.Write(tmp94[:]); err != nil || n != 4 {
+	tmp182 := [4]byte{}
+	binary.BigEndian.PutUint32(tmp182[:], uint32(t.DdSequenceNumber))
+	if n, err := w.Write(tmp182[:]); err != nil || n != 4 {
 		return fmt.Errorf("encode t.DdSequenceNumber: %w", err)
 	}
 	for _, v := range t.LsaHeaders {
@@ -3256,37 +6542,37 @@ func (t *DatabaseDescriptionPacket) Read(r io.Reader) (err error) {
 		return fmt.Errorf("read Reserved2: expect 1 byte but read %d bytes: %w", n_Reserved2, err)
 	}
 	t.Reserved2 = uint8(tmpReserved2[0])
-	tmpflags92 := [1]byte{}
-	n_flags92, err := io.ReadFull(r, tmpflags92[:])
+	tmpflags180 := [1]byte{}
+	n_flags180, err := io.ReadFull(r, tmpflags180[:])
 	if err != nil {
-		return fmt.Errorf("read flags92: expect 1 byte but read %d bytes: %w", n_flags92, err)
+		return fmt.Errorf("read flags180: expect 1 byte but read %d bytes: %w", n_flags180, err)
 	}
-	t.flags92 = uint8(tmpflags92[0])
+	t.flags180 = uint8(tmpflags180[0])
 	tmpDdSequenceNumber := [4]byte{}
 	n_DdSequenceNumber, err := io.ReadFull(r, tmpDdSequenceNumber[:])
 	if err != nil {
 		return fmt.Errorf("read DdSequenceNumber: expect 4 bytes but read %d bytes: %w", n_DdSequenceNumber, err)
 	}
 	t.DdSequenceNumber = uint32(binary.BigEndian.Uint32(tmpDdSequenceNumber[:]))
-	tmp_byte_scanner95_ := bufio.NewReaderSize(r, 1)
+	tmp_byte_scanner183_ := bufio.NewReaderSize(r, 1)
 	old_r_LsaHeaders := r
-	r = tmp_byte_scanner95_
+	r = tmp_byte_scanner183_
 	for {
-		_, err := tmp_byte_scanner95_.ReadByte()
+		_, err := tmp_byte_scanner183_.ReadByte()
 		if err != nil {
 			if err != io.EOF {
 				return fmt.Errorf("read LsaHeaders: %w", err)
 			}
 			break
 		}
-		if err := tmp_byte_scanner95_.UnreadByte(); err != nil {
+		if err := tmp_byte_scanner183_.UnreadByte(); err != nil {
 			return fmt.Errorf("read LsaHeaders: unexpected unread error: %w", err)
 		}
-		var tmp96_ Lsaheader
-		if err := tmp96_.Read(r); err != nil {
+		var tmp184_ Lsaheader
+		if err := tmp184_.Read(r); err != nil {
 			return fmt.Errorf("read LsaHeaders: %w", err)
 		}
-		t.LsaHeaders = append(t.LsaHeaders, tmp96_)
+		t.LsaHeaders = append(t.LsaHeaders, tmp184_)
 	}
 	r = old_r_LsaHeaders
 	return nil
@@ -3305,12 +6591,12 @@ func (t *DatabaseDescriptionPacket) DecodeExact(d []byte) error {
 	}
 	return nil
 }
-func (t *union_99_t) isunion97_()  {}
-func (t *union_100_t) isunion97_() {}
-func (t *union_101_t) isunion97_() {}
-func (t *union_102_t) isunion97_() {}
-func (t *union_103_t) isunion97_() {}
-func (t *union_104_t) isunion97_() {}
+func (t *union_187_t) isunion185_() {}
+func (t *union_188_t) isunion185_() {}
+func (t *union_189_t) isunion185_() {}
+func (t *union_190_t) isunion185_() {}
+func (t *union_191_t) isunion185_() {}
+func (t *union_192_t) isunion185_() {}
 func (t *Ospfpacket) Data() *[]uint8 {
 	if t.Header.Type == OspfpacketType_Hello {
 		return nil
@@ -3323,10 +6609,10 @@ func (t *Ospfpacket) Data() *[]uint8 {
 	} else if t.Header.Type == OspfpacketType_LinkStateAcknowledgement {
 		return nil
 	} else if true {
-		if _, ok := t.union97_.(*union_104_t); !ok {
+		if _, ok := t.union185_.(*union_192_t); !ok {
 			return nil // not set
 		}
-		tmp := []uint8(t.union97_.(*union_104_t).Data)
+		tmp := []uint8(t.union185_.(*union_192_t).Data)
 		return &tmp
 	}
 	return nil
@@ -3343,10 +6629,10 @@ func (t *Ospfpacket) SetData(v []uint8) bool {
 	} else if t.Header.Type == OspfpacketType_LinkStateAcknowledgement {
 		return false
 	} else if true {
-		if _, ok := t.union97_.(*union_104_t); !ok {
-			t.union97_ = &union_104_t{}
+		if _, ok := t.union185_.(*union_192_t); !ok {
+			t.union185_ = &union_192_t{}
 		}
-		t.union97_.(*union_104_t).Data = []uint8(v)
+		t.union185_.(*union_192_t).Data = []uint8(v)
 		return true
 	}
 	return false
@@ -3355,10 +6641,10 @@ func (t *Ospfpacket) DatabaseDescriptionPacket() *DatabaseDescriptionPacket {
 	if t.Header.Type == OspfpacketType_Hello {
 		return nil
 	} else if t.Header.Type == OspfpacketType_DatabaseDescription {
-		if _, ok := t.union97_.(*union_100_t); !ok {
+		if _, ok := t.union185_.(*union_188_t); !ok {
 			return nil // not set
 		}
-		tmp := DatabaseDescriptionPacket(t.union97_.(*union_100_t).DatabaseDescriptionPacket)
+		tmp := DatabaseDescriptionPacket(t.union185_.(*union_188_t).DatabaseDescriptionPacket)
 		return &tmp
 	}
 	return nil
@@ -3367,30 +6653,30 @@ func (t *Ospfpacket) SetDatabaseDescriptionPacket(v DatabaseDescriptionPacket) b
 	if t.Header.Type == OspfpacketType_Hello {
 		return false
 	} else if t.Header.Type == OspfpacketType_DatabaseDescription {
-		if _, ok := t.union97_.(*union_100_t); !ok {
-			t.union97_ = &union_100_t{}
+		if _, ok := t.union185_.(*union_188_t); !ok {
+			t.union185_ = &union_188_t{}
 		}
-		t.union97_.(*union_100_t).DatabaseDescriptionPacket = DatabaseDescriptionPacket(v)
+		t.union185_.(*union_188_t).DatabaseDescriptionPacket = DatabaseDescriptionPacket(v)
 		return true
 	}
 	return false
 }
 func (t *Ospfpacket) HelloPacket() *HelloPacket {
 	if t.Header.Type == OspfpacketType_Hello {
-		if _, ok := t.union97_.(*union_99_t); !ok {
+		if _, ok := t.union185_.(*union_187_t); !ok {
 			return nil // not set
 		}
-		tmp := HelloPacket(t.union97_.(*union_99_t).HelloPacket)
+		tmp := HelloPacket(t.union185_.(*union_187_t).HelloPacket)
 		return &tmp
 	}
 	return nil
 }
 func (t *Ospfpacket) SetHelloPacket(v HelloPacket) bool {
 	if t.Header.Type == OspfpacketType_Hello {
-		if _, ok := t.union97_.(*union_99_t); !ok {
-			t.union97_ = &union_99_t{}
+		if _, ok := t.union185_.(*union_187_t); !ok {
+			t.union185_ = &union_187_t{}
 		}
-		t.union97_.(*union_99_t).HelloPacket = HelloPacket(v)
+		t.union185_.(*union_187_t).HelloPacket = HelloPacket(v)
 		return true
 	}
 	return false
@@ -3405,10 +6691,10 @@ func (t *Ospfpacket) OspfLinkStateAcknowledgementPacket() *OspflinkStateAcknowle
 	} else if t.Header.Type == OspfpacketType_LinkStateUpdate {
 		return nil
 	} else if t.Header.Type == OspfpacketType_LinkStateAcknowledgement {
-		if _, ok := t.union97_.(*union_103_t); !ok {
+		if _, ok := t.union185_.(*union_191_t); !ok {
 			return nil // not set
 		}
-		tmp := OspflinkStateAcknowledgementPacket(t.union97_.(*union_103_t).OspfLinkStateAcknowledgementPacket)
+		tmp := OspflinkStateAcknowledgementPacket(t.union185_.(*union_191_t).OspfLinkStateAcknowledgementPacket)
 		return &tmp
 	}
 	return nil
@@ -3423,10 +6709,10 @@ func (t *Ospfpacket) SetOspfLinkStateAcknowledgementPacket(v OspflinkStateAcknow
 	} else if t.Header.Type == OspfpacketType_LinkStateUpdate {
 		return false
 	} else if t.Header.Type == OspfpacketType_LinkStateAcknowledgement {
-		if _, ok := t.union97_.(*union_103_t); !ok {
-			t.union97_ = &union_103_t{}
+		if _, ok := t.union185_.(*union_191_t); !ok {
+			t.union185_ = &union_191_t{}
 		}
-		t.union97_.(*union_103_t).OspfLinkStateAcknowledgementPacket = OspflinkStateAcknowledgementPacket(v)
+		t.union185_.(*union_191_t).OspfLinkStateAcknowledgementPacket = OspflinkStateAcknowledgementPacket(v)
 		return true
 	}
 	return false
@@ -3437,10 +6723,10 @@ func (t *Ospfpacket) OspfLinkStateRequestPacket() *OspflinkStateRequestPacket {
 	} else if t.Header.Type == OspfpacketType_DatabaseDescription {
 		return nil
 	} else if t.Header.Type == OspfpacketType_LinkStateRequest {
-		if _, ok := t.union97_.(*union_101_t); !ok {
+		if _, ok := t.union185_.(*union_189_t); !ok {
 			return nil // not set
 		}
-		tmp := OspflinkStateRequestPacket(t.union97_.(*union_101_t).OspfLinkStateRequestPacket)
+		tmp := OspflinkStateRequestPacket(t.union185_.(*union_189_t).OspfLinkStateRequestPacket)
 		return &tmp
 	}
 	return nil
@@ -3451,10 +6737,10 @@ func (t *Ospfpacket) SetOspfLinkStateRequestPacket(v OspflinkStateRequestPacket)
 	} else if t.Header.Type == OspfpacketType_DatabaseDescription {
 		return false
 	} else if t.Header.Type == OspfpacketType_LinkStateRequest {
-		if _, ok := t.union97_.(*union_101_t); !ok {
-			t.union97_ = &union_101_t{}
+		if _, ok := t.union185_.(*union_189_t); !ok {
+			t.union185_ = &union_189_t{}
 		}
-		t.union97_.(*union_101_t).OspfLinkStateRequestPacket = OspflinkStateRequestPacket(v)
+		t.union185_.(*union_189_t).OspfLinkStateRequestPacket = OspflinkStateRequestPacket(v)
 		return true
 	}
 	return false
@@ -3467,10 +6753,10 @@ func (t *Ospfpacket) OspfLinkStateUpdatePacket() *OspflinkStateUpdatePacket {
 	} else if t.Header.Type == OspfpacketType_LinkStateRequest {
 		return nil
 	} else if t.Header.Type == OspfpacketType_LinkStateUpdate {
-		if _, ok := t.union97_.(*union_102_t); !ok {
+		if _, ok := t.union185_.(*union_190_t); !ok {
 			return nil // not set
 		}
-		tmp := OspflinkStateUpdatePacket(t.union97_.(*union_102_t).OspfLinkStateUpdatePacket)
+		tmp := OspflinkStateUpdatePacket(t.union185_.(*union_190_t).OspfLinkStateUpdatePacket)
 		return &tmp
 	}
 	return nil
@@ -3483,10 +6769,10 @@ func (t *Ospfpacket) SetOspfLinkStateUpdatePacket(v OspflinkStateUpdatePacket) b
 	} else if t.Header.Type == OspfpacketType_LinkStateRequest {
 		return false
 	} else if t.Header.Type == OspfpacketType_LinkStateUpdate {
-		if _, ok := t.union97_.(*union_102_t); !ok {
-			t.union97_ = &union_102_t{}
+		if _, ok := t.union185_.(*union_190_t); !ok {
+			t.union185_ = &union_190_t{}
 		}
-		t.union97_.(*union_102_t).OspfLinkStateUpdatePacket = OspflinkStateUpdatePacket(v)
+		t.union185_.(*union_190_t).OspfLinkStateUpdatePacket = OspflinkStateUpdatePacket(v)
 		return true
 	}
 	return false
@@ -3509,104 +6795,104 @@ func (t *Ospfpacket) Write(w io.Writer) (err error) {
 	}
 	switch {
 	case (t.Header.Type == OspfpacketType_Hello):
-		if _, ok := t.union97_.(*union_99_t); !ok {
-			return fmt.Errorf("encode t.union97_: union is not set to union_99_t")
+		if _, ok := t.union185_.(*union_187_t); !ok {
+			return fmt.Errorf("encode t.union185_: union is not set to union_187_t")
 		}
-		new_buf_105 := bytes.NewBuffer(nil)
-		old_buf_105_w := w
-		w = new_buf_105
-		if err := t.union97_.(*union_99_t).HelloPacket.Write(w); err != nil {
+		new_buf_193 := bytes.NewBuffer(nil)
+		old_buf_193_w := w
+		w = new_buf_193
+		if err := t.union185_.(*union_187_t).HelloPacket.Write(w); err != nil {
 			return fmt.Errorf("encode HelloPacket: %w", err)
 		}
-		if new_buf_105.Len() != int(24) {
-			return fmt.Errorf("encode HelloPacket: expect %d bytes but got %d bytes", new_buf_105.Len(), int(24))
+		if new_buf_193.Len() != int((t.Header.PacketLength - 16)) {
+			return fmt.Errorf("encode HelloPacket: expect %d bytes but got %d bytes", new_buf_193.Len(), int((t.Header.PacketLength - 16)))
 		}
-		_, err = new_buf_105.WriteTo(old_buf_105_w)
+		_, err = new_buf_193.WriteTo(old_buf_193_w)
 		if err != nil {
 			return err
 		}
-		w = old_buf_105_w
+		w = old_buf_193_w
 	case (t.Header.Type == OspfpacketType_DatabaseDescription):
-		if _, ok := t.union97_.(*union_100_t); !ok {
-			return fmt.Errorf("encode t.union97_: union is not set to union_100_t")
+		if _, ok := t.union185_.(*union_188_t); !ok {
+			return fmt.Errorf("encode t.union185_: union is not set to union_188_t")
 		}
-		new_buf_106 := bytes.NewBuffer(nil)
-		old_buf_106_w := w
-		w = new_buf_106
-		if err := t.union97_.(*union_100_t).DatabaseDescriptionPacket.Write(w); err != nil {
+		new_buf_194 := bytes.NewBuffer(nil)
+		old_buf_194_w := w
+		w = new_buf_194
+		if err := t.union185_.(*union_188_t).DatabaseDescriptionPacket.Write(w); err != nil {
 			return fmt.Errorf("encode DatabaseDescriptionPacket: %w", err)
 		}
-		if new_buf_106.Len() != int(24) {
-			return fmt.Errorf("encode DatabaseDescriptionPacket: expect %d bytes but got %d bytes", new_buf_106.Len(), int(24))
+		if new_buf_194.Len() != int((t.Header.PacketLength - 16)) {
+			return fmt.Errorf("encode DatabaseDescriptionPacket: expect %d bytes but got %d bytes", new_buf_194.Len(), int((t.Header.PacketLength - 16)))
 		}
-		_, err = new_buf_106.WriteTo(old_buf_106_w)
+		_, err = new_buf_194.WriteTo(old_buf_194_w)
 		if err != nil {
 			return err
 		}
-		w = old_buf_106_w
+		w = old_buf_194_w
 	case (t.Header.Type == OspfpacketType_LinkStateRequest):
-		if _, ok := t.union97_.(*union_101_t); !ok {
-			return fmt.Errorf("encode t.union97_: union is not set to union_101_t")
+		if _, ok := t.union185_.(*union_189_t); !ok {
+			return fmt.Errorf("encode t.union185_: union is not set to union_189_t")
 		}
-		new_buf_107 := bytes.NewBuffer(nil)
-		old_buf_107_w := w
-		w = new_buf_107
-		if err := t.union97_.(*union_101_t).OspfLinkStateRequestPacket.Write(w); err != nil {
+		new_buf_195 := bytes.NewBuffer(nil)
+		old_buf_195_w := w
+		w = new_buf_195
+		if err := t.union185_.(*union_189_t).OspfLinkStateRequestPacket.Write(w); err != nil {
 			return fmt.Errorf("encode OspfLinkStateRequestPacket: %w", err)
 		}
-		if new_buf_107.Len() != int(24) {
-			return fmt.Errorf("encode OspfLinkStateRequestPacket: expect %d bytes but got %d bytes", new_buf_107.Len(), int(24))
+		if new_buf_195.Len() != int((t.Header.PacketLength - 16)) {
+			return fmt.Errorf("encode OspfLinkStateRequestPacket: expect %d bytes but got %d bytes", new_buf_195.Len(), int((t.Header.PacketLength - 16)))
 		}
-		_, err = new_buf_107.WriteTo(old_buf_107_w)
+		_, err = new_buf_195.WriteTo(old_buf_195_w)
 		if err != nil {
 			return err
 		}
-		w = old_buf_107_w
+		w = old_buf_195_w
 	case (t.Header.Type == OspfpacketType_LinkStateUpdate):
-		if _, ok := t.union97_.(*union_102_t); !ok {
-			return fmt.Errorf("encode t.union97_: union is not set to union_102_t")
+		if _, ok := t.union185_.(*union_190_t); !ok {
+			return fmt.Errorf("encode t.union185_: union is not set to union_190_t")
 		}
-		new_buf_108 := bytes.NewBuffer(nil)
-		old_buf_108_w := w
-		w = new_buf_108
-		if err := t.union97_.(*union_102_t).OspfLinkStateUpdatePacket.Write(w); err != nil {
+		new_buf_196 := bytes.NewBuffer(nil)
+		old_buf_196_w := w
+		w = new_buf_196
+		if err := t.union185_.(*union_190_t).OspfLinkStateUpdatePacket.Write(w); err != nil {
 			return fmt.Errorf("encode OspfLinkStateUpdatePacket: %w", err)
 		}
-		if new_buf_108.Len() != int(24) {
-			return fmt.Errorf("encode OspfLinkStateUpdatePacket: expect %d bytes but got %d bytes", new_buf_108.Len(), int(24))
+		if new_buf_196.Len() != int((t.Header.PacketLength - 16)) {
+			return fmt.Errorf("encode OspfLinkStateUpdatePacket: expect %d bytes but got %d bytes", new_buf_196.Len(), int((t.Header.PacketLength - 16)))
 		}
-		_, err = new_buf_108.WriteTo(old_buf_108_w)
+		_, err = new_buf_196.WriteTo(old_buf_196_w)
 		if err != nil {
 			return err
 		}
-		w = old_buf_108_w
+		w = old_buf_196_w
 	case (t.Header.Type == OspfpacketType_LinkStateAcknowledgement):
-		if _, ok := t.union97_.(*union_103_t); !ok {
-			return fmt.Errorf("encode t.union97_: union is not set to union_103_t")
+		if _, ok := t.union185_.(*union_191_t); !ok {
+			return fmt.Errorf("encode t.union185_: union is not set to union_191_t")
 		}
-		new_buf_109 := bytes.NewBuffer(nil)
-		old_buf_109_w := w
-		w = new_buf_109
-		if err := t.union97_.(*union_103_t).OspfLinkStateAcknowledgementPacket.Write(w); err != nil {
+		new_buf_197 := bytes.NewBuffer(nil)
+		old_buf_197_w := w
+		w = new_buf_197
+		if err := t.union185_.(*union_191_t).OspfLinkStateAcknowledgementPacket.Write(w); err != nil {
 			return fmt.Errorf("encode OspfLinkStateAcknowledgementPacket: %w", err)
 		}
-		if new_buf_109.Len() != int(24) {
-			return fmt.Errorf("encode OspfLinkStateAcknowledgementPacket: expect %d bytes but got %d bytes", new_buf_109.Len(), int(24))
+		if new_buf_197.Len() != int((t.Header.PacketLength - 16)) {
+			return fmt.Errorf("encode OspfLinkStateAcknowledgementPacket: expect %d bytes but got %d bytes", new_buf_197.Len(), int((t.Header.PacketLength - 16)))
 		}
-		_, err = new_buf_109.WriteTo(old_buf_109_w)
+		_, err = new_buf_197.WriteTo(old_buf_197_w)
 		if err != nil {
 			return err
 		}
-		w = old_buf_109_w
+		w = old_buf_197_w
 	default:
-		if _, ok := t.union97_.(*union_104_t); !ok {
-			return fmt.Errorf("encode t.union97_: union is not set to union_104_t")
+		if _, ok := t.union185_.(*union_192_t); !ok {
+			return fmt.Errorf("encode t.union185_: union is not set to union_192_t")
 		}
-		len_Data := int((t.Header.PacketLength - 24))
-		if len(t.union97_.(*union_104_t).Data) != len_Data {
-			return fmt.Errorf("encode Data: expect %d bytes but got %d bytes", len_Data, len(t.union97_.(*union_104_t).Data))
+		len_Data := int((t.Header.PacketLength - 16))
+		if len(t.union185_.(*union_192_t).Data) != len_Data {
+			return fmt.Errorf("encode Data: expect %d bytes but got %d bytes", len_Data, len(t.union185_.(*union_192_t).Data))
 		}
-		if n, err := w.Write(t.union97_.(*union_104_t).Data); err != nil || n != len(t.union97_.(*union_104_t).Data) {
+		if n, err := w.Write(t.union185_.(*union_192_t).Data); err != nil || n != len(t.union185_.(*union_192_t).Data) {
 			return fmt.Errorf("encode Data: %w", err)
 		}
 	}
@@ -3632,82 +6918,82 @@ func (t *Ospfpacket) Read(r io.Reader) (err error) {
 	}
 	switch {
 	case (t.Header.Type == OspfpacketType_Hello):
-		t.union97_ = &union_99_t{}
-		sub_byte_len_HelloPacket := int64(24)
+		t.union185_ = &union_187_t{}
+		sub_byte_len_HelloPacket := int64((t.Header.PacketLength - 16))
 		sub_byte_r_HelloPacket := io.LimitReader(r, int64(sub_byte_len_HelloPacket))
-		tmp_old_r_HelloPacket_110 := r
+		tmp_old_r_HelloPacket_198 := r
 		r = sub_byte_r_HelloPacket
-		if err := t.union97_.(*union_99_t).HelloPacket.Read(r); err != nil {
+		if err := t.union185_.(*union_187_t).HelloPacket.Read(r); err != nil {
 			return fmt.Errorf("read HelloPacket: %w", err)
 		}
 		if sub_byte_r_HelloPacket.(*io.LimitedReader).N != 0 {
 			return fmt.Errorf("read HelloPacket: expect %d bytes but got %d bytes", sub_byte_len_HelloPacket, sub_byte_len_HelloPacket-sub_byte_r_HelloPacket.(*io.LimitedReader).N)
 		}
-		r = tmp_old_r_HelloPacket_110
+		r = tmp_old_r_HelloPacket_198
 	case (t.Header.Type == OspfpacketType_DatabaseDescription):
-		t.union97_ = &union_100_t{}
-		sub_byte_len_DatabaseDescriptionPacket := int64(24)
+		t.union185_ = &union_188_t{}
+		sub_byte_len_DatabaseDescriptionPacket := int64((t.Header.PacketLength - 16))
 		sub_byte_r_DatabaseDescriptionPacket := io.LimitReader(r, int64(sub_byte_len_DatabaseDescriptionPacket))
-		tmp_old_r_DatabaseDescriptionPacket_111 := r
+		tmp_old_r_DatabaseDescriptionPacket_199 := r
 		r = sub_byte_r_DatabaseDescriptionPacket
-		if err := t.union97_.(*union_100_t).DatabaseDescriptionPacket.Read(r); err != nil {
+		if err := t.union185_.(*union_188_t).DatabaseDescriptionPacket.Read(r); err != nil {
 			return fmt.Errorf("read DatabaseDescriptionPacket: %w", err)
 		}
 		if sub_byte_r_DatabaseDescriptionPacket.(*io.LimitedReader).N != 0 {
 			return fmt.Errorf("read DatabaseDescriptionPacket: expect %d bytes but got %d bytes", sub_byte_len_DatabaseDescriptionPacket, sub_byte_len_DatabaseDescriptionPacket-sub_byte_r_DatabaseDescriptionPacket.(*io.LimitedReader).N)
 		}
-		r = tmp_old_r_DatabaseDescriptionPacket_111
+		r = tmp_old_r_DatabaseDescriptionPacket_199
 	case (t.Header.Type == OspfpacketType_LinkStateRequest):
-		t.union97_ = &union_101_t{}
-		sub_byte_len_OspfLinkStateRequestPacket := int64(24)
+		t.union185_ = &union_189_t{}
+		sub_byte_len_OspfLinkStateRequestPacket := int64((t.Header.PacketLength - 16))
 		sub_byte_r_OspfLinkStateRequestPacket := io.LimitReader(r, int64(sub_byte_len_OspfLinkStateRequestPacket))
-		tmp_old_r_OspfLinkStateRequestPacket_112 := r
+		tmp_old_r_OspfLinkStateRequestPacket_200 := r
 		r = sub_byte_r_OspfLinkStateRequestPacket
-		if err := t.union97_.(*union_101_t).OspfLinkStateRequestPacket.Read(r); err != nil {
+		if err := t.union185_.(*union_189_t).OspfLinkStateRequestPacket.Read(r); err != nil {
 			return fmt.Errorf("read OspfLinkStateRequestPacket: %w", err)
 		}
 		if sub_byte_r_OspfLinkStateRequestPacket.(*io.LimitedReader).N != 0 {
 			return fmt.Errorf("read OspfLinkStateRequestPacket: expect %d bytes but got %d bytes", sub_byte_len_OspfLinkStateRequestPacket, sub_byte_len_OspfLinkStateRequestPacket-sub_byte_r_OspfLinkStateRequestPacket.(*io.LimitedReader).N)
 		}
-		r = tmp_old_r_OspfLinkStateRequestPacket_112
+		r = tmp_old_r_OspfLinkStateRequestPacket_200
 	case (t.Header.Type == OspfpacketType_LinkStateUpdate):
-		t.union97_ = &union_102_t{}
-		sub_byte_len_OspfLinkStateUpdatePacket := int64(24)
+		t.union185_ = &union_190_t{}
+		sub_byte_len_OspfLinkStateUpdatePacket := int64((t.Header.PacketLength - 16))
 		sub_byte_r_OspfLinkStateUpdatePacket := io.LimitReader(r, int64(sub_byte_len_OspfLinkStateUpdatePacket))
-		tmp_old_r_OspfLinkStateUpdatePacket_113 := r
+		tmp_old_r_OspfLinkStateUpdatePacket_201 := r
 		r = sub_byte_r_OspfLinkStateUpdatePacket
-		if err := t.union97_.(*union_102_t).OspfLinkStateUpdatePacket.Read(r); err != nil {
+		if err := t.union185_.(*union_190_t).OspfLinkStateUpdatePacket.Read(r); err != nil {
 			return fmt.Errorf("read OspfLinkStateUpdatePacket: %w", err)
 		}
 		if sub_byte_r_OspfLinkStateUpdatePacket.(*io.LimitedReader).N != 0 {
 			return fmt.Errorf("read OspfLinkStateUpdatePacket: expect %d bytes but got %d bytes", sub_byte_len_OspfLinkStateUpdatePacket, sub_byte_len_OspfLinkStateUpdatePacket-sub_byte_r_OspfLinkStateUpdatePacket.(*io.LimitedReader).N)
 		}
-		r = tmp_old_r_OspfLinkStateUpdatePacket_113
+		r = tmp_old_r_OspfLinkStateUpdatePacket_201
 	case (t.Header.Type == OspfpacketType_LinkStateAcknowledgement):
-		t.union97_ = &union_103_t{}
-		sub_byte_len_OspfLinkStateAcknowledgementPacket := int64(24)
+		t.union185_ = &union_191_t{}
+		sub_byte_len_OspfLinkStateAcknowledgementPacket := int64((t.Header.PacketLength - 16))
 		sub_byte_r_OspfLinkStateAcknowledgementPacket := io.LimitReader(r, int64(sub_byte_len_OspfLinkStateAcknowledgementPacket))
-		tmp_old_r_OspfLinkStateAcknowledgementPacket_114 := r
+		tmp_old_r_OspfLinkStateAcknowledgementPacket_202 := r
 		r = sub_byte_r_OspfLinkStateAcknowledgementPacket
-		if err := t.union97_.(*union_103_t).OspfLinkStateAcknowledgementPacket.Read(r); err != nil {
+		if err := t.union185_.(*union_191_t).OspfLinkStateAcknowledgementPacket.Read(r); err != nil {
 			return fmt.Errorf("read OspfLinkStateAcknowledgementPacket: %w", err)
 		}
 		if sub_byte_r_OspfLinkStateAcknowledgementPacket.(*io.LimitedReader).N != 0 {
 			return fmt.Errorf("read OspfLinkStateAcknowledgementPacket: expect %d bytes but got %d bytes", sub_byte_len_OspfLinkStateAcknowledgementPacket, sub_byte_len_OspfLinkStateAcknowledgementPacket-sub_byte_r_OspfLinkStateAcknowledgementPacket.(*io.LimitedReader).N)
 		}
-		r = tmp_old_r_OspfLinkStateAcknowledgementPacket_114
+		r = tmp_old_r_OspfLinkStateAcknowledgementPacket_202
 	default:
-		t.union97_ = &union_104_t{}
-		len_Data := int((t.Header.PacketLength - 24))
+		t.union185_ = &union_192_t{}
+		len_Data := int((t.Header.PacketLength - 16))
 		if len_Data != 0 {
 			tmpData := make([]byte, len_Data)
 			n_Data, err := io.ReadFull(r, tmpData[:])
 			if err != nil {
 				return fmt.Errorf("read Data: expect %d bytes but read %d bytes: %w", len_Data, n_Data, err)
 			}
-			t.union97_.(*union_104_t).Data = tmpData[:]
+			t.union185_.(*union_192_t).Data = tmpData[:]
 		} else {
-			t.union97_.(*union_104_t).Data = nil
+			t.union185_.(*union_192_t).Data = nil
 		}
 	}
 	return nil

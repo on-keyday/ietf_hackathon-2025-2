@@ -3,3 +3,7 @@ global:
         as: 64512
         router-id: 2001:db8:0:5::2
 
+neighbors:
+    afi-safis:
+        config:
+            afi-safi-name: ipv6-flowspec

@@ -2,3 +2,5 @@
 gobgp
 .buildx-cache
 *.o
+*.gz
+libnl

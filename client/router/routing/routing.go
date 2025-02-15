@@ -346,6 +346,127 @@ func (t NdpoptionType) String() string {
 	return fmt.Sprintf("NdpoptionType(%d)", t)
 }
 
+type FlowSpecOp int
+
+const (
+	FlowSpecOp_FalseValue   FlowSpecOp = 0
+	FlowSpecOp_Equal        FlowSpecOp = 1
+	FlowSpecOp_Greater      FlowSpecOp = 2
+	FlowSpecOp_GreaterEqual FlowSpecOp = 3
+	FlowSpecOp_Less         FlowSpecOp = 4
+	FlowSpecOp_LessEqual    FlowSpecOp = 5
+	FlowSpecOp_NotEqual     FlowSpecOp = 6
+	FlowSpecOp_TrueValue    FlowSpecOp = 7
+)
+
+func (t FlowSpecOp) String() string {
+	switch t {
+	case FlowSpecOp_FalseValue:
+		return "FalseValue"
+	case FlowSpecOp_Equal:
+		return "Equal"
+	case FlowSpecOp_Greater:
+		return "Greater"
+	case FlowSpecOp_GreaterEqual:
+		return "GreaterEqual"
+	case FlowSpecOp_Less:
+		return "Less"
+	case FlowSpecOp_LessEqual:
+		return "LessEqual"
+	case FlowSpecOp_NotEqual:
+		return "NotEqual"
+	case FlowSpecOp_TrueValue:
+		return "TrueValue"
+	}
+	return fmt.Sprintf("FlowSpecOp(%d)", t)
+}
+
+type BgpflowSpecType uint8
+
+const (
+	BgpflowSpecType_Unknown      BgpflowSpecType = 0
+	BgpflowSpecType_DstPrefix    BgpflowSpecType = 1
+	BgpflowSpecType_SrcPrefix    BgpflowSpecType = 2
+	BgpflowSpecType_IpProto      BgpflowSpecType = 3
+	BgpflowSpecType_Port         BgpflowSpecType = 4
+	BgpflowSpecType_DstPort      BgpflowSpecType = 5
+	BgpflowSpecType_SrcPort      BgpflowSpecType = 6
+	BgpflowSpecType_IcmpType     BgpflowSpecType = 7
+	BgpflowSpecType_IcmpCode     BgpflowSpecType = 8
+	BgpflowSpecType_TcpFlag      BgpflowSpecType = 9
+	BgpflowSpecType_PktLen       BgpflowSpecType = 10
+	BgpflowSpecType_Dscp         BgpflowSpecType = 11
+	BgpflowSpecType_Fragment     BgpflowSpecType = 12
+	BgpflowSpecType_Label        BgpflowSpecType = 13
+	BgpflowSpecType_EthernetType BgpflowSpecType = 14
+	BgpflowSpecType_SrcMac       BgpflowSpecType = 15
+	BgpflowSpecType_DstMac       BgpflowSpecType = 16
+	BgpflowSpecType_LlcDsap      BgpflowSpecType = 17
+	BgpflowSpecType_LlcSsap      BgpflowSpecType = 18
+	BgpflowSpecType_LlcControl   BgpflowSpecType = 19
+	BgpflowSpecType_Snap         BgpflowSpecType = 20
+	BgpflowSpecType_Vid          BgpflowSpecType = 21
+	BgpflowSpecType_Cos          BgpflowSpecType = 22
+	BgpflowSpecType_InnerVid     BgpflowSpecType = 23
+	BgpflowSpecType_InnerCos     BgpflowSpecType = 24
+)
+
+func (t BgpflowSpecType) String() string {
+	switch t {
+	case BgpflowSpecType_Unknown:
+		return "Unknown"
+	case BgpflowSpecType_DstPrefix:
+		return "DstPrefix"
+	case BgpflowSpecType_SrcPrefix:
+		return "SrcPrefix"
+	case BgpflowSpecType_IpProto:
+		return "IpProto"
+	case BgpflowSpecType_Port:
+		return "Port"
+	case BgpflowSpecType_DstPort:
+		return "DstPort"
+	case BgpflowSpecType_SrcPort:
+		return "SrcPort"
+	case BgpflowSpecType_IcmpType:
+		return "IcmpType"
+	case BgpflowSpecType_IcmpCode:
+		return "IcmpCode"
+	case BgpflowSpecType_TcpFlag:
+		return "TcpFlag"
+	case BgpflowSpecType_PktLen:
+		return "PktLen"
+	case BgpflowSpecType_Dscp:
+		return "Dscp"
+	case BgpflowSpecType_Fragment:
+		return "Fragment"
+	case BgpflowSpecType_Label:
+		return "Label"
+	case BgpflowSpecType_EthernetType:
+		return "EthernetType"
+	case BgpflowSpecType_SrcMac:
+		return "SrcMac"
+	case BgpflowSpecType_DstMac:
+		return "DstMac"
+	case BgpflowSpecType_LlcDsap:
+		return "LlcDsap"
+	case BgpflowSpecType_LlcSsap:
+		return "LlcSsap"
+	case BgpflowSpecType_LlcControl:
+		return "LlcControl"
+	case BgpflowSpecType_Snap:
+		return "Snap"
+	case BgpflowSpecType_Vid:
+		return "Vid"
+	case BgpflowSpecType_Cos:
+		return "Cos"
+	case BgpflowSpecType_InnerVid:
+		return "InnerVid"
+	case BgpflowSpecType_InnerCos:
+		return "InnerCos"
+	}
+	return fmt.Sprintf("BgpflowSpecType(%d)", t)
+}
+
 type union2_SegmentRoutingTlv interface {
 	isunion1_()
 }
@@ -536,6 +657,15 @@ type Ipv6ChecksumPseudoHeader struct {
 	Zero             uint32
 	NextHeader       ProtocolNumber
 }
+type FlowSpecOpByte struct {
+	flags56 uint8
+}
+type Udpheader struct {
+	SrcPort  uint16
+	DstPort  uint16
+	Length   uint16
+	Checksum uint16
+}
 type Ipv6ExtCommon struct {
 	Header Ipv6ExtHeader
 	Data   []uint8
@@ -547,44 +677,44 @@ type MacAddress struct {
 type Sack struct {
 	Blocks []SackBlock
 }
-type union59_Tcpoption interface {
-	isunion58_()
+type union64_Tcpoption interface {
+	isunion63_()
 }
-type union_60_t struct{}
-type union_61_t struct{}
-type union_62_t struct {
+type union_65_t struct{}
+type union_66_t struct{}
+type union_67_t struct {
 	Length uint8
 	Mss    uint16
 }
-type union_63_t struct {
+type union_68_t struct {
 	Length     uint8
 	ShiftCount uint8
 }
-type union_64_t struct {
+type union_69_t struct {
 	Length uint8
 }
-type union_65_t struct {
+type union_70_t struct {
 	Length uint8
 	Sack   Sack
 }
-type union_66_t struct {
+type union_71_t struct {
 	Length    uint8
 	Timestamp Timestamp
 }
-type union_67_t struct {
+type union_72_t struct {
 	Length uint8
 	Data   []uint8
 }
 type Tcpoption struct {
 	Kind     TcpoptionKind
-	union58_ union59_Tcpoption
+	union63_ union64_Tcpoption
 }
 type Tcpheader struct {
 	SrcPort       uint16
 	DstPort       uint16
 	SeqNum        uint32
 	AckNum        uint32
-	flags73       uint8
+	flags78       uint8
 	Flags         Tcpflags
 	WindowSize    uint16
 	Checksum      uint16
@@ -595,31 +725,31 @@ type Tcpsegment struct {
 	Hdr     Tcpheader
 	Payload []uint8
 }
-type union85_Ndpoption interface {
-	isunion84_()
-}
-type union_86_t struct {
-	LinkLayerAddress []uint8
-}
-type union_87_t struct {
-	LinkLayerAddress []uint8
-}
-type union_88_t struct {
-	PrefixInformation PrefixInformation
-}
-type union_89_t struct {
-	RedirectHeader RedirectHeader
-}
-type union_90_t struct {
-	Mtu Mtu
+type union90_Ndpoption interface {
+	isunion89_()
 }
 type union_91_t struct {
+	LinkLayerAddress []uint8
+}
+type union_92_t struct {
+	LinkLayerAddress []uint8
+}
+type union_93_t struct {
+	PrefixInformation PrefixInformation
+}
+type union_94_t struct {
+	RedirectHeader RedirectHeader
+}
+type union_95_t struct {
+	Mtu Mtu
+}
+type union_96_t struct {
 	Data []uint8
 }
 type Ndpoption struct {
 	Type     NdpoptionType
 	Length   uint8
-	union84_ union85_Ndpoption
+	union89_ union90_Ndpoption
 }
 type NdprouterSolicitation struct {
 	Reserved uint32
@@ -627,7 +757,7 @@ type NdprouterSolicitation struct {
 }
 type NdprouterAdvertisement struct {
 	CurHopLimit    uint8
-	flags101       uint8
+	flags106       uint8
 	RouterLifetime uint16
 	ReachableTime  uint32
 	RetransTimer   uint32
@@ -639,7 +769,7 @@ type NdpneighborSolicitation struct {
 	Options    []Ndpoption
 }
 type NdpneighborAdvertisement struct {
-	flags110   uint32
+	flags115   uint32
 	TargetAddr [16]uint8
 	Options    []Ndpoption
 }
@@ -653,6 +783,10 @@ type V2MulticastListernerReport struct {
 	NumberOfRecords uint16
 	Records         []MulticastAddressRecord
 }
+type Udpdatagram struct {
+	Header Udpheader
+	Data   []uint8
+}
 type SegmentRouting struct {
 	Header       Ipv6ExtHeader
 	RoutingType  uint8
@@ -663,54 +797,54 @@ type SegmentRouting struct {
 	SegmentList  [][16]uint8
 	Options      []SegmentRoutingTlv
 }
-type union127_Icmpv6Packet interface {
-	isunion126_()
-}
-type union_128_t struct {
-	EchoRequest Icmpecho
-}
-type union_129_t struct {
-	EchoReply Icmpecho
-}
-type union_130_t struct {
-	TimeExceeded Icmpv6ParameterProblem
-}
-type union_131_t struct {
-	PacketTooBig IcmppacketTooBig
-}
-type union_132_t struct {
-	ParameterProblem Icmpv6ParameterProblem
+type union132_Icmpv6Packet interface {
+	isunion131_()
 }
 type union_133_t struct {
-	DestinationUnreachable IcmpdestinationUnreachable
+	EchoRequest Icmpecho
 }
 type union_134_t struct {
-	RouterSolicitation NdprouterSolicitation
+	EchoReply Icmpecho
 }
 type union_135_t struct {
-	RouterAdvertisement NdprouterAdvertisement
+	TimeExceeded Icmpv6ParameterProblem
 }
 type union_136_t struct {
-	NeighborSolicitation NdpneighborSolicitation
+	PacketTooBig IcmppacketTooBig
 }
 type union_137_t struct {
-	NeighborAdvertisement NdpneighborAdvertisement
+	ParameterProblem Icmpv6ParameterProblem
 }
 type union_138_t struct {
-	RedirectMessage NdpredirectMessage
+	DestinationUnreachable IcmpdestinationUnreachable
 }
 type union_139_t struct {
-	MulticastListenerQuery MulticastListenerQuery
+	RouterSolicitation NdprouterSolicitation
 }
 type union_140_t struct {
-	V2MulticastListenerReport V2MulticastListernerReport
+	RouterAdvertisement NdprouterAdvertisement
 }
 type union_141_t struct {
+	NeighborSolicitation NdpneighborSolicitation
+}
+type union_142_t struct {
+	NeighborAdvertisement NdpneighborAdvertisement
+}
+type union_143_t struct {
+	RedirectMessage NdpredirectMessage
+}
+type union_144_t struct {
+	MulticastListenerQuery MulticastListenerQuery
+}
+type union_145_t struct {
+	V2MulticastListenerReport V2MulticastListernerReport
+}
+type union_146_t struct {
 	Data []uint8
 }
 type Icmpv6Packet struct {
 	Header    Icmpheader
-	union126_ union127_Icmpv6Packet
+	union131_ union132_Icmpv6Packet
 }
 
 func (t *union_3_t) isunion1_() {}
@@ -3078,6 +3212,214 @@ func (t *Ipv6ChecksumPseudoHeader) DecodeExact(d []byte) error {
 	}
 	return nil
 }
+func (t *FlowSpecOpByte) End() bool {
+	return ((t.flags56 & 0x80) >> 7) == 1
+}
+func (t *FlowSpecOpByte) SetEnd(v bool) {
+	if v {
+		t.flags56 |= uint8(0x80)
+	} else {
+		t.flags56 &= ^uint8(0x80)
+	}
+}
+func (t *FlowSpecOpByte) AndBit() bool {
+	return ((t.flags56 & 0x40) >> 6) == 1
+}
+func (t *FlowSpecOpByte) SetAndBit(v bool) {
+	if v {
+		t.flags56 |= uint8(0x40)
+	} else {
+		t.flags56 &= ^uint8(0x40)
+	}
+}
+func (t *FlowSpecOpByte) Len() uint8 {
+	return ((t.flags56 & 0x30) >> 4)
+}
+func (t *FlowSpecOpByte) SetLen(v uint8) bool {
+	if v > 3 {
+		return false
+	}
+	t.flags56 = (t.flags56 & ^uint8(0x30)) | ((v & 0x3) << 4)
+	return true
+}
+func (t *FlowSpecOpByte) Reserved() bool {
+	return ((t.flags56 & 0x08) >> 3) == 1
+}
+func (t *FlowSpecOpByte) SetReserved(v bool) {
+	if v {
+		t.flags56 |= uint8(0x8)
+	} else {
+		t.flags56 &= ^uint8(0x8)
+	}
+}
+func (t *FlowSpecOpByte) Op() FlowSpecOp {
+	return FlowSpecOp(((t.flags56 & 0x07) >> 0))
+}
+func (t *FlowSpecOpByte) SetOp(v FlowSpecOp) bool {
+	if v > 7 {
+		return false
+	}
+	t.flags56 = (t.flags56 & ^uint8(0x7)) | ((uint8(v) & 0x7) << 0)
+	return true
+}
+func (t *FlowSpecOpByte) Visit(v VisitorKEYKW) {
+	v.Visit(v, "End", (func() uint8 {
+		if t.End() {
+			return 1
+		} else {
+			return 0
+		}
+	}()))
+	v.Visit(v, "AndBit", (func() uint8 {
+		if t.AndBit() {
+			return 1
+		} else {
+			return 0
+		}
+	}()))
+	v.Visit(v, "Len", t.Len())
+	v.Visit(v, "Reserved", (func() uint8 {
+		if t.Reserved() {
+			return 1
+		} else {
+			return 0
+		}
+	}()))
+	v.Visit(v, "Op", t.Op())
+}
+func (t *FlowSpecOpByte) MarshalJSON() ([]byte, error) {
+	return json.Marshal(VisitorKEYKWToMap(t))
+}
+func (t *FlowSpecOpByte) Write(w io.Writer) (err error) {
+	if n, err := w.Write([]byte{byte(t.flags56)}); err != nil || n != 1 {
+		return fmt.Errorf("encode t.flags56: %w", err)
+	}
+	return nil
+}
+func (t *FlowSpecOpByte) Encode() ([]byte, error) {
+	w := bytes.NewBuffer(make([]byte, 0, 1))
+	if err := t.Write(w); err != nil {
+		return nil, err
+	}
+	return w.Bytes(), nil
+}
+func (t *FlowSpecOpByte) MustEncode() []byte {
+	buf, err := t.Encode()
+	if err != nil {
+		panic(err)
+	}
+	return buf
+}
+func (t *FlowSpecOpByte) Read(r io.Reader) (err error) {
+	tmpflags56 := [1]byte{}
+	n_flags56, err := io.ReadFull(r, tmpflags56[:])
+	if err != nil {
+		return fmt.Errorf("read flags56: expect 1 byte but read %d bytes: %w", n_flags56, err)
+	}
+	t.flags56 = uint8(tmpflags56[0])
+	return nil
+}
+
+func (t *FlowSpecOpByte) Decode(d []byte) (int, error) {
+	r := bytes.NewReader(d)
+	err := t.Read(r)
+	return int(int(r.Size()) - r.Len()), err
+}
+func (t *FlowSpecOpByte) DecodeExact(d []byte) error {
+	if n, err := t.Decode(d); err != nil {
+		return err
+	} else if n != len(d) {
+		return fmt.Errorf("decode FlowSpecOpByte: expect %d bytes but got %d bytes", len(d), n)
+	}
+	return nil
+}
+func (t *Udpheader) Visit(v VisitorKEYKW) {
+	v.Visit(v, "SrcPort", &t.SrcPort)
+	v.Visit(v, "DstPort", &t.DstPort)
+	v.Visit(v, "Length", &t.Length)
+	v.Visit(v, "Checksum", &t.Checksum)
+}
+func (t *Udpheader) MarshalJSON() ([]byte, error) {
+	return json.Marshal(VisitorKEYKWToMap(t))
+}
+func (t *Udpheader) Write(w io.Writer) (err error) {
+	tmp57 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp57[:], uint16(t.SrcPort))
+	if n, err := w.Write(tmp57[:]); err != nil || n != 2 {
+		return fmt.Errorf("encode t.SrcPort: %w", err)
+	}
+	tmp58 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp58[:], uint16(t.DstPort))
+	if n, err := w.Write(tmp58[:]); err != nil || n != 2 {
+		return fmt.Errorf("encode t.DstPort: %w", err)
+	}
+	tmp59 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp59[:], uint16(t.Length))
+	if n, err := w.Write(tmp59[:]); err != nil || n != 2 {
+		return fmt.Errorf("encode t.Length: %w", err)
+	}
+	tmp60 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp60[:], uint16(t.Checksum))
+	if n, err := w.Write(tmp60[:]); err != nil || n != 2 {
+		return fmt.Errorf("encode t.Checksum: %w", err)
+	}
+	return nil
+}
+func (t *Udpheader) Encode() ([]byte, error) {
+	w := bytes.NewBuffer(make([]byte, 0, 8))
+	if err := t.Write(w); err != nil {
+		return nil, err
+	}
+	return w.Bytes(), nil
+}
+func (t *Udpheader) MustEncode() []byte {
+	buf, err := t.Encode()
+	if err != nil {
+		panic(err)
+	}
+	return buf
+}
+func (t *Udpheader) Read(r io.Reader) (err error) {
+	tmpSrcPort := [2]byte{}
+	n_SrcPort, err := io.ReadFull(r, tmpSrcPort[:])
+	if err != nil {
+		return fmt.Errorf("read SrcPort: expect 2 bytes but read %d bytes: %w", n_SrcPort, err)
+	}
+	t.SrcPort = uint16(binary.BigEndian.Uint16(tmpSrcPort[:]))
+	tmpDstPort := [2]byte{}
+	n_DstPort, err := io.ReadFull(r, tmpDstPort[:])
+	if err != nil {
+		return fmt.Errorf("read DstPort: expect 2 bytes but read %d bytes: %w", n_DstPort, err)
+	}
+	t.DstPort = uint16(binary.BigEndian.Uint16(tmpDstPort[:]))
+	tmpLength := [2]byte{}
+	n_Length, err := io.ReadFull(r, tmpLength[:])
+	if err != nil {
+		return fmt.Errorf("read Length: expect 2 bytes but read %d bytes: %w", n_Length, err)
+	}
+	t.Length = uint16(binary.BigEndian.Uint16(tmpLength[:]))
+	tmpChecksum := [2]byte{}
+	n_Checksum, err := io.ReadFull(r, tmpChecksum[:])
+	if err != nil {
+		return fmt.Errorf("read Checksum: expect 2 bytes but read %d bytes: %w", n_Checksum, err)
+	}
+	t.Checksum = uint16(binary.BigEndian.Uint16(tmpChecksum[:]))
+	return nil
+}
+
+func (t *Udpheader) Decode(d []byte) (int, error) {
+	r := bytes.NewReader(d)
+	err := t.Read(r)
+	return int(int(r.Size()) - r.Len()), err
+}
+func (t *Udpheader) DecodeExact(d []byte) error {
+	if n, err := t.Decode(d); err != nil {
+		return err
+	} else if n != len(d) {
+		return fmt.Errorf("decode Udpheader: expect %d bytes but got %d bytes", len(d), n)
+	}
+	return nil
+}
 func (t *Ipv6ExtCommon) SetData(v []uint8) bool {
 	t.Data = v
 	return true
@@ -3230,25 +3572,25 @@ func (t *Sack) MustEncode() []byte {
 	return buf
 }
 func (t *Sack) Read(r io.Reader) (err error) {
-	tmp_byte_scanner56_ := bufio.NewReaderSize(r, 1)
+	tmp_byte_scanner61_ := bufio.NewReaderSize(r, 1)
 	old_r_Blocks := r
-	r = tmp_byte_scanner56_
+	r = tmp_byte_scanner61_
 	for {
-		_, err := tmp_byte_scanner56_.ReadByte()
+		_, err := tmp_byte_scanner61_.ReadByte()
 		if err != nil {
 			if err != io.EOF {
 				return fmt.Errorf("read Blocks: %w", err)
 			}
 			break
 		}
-		if err := tmp_byte_scanner56_.UnreadByte(); err != nil {
+		if err := tmp_byte_scanner61_.UnreadByte(); err != nil {
 			return fmt.Errorf("read Blocks: unexpected unread error: %w", err)
 		}
-		var tmp57_ SackBlock
-		if err := tmp57_.Read(r); err != nil {
+		var tmp62_ SackBlock
+		if err := tmp62_.Read(r); err != nil {
 			return fmt.Errorf("read Blocks: %w", err)
 		}
-		t.Blocks = append(t.Blocks, tmp57_)
+		t.Blocks = append(t.Blocks, tmp62_)
 	}
 	r = old_r_Blocks
 	return nil
@@ -3267,14 +3609,14 @@ func (t *Sack) DecodeExact(d []byte) error {
 	}
 	return nil
 }
-func (t *union_60_t) isunion58_() {}
-func (t *union_61_t) isunion58_() {}
-func (t *union_62_t) isunion58_() {}
-func (t *union_63_t) isunion58_() {}
-func (t *union_64_t) isunion58_() {}
-func (t *union_65_t) isunion58_() {}
-func (t *union_66_t) isunion58_() {}
-func (t *union_67_t) isunion58_() {}
+func (t *union_65_t) isunion63_() {}
+func (t *union_66_t) isunion63_() {}
+func (t *union_67_t) isunion63_() {}
+func (t *union_68_t) isunion63_() {}
+func (t *union_69_t) isunion63_() {}
+func (t *union_70_t) isunion63_() {}
+func (t *union_71_t) isunion63_() {}
+func (t *union_72_t) isunion63_() {}
 func (t *Tcpoption) Data() *[]uint8 {
 	if t.Kind == TcpoptionKind_EndOfOptionsList {
 		return nil
@@ -3291,10 +3633,10 @@ func (t *Tcpoption) Data() *[]uint8 {
 	} else if t.Kind == TcpoptionKind_Timestamp {
 		return nil
 	} else if true {
-		if _, ok := t.union58_.(*union_67_t); !ok {
+		if _, ok := t.union63_.(*union_72_t); !ok {
 			return nil // not set
 		}
-		tmp := []uint8(t.union58_.(*union_67_t).Data)
+		tmp := []uint8(t.union63_.(*union_72_t).Data)
 		return &tmp
 	}
 	return nil
@@ -3315,10 +3657,10 @@ func (t *Tcpoption) SetData(v []uint8) bool {
 	} else if t.Kind == TcpoptionKind_Timestamp {
 		return false
 	} else if true {
-		if _, ok := t.union58_.(*union_67_t); !ok {
-			t.union58_ = &union_67_t{}
+		if _, ok := t.union63_.(*union_72_t); !ok {
+			t.union63_ = &union_72_t{}
 		}
-		t.union58_.(*union_67_t).Data = []uint8(v)
+		t.union63_.(*union_72_t).Data = []uint8(v)
 		return true
 	}
 	return false
@@ -3329,40 +3671,40 @@ func (t *Tcpoption) Length() *uint8 {
 	} else if t.Kind == TcpoptionKind_Nop {
 		return nil
 	} else if t.Kind == TcpoptionKind_MaximumSegmentSize {
-		if _, ok := t.union58_.(*union_62_t); !ok {
+		if _, ok := t.union63_.(*union_67_t); !ok {
 			return nil // not set
 		}
-		tmp := uint8(t.union58_.(*union_62_t).Length)
+		tmp := uint8(t.union63_.(*union_67_t).Length)
 		return &tmp
 	} else if t.Kind == TcpoptionKind_WindowScale {
-		if _, ok := t.union58_.(*union_63_t); !ok {
+		if _, ok := t.union63_.(*union_68_t); !ok {
 			return nil // not set
 		}
-		tmp := uint8(t.union58_.(*union_63_t).Length)
+		tmp := uint8(t.union63_.(*union_68_t).Length)
 		return &tmp
 	} else if t.Kind == TcpoptionKind_SackPermitted {
-		if _, ok := t.union58_.(*union_64_t); !ok {
+		if _, ok := t.union63_.(*union_69_t); !ok {
 			return nil // not set
 		}
-		tmp := uint8(t.union58_.(*union_64_t).Length)
+		tmp := uint8(t.union63_.(*union_69_t).Length)
 		return &tmp
 	} else if t.Kind == TcpoptionKind_Sack {
-		if _, ok := t.union58_.(*union_65_t); !ok {
+		if _, ok := t.union63_.(*union_70_t); !ok {
 			return nil // not set
 		}
-		tmp := uint8(t.union58_.(*union_65_t).Length)
+		tmp := uint8(t.union63_.(*union_70_t).Length)
 		return &tmp
 	} else if t.Kind == TcpoptionKind_Timestamp {
-		if _, ok := t.union58_.(*union_66_t); !ok {
+		if _, ok := t.union63_.(*union_71_t); !ok {
 			return nil // not set
 		}
-		tmp := uint8(t.union58_.(*union_66_t).Length)
+		tmp := uint8(t.union63_.(*union_71_t).Length)
 		return &tmp
 	} else if true {
-		if _, ok := t.union58_.(*union_67_t); !ok {
+		if _, ok := t.union63_.(*union_72_t); !ok {
 			return nil // not set
 		}
-		tmp := uint8(t.union58_.(*union_67_t).Length)
+		tmp := uint8(t.union63_.(*union_72_t).Length)
 		return &tmp
 	}
 	return nil
@@ -3373,40 +3715,40 @@ func (t *Tcpoption) SetLength(v uint8) bool {
 	} else if t.Kind == TcpoptionKind_Nop {
 		return false
 	} else if t.Kind == TcpoptionKind_MaximumSegmentSize {
-		if _, ok := t.union58_.(*union_62_t); !ok {
-			t.union58_ = &union_62_t{}
+		if _, ok := t.union63_.(*union_67_t); !ok {
+			t.union63_ = &union_67_t{}
 		}
-		t.union58_.(*union_62_t).Length = uint8(v)
+		t.union63_.(*union_67_t).Length = uint8(v)
 		return true
 	} else if t.Kind == TcpoptionKind_WindowScale {
-		if _, ok := t.union58_.(*union_63_t); !ok {
-			t.union58_ = &union_63_t{}
+		if _, ok := t.union63_.(*union_68_t); !ok {
+			t.union63_ = &union_68_t{}
 		}
-		t.union58_.(*union_63_t).Length = uint8(v)
+		t.union63_.(*union_68_t).Length = uint8(v)
 		return true
 	} else if t.Kind == TcpoptionKind_SackPermitted {
-		if _, ok := t.union58_.(*union_64_t); !ok {
-			t.union58_ = &union_64_t{}
+		if _, ok := t.union63_.(*union_69_t); !ok {
+			t.union63_ = &union_69_t{}
 		}
-		t.union58_.(*union_64_t).Length = uint8(v)
+		t.union63_.(*union_69_t).Length = uint8(v)
 		return true
 	} else if t.Kind == TcpoptionKind_Sack {
-		if _, ok := t.union58_.(*union_65_t); !ok {
-			t.union58_ = &union_65_t{}
+		if _, ok := t.union63_.(*union_70_t); !ok {
+			t.union63_ = &union_70_t{}
 		}
-		t.union58_.(*union_65_t).Length = uint8(v)
+		t.union63_.(*union_70_t).Length = uint8(v)
 		return true
 	} else if t.Kind == TcpoptionKind_Timestamp {
-		if _, ok := t.union58_.(*union_66_t); !ok {
-			t.union58_ = &union_66_t{}
+		if _, ok := t.union63_.(*union_71_t); !ok {
+			t.union63_ = &union_71_t{}
 		}
-		t.union58_.(*union_66_t).Length = uint8(v)
+		t.union63_.(*union_71_t).Length = uint8(v)
 		return true
 	} else if true {
-		if _, ok := t.union58_.(*union_67_t); !ok {
-			t.union58_ = &union_67_t{}
+		if _, ok := t.union63_.(*union_72_t); !ok {
+			t.union63_ = &union_72_t{}
 		}
-		t.union58_.(*union_67_t).Length = uint8(v)
+		t.union63_.(*union_72_t).Length = uint8(v)
 		return true
 	}
 	return false
@@ -3417,10 +3759,10 @@ func (t *Tcpoption) Mss() *uint16 {
 	} else if t.Kind == TcpoptionKind_Nop {
 		return nil
 	} else if t.Kind == TcpoptionKind_MaximumSegmentSize {
-		if _, ok := t.union58_.(*union_62_t); !ok {
+		if _, ok := t.union63_.(*union_67_t); !ok {
 			return nil // not set
 		}
-		tmp := uint16(t.union58_.(*union_62_t).Mss)
+		tmp := uint16(t.union63_.(*union_67_t).Mss)
 		return &tmp
 	}
 	return nil
@@ -3431,10 +3773,10 @@ func (t *Tcpoption) SetMss(v uint16) bool {
 	} else if t.Kind == TcpoptionKind_Nop {
 		return false
 	} else if t.Kind == TcpoptionKind_MaximumSegmentSize {
-		if _, ok := t.union58_.(*union_62_t); !ok {
-			t.union58_ = &union_62_t{}
+		if _, ok := t.union63_.(*union_67_t); !ok {
+			t.union63_ = &union_67_t{}
 		}
-		t.union58_.(*union_62_t).Mss = uint16(v)
+		t.union63_.(*union_67_t).Mss = uint16(v)
 		return true
 	}
 	return false
@@ -3451,10 +3793,10 @@ func (t *Tcpoption) Sack() *Sack {
 	} else if t.Kind == TcpoptionKind_SackPermitted {
 		return nil
 	} else if t.Kind == TcpoptionKind_Sack {
-		if _, ok := t.union58_.(*union_65_t); !ok {
+		if _, ok := t.union63_.(*union_70_t); !ok {
 			return nil // not set
 		}
-		tmp := Sack(t.union58_.(*union_65_t).Sack)
+		tmp := Sack(t.union63_.(*union_70_t).Sack)
 		return &tmp
 	}
 	return nil
@@ -3471,10 +3813,10 @@ func (t *Tcpoption) SetSack(v Sack) bool {
 	} else if t.Kind == TcpoptionKind_SackPermitted {
 		return false
 	} else if t.Kind == TcpoptionKind_Sack {
-		if _, ok := t.union58_.(*union_65_t); !ok {
-			t.union58_ = &union_65_t{}
+		if _, ok := t.union63_.(*union_70_t); !ok {
+			t.union63_ = &union_70_t{}
 		}
-		t.union58_.(*union_65_t).Sack = Sack(v)
+		t.union63_.(*union_70_t).Sack = Sack(v)
 		return true
 	}
 	return false
@@ -3487,10 +3829,10 @@ func (t *Tcpoption) ShiftCount() *uint8 {
 	} else if t.Kind == TcpoptionKind_MaximumSegmentSize {
 		return nil
 	} else if t.Kind == TcpoptionKind_WindowScale {
-		if _, ok := t.union58_.(*union_63_t); !ok {
+		if _, ok := t.union63_.(*union_68_t); !ok {
 			return nil // not set
 		}
-		tmp := uint8(t.union58_.(*union_63_t).ShiftCount)
+		tmp := uint8(t.union63_.(*union_68_t).ShiftCount)
 		return &tmp
 	}
 	return nil
@@ -3503,10 +3845,10 @@ func (t *Tcpoption) SetShiftCount(v uint8) bool {
 	} else if t.Kind == TcpoptionKind_MaximumSegmentSize {
 		return false
 	} else if t.Kind == TcpoptionKind_WindowScale {
-		if _, ok := t.union58_.(*union_63_t); !ok {
-			t.union58_ = &union_63_t{}
+		if _, ok := t.union63_.(*union_68_t); !ok {
+			t.union63_ = &union_68_t{}
 		}
-		t.union58_.(*union_63_t).ShiftCount = uint8(v)
+		t.union63_.(*union_68_t).ShiftCount = uint8(v)
 		return true
 	}
 	return false
@@ -3525,10 +3867,10 @@ func (t *Tcpoption) Timestamp() *Timestamp {
 	} else if t.Kind == TcpoptionKind_Sack {
 		return nil
 	} else if t.Kind == TcpoptionKind_Timestamp {
-		if _, ok := t.union58_.(*union_66_t); !ok {
+		if _, ok := t.union63_.(*union_71_t); !ok {
 			return nil // not set
 		}
-		tmp := Timestamp(t.union58_.(*union_66_t).Timestamp)
+		tmp := Timestamp(t.union63_.(*union_71_t).Timestamp)
 		return &tmp
 	}
 	return nil
@@ -3547,10 +3889,10 @@ func (t *Tcpoption) SetTimestamp(v Timestamp) bool {
 	} else if t.Kind == TcpoptionKind_Sack {
 		return false
 	} else if t.Kind == TcpoptionKind_Timestamp {
-		if _, ok := t.union58_.(*union_66_t); !ok {
-			t.union58_ = &union_66_t{}
+		if _, ok := t.union63_.(*union_71_t); !ok {
+			t.union63_ = &union_71_t{}
 		}
-		t.union58_.(*union_66_t).Timestamp = Timestamp(v)
+		t.union63_.(*union_71_t).Timestamp = Timestamp(v)
 		return true
 	}
 	return false
@@ -3575,88 +3917,88 @@ func (t *Tcpoption) Write(w io.Writer) (err error) {
 	case (t.Kind == TcpoptionKind_EndOfOptionsList):
 	case (t.Kind == TcpoptionKind_Nop):
 	case (t.Kind == TcpoptionKind_MaximumSegmentSize):
-		if _, ok := t.union58_.(*union_62_t); !ok {
-			return fmt.Errorf("encode t.union58_: union is not set to union_62_t")
+		if _, ok := t.union63_.(*union_67_t); !ok {
+			return fmt.Errorf("encode t.union63_: union is not set to union_67_t")
 		}
-		if n, err := w.Write([]byte{byte(t.union58_.(*union_62_t).Length)}); err != nil || n != 1 {
-			return fmt.Errorf("encode t.union58_.(*union_62_t).Length: %w", err)
+		if n, err := w.Write([]byte{byte(t.union63_.(*union_67_t).Length)}); err != nil || n != 1 {
+			return fmt.Errorf("encode t.union63_.(*union_67_t).Length: %w", err)
 		}
-		tmp68 := [2]byte{}
-		binary.BigEndian.PutUint16(tmp68[:], uint16(t.union58_.(*union_62_t).Mss))
-		if n, err := w.Write(tmp68[:]); err != nil || n != 2 {
-			return fmt.Errorf("encode t.union58_.(*union_62_t).Mss: %w", err)
+		tmp73 := [2]byte{}
+		binary.BigEndian.PutUint16(tmp73[:], uint16(t.union63_.(*union_67_t).Mss))
+		if n, err := w.Write(tmp73[:]); err != nil || n != 2 {
+			return fmt.Errorf("encode t.union63_.(*union_67_t).Mss: %w", err)
 		}
 	case (t.Kind == TcpoptionKind_WindowScale):
-		if _, ok := t.union58_.(*union_63_t); !ok {
-			return fmt.Errorf("encode t.union58_: union is not set to union_63_t")
+		if _, ok := t.union63_.(*union_68_t); !ok {
+			return fmt.Errorf("encode t.union63_: union is not set to union_68_t")
 		}
-		if n, err := w.Write([]byte{byte(t.union58_.(*union_63_t).Length)}); err != nil || n != 1 {
-			return fmt.Errorf("encode t.union58_.(*union_63_t).Length: %w", err)
+		if n, err := w.Write([]byte{byte(t.union63_.(*union_68_t).Length)}); err != nil || n != 1 {
+			return fmt.Errorf("encode t.union63_.(*union_68_t).Length: %w", err)
 		}
-		if n, err := w.Write([]byte{byte(t.union58_.(*union_63_t).ShiftCount)}); err != nil || n != 1 {
-			return fmt.Errorf("encode t.union58_.(*union_63_t).ShiftCount: %w", err)
+		if n, err := w.Write([]byte{byte(t.union63_.(*union_68_t).ShiftCount)}); err != nil || n != 1 {
+			return fmt.Errorf("encode t.union63_.(*union_68_t).ShiftCount: %w", err)
 		}
 	case (t.Kind == TcpoptionKind_SackPermitted):
-		if _, ok := t.union58_.(*union_64_t); !ok {
-			return fmt.Errorf("encode t.union58_: union is not set to union_64_t")
+		if _, ok := t.union63_.(*union_69_t); !ok {
+			return fmt.Errorf("encode t.union63_: union is not set to union_69_t")
 		}
-		if n, err := w.Write([]byte{byte(t.union58_.(*union_64_t).Length)}); err != nil || n != 1 {
-			return fmt.Errorf("encode t.union58_.(*union_64_t).Length: %w", err)
+		if n, err := w.Write([]byte{byte(t.union63_.(*union_69_t).Length)}); err != nil || n != 1 {
+			return fmt.Errorf("encode t.union63_.(*union_69_t).Length: %w", err)
 		}
 	case (t.Kind == TcpoptionKind_Sack):
-		if _, ok := t.union58_.(*union_65_t); !ok {
-			return fmt.Errorf("encode t.union58_: union is not set to union_65_t")
+		if _, ok := t.union63_.(*union_70_t); !ok {
+			return fmt.Errorf("encode t.union63_: union is not set to union_70_t")
 		}
-		if n, err := w.Write([]byte{byte(t.union58_.(*union_65_t).Length)}); err != nil || n != 1 {
-			return fmt.Errorf("encode t.union58_.(*union_65_t).Length: %w", err)
+		if n, err := w.Write([]byte{byte(t.union63_.(*union_70_t).Length)}); err != nil || n != 1 {
+			return fmt.Errorf("encode t.union63_.(*union_70_t).Length: %w", err)
 		}
-		new_buf_69 := bytes.NewBuffer(nil)
-		old_buf_69_w := w
-		w = new_buf_69
-		if err := t.union58_.(*union_65_t).Sack.Write(w); err != nil {
+		new_buf_74 := bytes.NewBuffer(nil)
+		old_buf_74_w := w
+		w = new_buf_74
+		if err := t.union63_.(*union_70_t).Sack.Write(w); err != nil {
 			return fmt.Errorf("encode Sack: %w", err)
 		}
-		if new_buf_69.Len() != int((t.union58_.(*union_65_t).Length - 2)) {
-			return fmt.Errorf("encode Sack: expect %d bytes but got %d bytes", new_buf_69.Len(), int((t.union58_.(*union_65_t).Length - 2)))
+		if new_buf_74.Len() != int((t.union63_.(*union_70_t).Length - 2)) {
+			return fmt.Errorf("encode Sack: expect %d bytes but got %d bytes", new_buf_74.Len(), int((t.union63_.(*union_70_t).Length - 2)))
 		}
-		_, err = new_buf_69.WriteTo(old_buf_69_w)
+		_, err = new_buf_74.WriteTo(old_buf_74_w)
 		if err != nil {
 			return err
 		}
-		w = old_buf_69_w
+		w = old_buf_74_w
 	case (t.Kind == TcpoptionKind_Timestamp):
-		if _, ok := t.union58_.(*union_66_t); !ok {
-			return fmt.Errorf("encode t.union58_: union is not set to union_66_t")
+		if _, ok := t.union63_.(*union_71_t); !ok {
+			return fmt.Errorf("encode t.union63_: union is not set to union_71_t")
 		}
-		if n, err := w.Write([]byte{byte(t.union58_.(*union_66_t).Length)}); err != nil || n != 1 {
-			return fmt.Errorf("encode t.union58_.(*union_66_t).Length: %w", err)
+		if n, err := w.Write([]byte{byte(t.union63_.(*union_71_t).Length)}); err != nil || n != 1 {
+			return fmt.Errorf("encode t.union63_.(*union_71_t).Length: %w", err)
 		}
-		new_buf_70 := bytes.NewBuffer(nil)
-		old_buf_70_w := w
-		w = new_buf_70
-		if err := t.union58_.(*union_66_t).Timestamp.Write(w); err != nil {
+		new_buf_75 := bytes.NewBuffer(nil)
+		old_buf_75_w := w
+		w = new_buf_75
+		if err := t.union63_.(*union_71_t).Timestamp.Write(w); err != nil {
 			return fmt.Errorf("encode Timestamp: %w", err)
 		}
-		if new_buf_70.Len() != int((t.union58_.(*union_66_t).Length - 2)) {
-			return fmt.Errorf("encode Timestamp: expect %d bytes but got %d bytes", new_buf_70.Len(), int((t.union58_.(*union_66_t).Length - 2)))
+		if new_buf_75.Len() != int((t.union63_.(*union_71_t).Length - 2)) {
+			return fmt.Errorf("encode Timestamp: expect %d bytes but got %d bytes", new_buf_75.Len(), int((t.union63_.(*union_71_t).Length - 2)))
 		}
-		_, err = new_buf_70.WriteTo(old_buf_70_w)
+		_, err = new_buf_75.WriteTo(old_buf_75_w)
 		if err != nil {
 			return err
 		}
-		w = old_buf_70_w
+		w = old_buf_75_w
 	default:
-		if _, ok := t.union58_.(*union_67_t); !ok {
-			return fmt.Errorf("encode t.union58_: union is not set to union_67_t")
+		if _, ok := t.union63_.(*union_72_t); !ok {
+			return fmt.Errorf("encode t.union63_: union is not set to union_72_t")
 		}
-		if n, err := w.Write([]byte{byte(t.union58_.(*union_67_t).Length)}); err != nil || n != 1 {
-			return fmt.Errorf("encode t.union58_.(*union_67_t).Length: %w", err)
+		if n, err := w.Write([]byte{byte(t.union63_.(*union_72_t).Length)}); err != nil || n != 1 {
+			return fmt.Errorf("encode t.union63_.(*union_72_t).Length: %w", err)
 		}
-		len_Data := int((t.union58_.(*union_67_t).Length - 2))
-		if len(t.union58_.(*union_67_t).Data) != len_Data {
-			return fmt.Errorf("encode Data: expect %d bytes but got %d bytes", len_Data, len(t.union58_.(*union_67_t).Data))
+		len_Data := int((t.union63_.(*union_72_t).Length - 2))
+		if len(t.union63_.(*union_72_t).Data) != len_Data {
+			return fmt.Errorf("encode Data: expect %d bytes but got %d bytes", len_Data, len(t.union63_.(*union_72_t).Data))
 		}
-		if n, err := w.Write(t.union58_.(*union_67_t).Data); err != nil || n != len(t.union58_.(*union_67_t).Data) {
+		if n, err := w.Write(t.union63_.(*union_72_t).Data); err != nil || n != len(t.union63_.(*union_72_t).Data) {
 			return fmt.Errorf("encode Data: %w", err)
 		}
 	}
@@ -3687,97 +4029,97 @@ func (t *Tcpoption) Read(r io.Reader) (err error) {
 	case (t.Kind == TcpoptionKind_EndOfOptionsList):
 	case (t.Kind == TcpoptionKind_Nop):
 	case (t.Kind == TcpoptionKind_MaximumSegmentSize):
-		t.union58_ = &union_62_t{}
+		t.union63_ = &union_67_t{}
 		tmpLength := [1]byte{}
 		n_Length, err := io.ReadFull(r, tmpLength[:])
 		if err != nil {
 			return fmt.Errorf("read Length: expect 1 byte but read %d bytes: %w", n_Length, err)
 		}
-		t.union58_.(*union_62_t).Length = uint8(tmpLength[0])
+		t.union63_.(*union_67_t).Length = uint8(tmpLength[0])
 		tmpMss := [2]byte{}
 		n_Mss, err := io.ReadFull(r, tmpMss[:])
 		if err != nil {
 			return fmt.Errorf("read Mss: expect 2 bytes but read %d bytes: %w", n_Mss, err)
 		}
-		t.union58_.(*union_62_t).Mss = uint16(binary.BigEndian.Uint16(tmpMss[:]))
+		t.union63_.(*union_67_t).Mss = uint16(binary.BigEndian.Uint16(tmpMss[:]))
 	case (t.Kind == TcpoptionKind_WindowScale):
-		t.union58_ = &union_63_t{}
+		t.union63_ = &union_68_t{}
 		tmpLength := [1]byte{}
 		n_Length, err := io.ReadFull(r, tmpLength[:])
 		if err != nil {
 			return fmt.Errorf("read Length: expect 1 byte but read %d bytes: %w", n_Length, err)
 		}
-		t.union58_.(*union_63_t).Length = uint8(tmpLength[0])
+		t.union63_.(*union_68_t).Length = uint8(tmpLength[0])
 		tmpShiftCount := [1]byte{}
 		n_ShiftCount, err := io.ReadFull(r, tmpShiftCount[:])
 		if err != nil {
 			return fmt.Errorf("read ShiftCount: expect 1 byte but read %d bytes: %w", n_ShiftCount, err)
 		}
-		t.union58_.(*union_63_t).ShiftCount = uint8(tmpShiftCount[0])
+		t.union63_.(*union_68_t).ShiftCount = uint8(tmpShiftCount[0])
 	case (t.Kind == TcpoptionKind_SackPermitted):
-		t.union58_ = &union_64_t{}
+		t.union63_ = &union_69_t{}
 		tmpLength := [1]byte{}
 		n_Length, err := io.ReadFull(r, tmpLength[:])
 		if err != nil {
 			return fmt.Errorf("read Length: expect 1 byte but read %d bytes: %w", n_Length, err)
 		}
-		t.union58_.(*union_64_t).Length = uint8(tmpLength[0])
+		t.union63_.(*union_69_t).Length = uint8(tmpLength[0])
 	case (t.Kind == TcpoptionKind_Sack):
-		t.union58_ = &union_65_t{}
+		t.union63_ = &union_70_t{}
 		tmpLength := [1]byte{}
 		n_Length, err := io.ReadFull(r, tmpLength[:])
 		if err != nil {
 			return fmt.Errorf("read Length: expect 1 byte but read %d bytes: %w", n_Length, err)
 		}
-		t.union58_.(*union_65_t).Length = uint8(tmpLength[0])
-		sub_byte_len_Sack := int64((t.union58_.(*union_65_t).Length - 2))
+		t.union63_.(*union_70_t).Length = uint8(tmpLength[0])
+		sub_byte_len_Sack := int64((t.union63_.(*union_70_t).Length - 2))
 		sub_byte_r_Sack := io.LimitReader(r, int64(sub_byte_len_Sack))
-		tmp_old_r_Sack_71 := r
+		tmp_old_r_Sack_76 := r
 		r = sub_byte_r_Sack
-		if err := t.union58_.(*union_65_t).Sack.Read(r); err != nil {
+		if err := t.union63_.(*union_70_t).Sack.Read(r); err != nil {
 			return fmt.Errorf("read Sack: %w", err)
 		}
 		if sub_byte_r_Sack.(*io.LimitedReader).N != 0 {
 			return fmt.Errorf("read Sack: expect %d bytes but got %d bytes", sub_byte_len_Sack, sub_byte_len_Sack-sub_byte_r_Sack.(*io.LimitedReader).N)
 		}
-		r = tmp_old_r_Sack_71
+		r = tmp_old_r_Sack_76
 	case (t.Kind == TcpoptionKind_Timestamp):
-		t.union58_ = &union_66_t{}
+		t.union63_ = &union_71_t{}
 		tmpLength := [1]byte{}
 		n_Length, err := io.ReadFull(r, tmpLength[:])
 		if err != nil {
 			return fmt.Errorf("read Length: expect 1 byte but read %d bytes: %w", n_Length, err)
 		}
-		t.union58_.(*union_66_t).Length = uint8(tmpLength[0])
-		sub_byte_len_Timestamp := int64((t.union58_.(*union_66_t).Length - 2))
+		t.union63_.(*union_71_t).Length = uint8(tmpLength[0])
+		sub_byte_len_Timestamp := int64((t.union63_.(*union_71_t).Length - 2))
 		sub_byte_r_Timestamp := io.LimitReader(r, int64(sub_byte_len_Timestamp))
-		tmp_old_r_Timestamp_72 := r
+		tmp_old_r_Timestamp_77 := r
 		r = sub_byte_r_Timestamp
-		if err := t.union58_.(*union_66_t).Timestamp.Read(r); err != nil {
+		if err := t.union63_.(*union_71_t).Timestamp.Read(r); err != nil {
 			return fmt.Errorf("read Timestamp: %w", err)
 		}
 		if sub_byte_r_Timestamp.(*io.LimitedReader).N != 0 {
 			return fmt.Errorf("read Timestamp: expect %d bytes but got %d bytes", sub_byte_len_Timestamp, sub_byte_len_Timestamp-sub_byte_r_Timestamp.(*io.LimitedReader).N)
 		}
-		r = tmp_old_r_Timestamp_72
+		r = tmp_old_r_Timestamp_77
 	default:
-		t.union58_ = &union_67_t{}
+		t.union63_ = &union_72_t{}
 		tmpLength := [1]byte{}
 		n_Length, err := io.ReadFull(r, tmpLength[:])
 		if err != nil {
 			return fmt.Errorf("read Length: expect 1 byte but read %d bytes: %w", n_Length, err)
 		}
-		t.union58_.(*union_67_t).Length = uint8(tmpLength[0])
-		len_Data := int((t.union58_.(*union_67_t).Length - 2))
+		t.union63_.(*union_72_t).Length = uint8(tmpLength[0])
+		len_Data := int((t.union63_.(*union_72_t).Length - 2))
 		if len_Data != 0 {
 			tmpData := make([]byte, len_Data)
 			n_Data, err := io.ReadFull(r, tmpData[:])
 			if err != nil {
 				return fmt.Errorf("read Data: expect %d bytes but read %d bytes: %w", len_Data, n_Data, err)
 			}
-			t.union58_.(*union_67_t).Data = tmpData[:]
+			t.union63_.(*union_72_t).Data = tmpData[:]
 		} else {
-			t.union58_.(*union_67_t).Data = nil
+			t.union63_.(*union_72_t).Data = nil
 		}
 	}
 	return nil
@@ -3797,23 +4139,23 @@ func (t *Tcpoption) DecodeExact(d []byte) error {
 	return nil
 }
 func (t *Tcpheader) DataOffset() uint8 {
-	return ((t.flags73 & 0xf0) >> 4)
+	return ((t.flags78 & 0xf0) >> 4)
 }
 func (t *Tcpheader) SetDataOffset(v uint8) bool {
 	if v > 15 {
 		return false
 	}
-	t.flags73 = (t.flags73 & ^uint8(0xf0)) | ((v & 0xf) << 4)
+	t.flags78 = (t.flags78 & ^uint8(0xf0)) | ((v & 0xf) << 4)
 	return true
 }
 func (t *Tcpheader) Reserved() uint8 {
-	return ((t.flags73 & 0x0f) >> 0)
+	return ((t.flags78 & 0x0f) >> 0)
 }
 func (t *Tcpheader) SetReserved(v uint8) bool {
 	if v > 15 {
 		return false
 	}
-	t.flags73 = (t.flags73 & ^uint8(0xf)) | ((v & 0xf) << 0)
+	t.flags78 = (t.flags78 & ^uint8(0xf)) | ((v & 0xf) << 0)
 	return true
 }
 func (t *Tcpheader) Visit(v VisitorKEYKW) {
@@ -3833,63 +4175,63 @@ func (t *Tcpheader) MarshalJSON() ([]byte, error) {
 	return json.Marshal(VisitorKEYKWToMap(t))
 }
 func (t *Tcpheader) Write(w io.Writer) (err error) {
-	tmp74 := [2]byte{}
-	binary.BigEndian.PutUint16(tmp74[:], uint16(t.SrcPort))
-	if n, err := w.Write(tmp74[:]); err != nil || n != 2 {
+	tmp79 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp79[:], uint16(t.SrcPort))
+	if n, err := w.Write(tmp79[:]); err != nil || n != 2 {
 		return fmt.Errorf("encode t.SrcPort: %w", err)
 	}
-	tmp75 := [2]byte{}
-	binary.BigEndian.PutUint16(tmp75[:], uint16(t.DstPort))
-	if n, err := w.Write(tmp75[:]); err != nil || n != 2 {
+	tmp80 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp80[:], uint16(t.DstPort))
+	if n, err := w.Write(tmp80[:]); err != nil || n != 2 {
 		return fmt.Errorf("encode t.DstPort: %w", err)
 	}
-	tmp76 := [4]byte{}
-	binary.BigEndian.PutUint32(tmp76[:], uint32(t.SeqNum))
-	if n, err := w.Write(tmp76[:]); err != nil || n != 4 {
+	tmp81 := [4]byte{}
+	binary.BigEndian.PutUint32(tmp81[:], uint32(t.SeqNum))
+	if n, err := w.Write(tmp81[:]); err != nil || n != 4 {
 		return fmt.Errorf("encode t.SeqNum: %w", err)
 	}
-	tmp77 := [4]byte{}
-	binary.BigEndian.PutUint32(tmp77[:], uint32(t.AckNum))
-	if n, err := w.Write(tmp77[:]); err != nil || n != 4 {
+	tmp82 := [4]byte{}
+	binary.BigEndian.PutUint32(tmp82[:], uint32(t.AckNum))
+	if n, err := w.Write(tmp82[:]); err != nil || n != 4 {
 		return fmt.Errorf("encode t.AckNum: %w", err)
 	}
-	if n, err := w.Write([]byte{byte(t.flags73)}); err != nil || n != 1 {
-		return fmt.Errorf("encode t.flags73: %w", err)
+	if n, err := w.Write([]byte{byte(t.flags78)}); err != nil || n != 1 {
+		return fmt.Errorf("encode t.flags78: %w", err)
 	}
 	if err := t.Flags.Write(w); err != nil {
 		return fmt.Errorf("encode Flags: %w", err)
 	}
-	tmp78 := [2]byte{}
-	binary.BigEndian.PutUint16(tmp78[:], uint16(t.WindowSize))
-	if n, err := w.Write(tmp78[:]); err != nil || n != 2 {
+	tmp83 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp83[:], uint16(t.WindowSize))
+	if n, err := w.Write(tmp83[:]); err != nil || n != 2 {
 		return fmt.Errorf("encode t.WindowSize: %w", err)
 	}
-	tmp79 := [2]byte{}
-	binary.BigEndian.PutUint16(tmp79[:], uint16(t.Checksum))
-	if n, err := w.Write(tmp79[:]); err != nil || n != 2 {
+	tmp84 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp84[:], uint16(t.Checksum))
+	if n, err := w.Write(tmp84[:]); err != nil || n != 2 {
 		return fmt.Errorf("encode t.Checksum: %w", err)
 	}
-	tmp80 := [2]byte{}
-	binary.BigEndian.PutUint16(tmp80[:], uint16(t.UrgentPointer))
-	if n, err := w.Write(tmp80[:]); err != nil || n != 2 {
+	tmp85 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp85[:], uint16(t.UrgentPointer))
+	if n, err := w.Write(tmp85[:]); err != nil || n != 2 {
 		return fmt.Errorf("encode t.UrgentPointer: %w", err)
 	}
-	new_buf_81 := bytes.NewBuffer(nil)
-	old_buf_81_w := w
-	w = new_buf_81
+	new_buf_86 := bytes.NewBuffer(nil)
+	old_buf_86_w := w
+	w = new_buf_86
 	for _, v := range t.Options {
 		if err := v.Write(w); err != nil {
 			return fmt.Errorf("encode Options: %w", err)
 		}
 	}
-	if new_buf_81.Len() != int((uint8((t.DataOffset() * 4)) - 20)) {
-		return fmt.Errorf("encode Options: expect %d bytes but got %d bytes", new_buf_81.Len(), int((uint8((t.DataOffset() * 4)) - 20)))
+	if new_buf_86.Len() != int((uint8((t.DataOffset() * 4)) - 20)) {
+		return fmt.Errorf("encode Options: expect %d bytes but got %d bytes", new_buf_86.Len(), int((uint8((t.DataOffset() * 4)) - 20)))
 	}
-	_, err = new_buf_81.WriteTo(old_buf_81_w)
+	_, err = new_buf_86.WriteTo(old_buf_86_w)
 	if err != nil {
 		return err
 	}
-	w = old_buf_81_w
+	w = old_buf_86_w
 	return nil
 }
 func (t *Tcpheader) Encode() ([]byte, error) {
@@ -3931,12 +4273,12 @@ func (t *Tcpheader) Read(r io.Reader) (err error) {
 		return fmt.Errorf("read AckNum: expect 4 bytes but read %d bytes: %w", n_AckNum, err)
 	}
 	t.AckNum = uint32(binary.BigEndian.Uint32(tmpAckNum[:]))
-	tmpflags73 := [1]byte{}
-	n_flags73, err := io.ReadFull(r, tmpflags73[:])
+	tmpflags78 := [1]byte{}
+	n_flags78, err := io.ReadFull(r, tmpflags78[:])
 	if err != nil {
-		return fmt.Errorf("read flags73: expect 1 byte but read %d bytes: %w", n_flags73, err)
+		return fmt.Errorf("read flags78: expect 1 byte but read %d bytes: %w", n_flags78, err)
 	}
-	t.flags73 = uint8(tmpflags73[0])
+	t.flags78 = uint8(tmpflags78[0])
 	if err := t.Flags.Read(r); err != nil {
 		return fmt.Errorf("read Flags: %w", err)
 	}
@@ -3960,7 +4302,7 @@ func (t *Tcpheader) Read(r io.Reader) (err error) {
 	t.UrgentPointer = uint16(binary.BigEndian.Uint16(tmpUrgentPointer[:]))
 	sub_byte_len_Options := int64((uint8((t.DataOffset() * 4)) - 20))
 	sub_byte_r_Options := io.LimitReader(r, int64(sub_byte_len_Options))
-	tmp_old_r_Options_82 := r
+	tmp_old_r_Options_87 := r
 	r = sub_byte_r_Options
 	len_Options := int(r.(*io.LimitedReader).N)
 	tmpOptions := make([]byte, len_Options)
@@ -3972,17 +4314,17 @@ func (t *Tcpheader) Read(r io.Reader) (err error) {
 	tmp_old_r_Options := r
 	r = range_tmp_Options
 	for range_tmp_Options.Len() > 0 {
-		var tmp83_ Tcpoption
-		if err := tmp83_.Read(r); err != nil {
+		var tmp88_ Tcpoption
+		if err := tmp88_.Read(r); err != nil {
 			return fmt.Errorf("read Options: %w", err)
 		}
-		t.Options = append(t.Options, tmp83_)
+		t.Options = append(t.Options, tmp88_)
 	}
 	r = tmp_old_r_Options
 	if sub_byte_r_Options.(*io.LimitedReader).N != 0 {
 		return fmt.Errorf("read Options: expect %d bytes but got %d bytes", sub_byte_len_Options, sub_byte_len_Options-sub_byte_r_Options.(*io.LimitedReader).N)
 	}
-	r = tmp_old_r_Options_82
+	r = tmp_old_r_Options_87
 	return nil
 }
 
@@ -4054,12 +4396,12 @@ func (t *Tcpsegment) DecodeExact(d []byte) error {
 	}
 	return nil
 }
-func (t *union_86_t) isunion84_() {}
-func (t *union_87_t) isunion84_() {}
-func (t *union_88_t) isunion84_() {}
-func (t *union_89_t) isunion84_() {}
-func (t *union_90_t) isunion84_() {}
-func (t *union_91_t) isunion84_() {}
+func (t *union_91_t) isunion89_() {}
+func (t *union_92_t) isunion89_() {}
+func (t *union_93_t) isunion89_() {}
+func (t *union_94_t) isunion89_() {}
+func (t *union_95_t) isunion89_() {}
+func (t *union_96_t) isunion89_() {}
 func (t *Ndpoption) Data() *[]uint8 {
 	if NdpoptionType(t.Type) == NdpoptionType_SourceLinkLayerAddress {
 		return nil
@@ -4072,10 +4414,10 @@ func (t *Ndpoption) Data() *[]uint8 {
 	} else if NdpoptionType(t.Type) == NdpoptionType_Mtu {
 		return nil
 	} else if true {
-		if _, ok := t.union84_.(*union_91_t); !ok {
+		if _, ok := t.union89_.(*union_96_t); !ok {
 			return nil // not set
 		}
-		tmp := []uint8(t.union84_.(*union_91_t).Data)
+		tmp := []uint8(t.union89_.(*union_96_t).Data)
 		return &tmp
 	}
 	return nil
@@ -4092,42 +4434,42 @@ func (t *Ndpoption) SetData(v []uint8) bool {
 	} else if NdpoptionType(t.Type) == NdpoptionType_Mtu {
 		return false
 	} else if true {
-		if _, ok := t.union84_.(*union_91_t); !ok {
-			t.union84_ = &union_91_t{}
+		if _, ok := t.union89_.(*union_96_t); !ok {
+			t.union89_ = &union_96_t{}
 		}
-		t.union84_.(*union_91_t).Data = []uint8(v)
+		t.union89_.(*union_96_t).Data = []uint8(v)
 		return true
 	}
 	return false
 }
 func (t *Ndpoption) LinkLayerAddress() *[]uint8 {
 	if NdpoptionType(t.Type) == NdpoptionType_SourceLinkLayerAddress {
-		if _, ok := t.union84_.(*union_86_t); !ok {
+		if _, ok := t.union89_.(*union_91_t); !ok {
 			return nil // not set
 		}
-		tmp := []uint8(t.union84_.(*union_86_t).LinkLayerAddress)
+		tmp := []uint8(t.union89_.(*union_91_t).LinkLayerAddress)
 		return &tmp
 	} else if NdpoptionType(t.Type) == NdpoptionType_TargetLinkLayerAddress {
-		if _, ok := t.union84_.(*union_87_t); !ok {
+		if _, ok := t.union89_.(*union_92_t); !ok {
 			return nil // not set
 		}
-		tmp := []uint8(t.union84_.(*union_87_t).LinkLayerAddress)
+		tmp := []uint8(t.union89_.(*union_92_t).LinkLayerAddress)
 		return &tmp
 	}
 	return nil
 }
 func (t *Ndpoption) SetLinkLayerAddress(v []uint8) bool {
 	if NdpoptionType(t.Type) == NdpoptionType_SourceLinkLayerAddress {
-		if _, ok := t.union84_.(*union_86_t); !ok {
-			t.union84_ = &union_86_t{}
+		if _, ok := t.union89_.(*union_91_t); !ok {
+			t.union89_ = &union_91_t{}
 		}
-		t.union84_.(*union_86_t).LinkLayerAddress = []uint8(v)
+		t.union89_.(*union_91_t).LinkLayerAddress = []uint8(v)
 		return true
 	} else if NdpoptionType(t.Type) == NdpoptionType_TargetLinkLayerAddress {
-		if _, ok := t.union84_.(*union_87_t); !ok {
-			t.union84_ = &union_87_t{}
+		if _, ok := t.union89_.(*union_92_t); !ok {
+			t.union89_ = &union_92_t{}
 		}
-		t.union84_.(*union_87_t).LinkLayerAddress = []uint8(v)
+		t.union89_.(*union_92_t).LinkLayerAddress = []uint8(v)
 		return true
 	}
 	return false
@@ -4142,10 +4484,10 @@ func (t *Ndpoption) Mtu() *Mtu {
 	} else if NdpoptionType(t.Type) == NdpoptionType_RedirectHeader {
 		return nil
 	} else if NdpoptionType(t.Type) == NdpoptionType_Mtu {
-		if _, ok := t.union84_.(*union_90_t); !ok {
+		if _, ok := t.union89_.(*union_95_t); !ok {
 			return nil // not set
 		}
-		tmp := Mtu(t.union84_.(*union_90_t).Mtu)
+		tmp := Mtu(t.union89_.(*union_95_t).Mtu)
 		return &tmp
 	}
 	return nil
@@ -4160,10 +4502,10 @@ func (t *Ndpoption) SetMtu(v Mtu) bool {
 	} else if NdpoptionType(t.Type) == NdpoptionType_RedirectHeader {
 		return false
 	} else if NdpoptionType(t.Type) == NdpoptionType_Mtu {
-		if _, ok := t.union84_.(*union_90_t); !ok {
-			t.union84_ = &union_90_t{}
+		if _, ok := t.union89_.(*union_95_t); !ok {
+			t.union89_ = &union_95_t{}
 		}
-		t.union84_.(*union_90_t).Mtu = Mtu(v)
+		t.union89_.(*union_95_t).Mtu = Mtu(v)
 		return true
 	}
 	return false
@@ -4174,10 +4516,10 @@ func (t *Ndpoption) PrefixInformation() *PrefixInformation {
 	} else if NdpoptionType(t.Type) == NdpoptionType_TargetLinkLayerAddress {
 		return nil
 	} else if NdpoptionType(t.Type) == NdpoptionType_PrefixInformation {
-		if _, ok := t.union84_.(*union_88_t); !ok {
+		if _, ok := t.union89_.(*union_93_t); !ok {
 			return nil // not set
 		}
-		tmp := PrefixInformation(t.union84_.(*union_88_t).PrefixInformation)
+		tmp := PrefixInformation(t.union89_.(*union_93_t).PrefixInformation)
 		return &tmp
 	}
 	return nil
@@ -4188,10 +4530,10 @@ func (t *Ndpoption) SetPrefixInformation(v PrefixInformation) bool {
 	} else if NdpoptionType(t.Type) == NdpoptionType_TargetLinkLayerAddress {
 		return false
 	} else if NdpoptionType(t.Type) == NdpoptionType_PrefixInformation {
-		if _, ok := t.union84_.(*union_88_t); !ok {
-			t.union84_ = &union_88_t{}
+		if _, ok := t.union89_.(*union_93_t); !ok {
+			t.union89_ = &union_93_t{}
 		}
-		t.union84_.(*union_88_t).PrefixInformation = PrefixInformation(v)
+		t.union89_.(*union_93_t).PrefixInformation = PrefixInformation(v)
 		return true
 	}
 	return false
@@ -4204,10 +4546,10 @@ func (t *Ndpoption) RedirectHeader() *RedirectHeader {
 	} else if NdpoptionType(t.Type) == NdpoptionType_PrefixInformation {
 		return nil
 	} else if NdpoptionType(t.Type) == NdpoptionType_RedirectHeader {
-		if _, ok := t.union84_.(*union_89_t); !ok {
+		if _, ok := t.union89_.(*union_94_t); !ok {
 			return nil // not set
 		}
-		tmp := RedirectHeader(t.union84_.(*union_89_t).RedirectHeader)
+		tmp := RedirectHeader(t.union89_.(*union_94_t).RedirectHeader)
 		return &tmp
 	}
 	return nil
@@ -4220,10 +4562,10 @@ func (t *Ndpoption) SetRedirectHeader(v RedirectHeader) bool {
 	} else if NdpoptionType(t.Type) == NdpoptionType_PrefixInformation {
 		return false
 	} else if NdpoptionType(t.Type) == NdpoptionType_RedirectHeader {
-		if _, ok := t.union84_.(*union_89_t); !ok {
-			t.union84_ = &union_89_t{}
+		if _, ok := t.union89_.(*union_94_t); !ok {
+			t.union89_ = &union_94_t{}
 		}
-		t.union84_.(*union_89_t).RedirectHeader = RedirectHeader(v)
+		t.union89_.(*union_94_t).RedirectHeader = RedirectHeader(v)
 		return true
 	}
 	return false
@@ -4249,90 +4591,90 @@ func (t *Ndpoption) Write(w io.Writer) (err error) {
 	}
 	switch {
 	case (NdpoptionType(t.Type) == NdpoptionType_SourceLinkLayerAddress):
-		if _, ok := t.union84_.(*union_86_t); !ok {
-			return fmt.Errorf("encode t.union84_: union is not set to union_86_t")
+		if _, ok := t.union89_.(*union_91_t); !ok {
+			return fmt.Errorf("encode t.union89_: union is not set to union_91_t")
 		}
 		len_LinkLayerAddress := int(((t.Length * 8) - 2))
-		if len(t.union84_.(*union_86_t).LinkLayerAddress) != len_LinkLayerAddress {
-			return fmt.Errorf("encode LinkLayerAddress: expect %d bytes but got %d bytes", len_LinkLayerAddress, len(t.union84_.(*union_86_t).LinkLayerAddress))
+		if len(t.union89_.(*union_91_t).LinkLayerAddress) != len_LinkLayerAddress {
+			return fmt.Errorf("encode LinkLayerAddress: expect %d bytes but got %d bytes", len_LinkLayerAddress, len(t.union89_.(*union_91_t).LinkLayerAddress))
 		}
-		if n, err := w.Write(t.union84_.(*union_86_t).LinkLayerAddress); err != nil || n != len(t.union84_.(*union_86_t).LinkLayerAddress) {
+		if n, err := w.Write(t.union89_.(*union_91_t).LinkLayerAddress); err != nil || n != len(t.union89_.(*union_91_t).LinkLayerAddress) {
 			return fmt.Errorf("encode LinkLayerAddress: %w", err)
 		}
 	case (NdpoptionType(t.Type) == NdpoptionType_TargetLinkLayerAddress):
-		if _, ok := t.union84_.(*union_87_t); !ok {
-			return fmt.Errorf("encode t.union84_: union is not set to union_87_t")
+		if _, ok := t.union89_.(*union_92_t); !ok {
+			return fmt.Errorf("encode t.union89_: union is not set to union_92_t")
 		}
 		len_LinkLayerAddress := int(((t.Length * 8) - 2))
-		if len(t.union84_.(*union_87_t).LinkLayerAddress) != len_LinkLayerAddress {
-			return fmt.Errorf("encode LinkLayerAddress: expect %d bytes but got %d bytes", len_LinkLayerAddress, len(t.union84_.(*union_87_t).LinkLayerAddress))
+		if len(t.union89_.(*union_92_t).LinkLayerAddress) != len_LinkLayerAddress {
+			return fmt.Errorf("encode LinkLayerAddress: expect %d bytes but got %d bytes", len_LinkLayerAddress, len(t.union89_.(*union_92_t).LinkLayerAddress))
 		}
-		if n, err := w.Write(t.union84_.(*union_87_t).LinkLayerAddress); err != nil || n != len(t.union84_.(*union_87_t).LinkLayerAddress) {
+		if n, err := w.Write(t.union89_.(*union_92_t).LinkLayerAddress); err != nil || n != len(t.union89_.(*union_92_t).LinkLayerAddress) {
 			return fmt.Errorf("encode LinkLayerAddress: %w", err)
 		}
 	case (NdpoptionType(t.Type) == NdpoptionType_PrefixInformation):
-		if _, ok := t.union84_.(*union_88_t); !ok {
-			return fmt.Errorf("encode t.union84_: union is not set to union_88_t")
+		if _, ok := t.union89_.(*union_93_t); !ok {
+			return fmt.Errorf("encode t.union89_: union is not set to union_93_t")
 		}
-		new_buf_92 := bytes.NewBuffer(nil)
-		old_buf_92_w := w
-		w = new_buf_92
-		if err := t.union84_.(*union_88_t).PrefixInformation.Write(w); err != nil {
+		new_buf_97 := bytes.NewBuffer(nil)
+		old_buf_97_w := w
+		w = new_buf_97
+		if err := t.union89_.(*union_93_t).PrefixInformation.Write(w); err != nil {
 			return fmt.Errorf("encode PrefixInformation: %w", err)
 		}
-		if new_buf_92.Len() != int(((t.Length * 8) - 2)) {
-			return fmt.Errorf("encode PrefixInformation: expect %d bytes but got %d bytes", new_buf_92.Len(), int(((t.Length * 8) - 2)))
+		if new_buf_97.Len() != int(((t.Length * 8) - 2)) {
+			return fmt.Errorf("encode PrefixInformation: expect %d bytes but got %d bytes", new_buf_97.Len(), int(((t.Length * 8) - 2)))
 		}
-		_, err = new_buf_92.WriteTo(old_buf_92_w)
+		_, err = new_buf_97.WriteTo(old_buf_97_w)
 		if err != nil {
 			return err
 		}
-		w = old_buf_92_w
+		w = old_buf_97_w
 	case (NdpoptionType(t.Type) == NdpoptionType_RedirectHeader):
-		if _, ok := t.union84_.(*union_89_t); !ok {
-			return fmt.Errorf("encode t.union84_: union is not set to union_89_t")
+		if _, ok := t.union89_.(*union_94_t); !ok {
+			return fmt.Errorf("encode t.union89_: union is not set to union_94_t")
 		}
-		new_buf_93 := bytes.NewBuffer(nil)
-		old_buf_93_w := w
-		w = new_buf_93
-		if err := t.union84_.(*union_89_t).RedirectHeader.Write(w); err != nil {
+		new_buf_98 := bytes.NewBuffer(nil)
+		old_buf_98_w := w
+		w = new_buf_98
+		if err := t.union89_.(*union_94_t).RedirectHeader.Write(w); err != nil {
 			return fmt.Errorf("encode RedirectHeader: %w", err)
 		}
-		if new_buf_93.Len() != int(((t.Length * 8) - 2)) {
-			return fmt.Errorf("encode RedirectHeader: expect %d bytes but got %d bytes", new_buf_93.Len(), int(((t.Length * 8) - 2)))
+		if new_buf_98.Len() != int(((t.Length * 8) - 2)) {
+			return fmt.Errorf("encode RedirectHeader: expect %d bytes but got %d bytes", new_buf_98.Len(), int(((t.Length * 8) - 2)))
 		}
-		_, err = new_buf_93.WriteTo(old_buf_93_w)
+		_, err = new_buf_98.WriteTo(old_buf_98_w)
 		if err != nil {
 			return err
 		}
-		w = old_buf_93_w
+		w = old_buf_98_w
 	case (NdpoptionType(t.Type) == NdpoptionType_Mtu):
-		if _, ok := t.union84_.(*union_90_t); !ok {
-			return fmt.Errorf("encode t.union84_: union is not set to union_90_t")
+		if _, ok := t.union89_.(*union_95_t); !ok {
+			return fmt.Errorf("encode t.union89_: union is not set to union_95_t")
 		}
-		new_buf_94 := bytes.NewBuffer(nil)
-		old_buf_94_w := w
-		w = new_buf_94
-		if err := t.union84_.(*union_90_t).Mtu.Write(w); err != nil {
+		new_buf_99 := bytes.NewBuffer(nil)
+		old_buf_99_w := w
+		w = new_buf_99
+		if err := t.union89_.(*union_95_t).Mtu.Write(w); err != nil {
 			return fmt.Errorf("encode Mtu: %w", err)
 		}
-		if new_buf_94.Len() != int(((t.Length * 8) - 2)) {
-			return fmt.Errorf("encode Mtu: expect %d bytes but got %d bytes", new_buf_94.Len(), int(((t.Length * 8) - 2)))
+		if new_buf_99.Len() != int(((t.Length * 8) - 2)) {
+			return fmt.Errorf("encode Mtu: expect %d bytes but got %d bytes", new_buf_99.Len(), int(((t.Length * 8) - 2)))
 		}
-		_, err = new_buf_94.WriteTo(old_buf_94_w)
+		_, err = new_buf_99.WriteTo(old_buf_99_w)
 		if err != nil {
 			return err
 		}
-		w = old_buf_94_w
+		w = old_buf_99_w
 	default:
-		if _, ok := t.union84_.(*union_91_t); !ok {
-			return fmt.Errorf("encode t.union84_: union is not set to union_91_t")
+		if _, ok := t.union89_.(*union_96_t); !ok {
+			return fmt.Errorf("encode t.union89_: union is not set to union_96_t")
 		}
 		len_Data := int(((t.Length * 8) - 2))
-		if len(t.union84_.(*union_91_t).Data) != len_Data {
-			return fmt.Errorf("encode Data: expect %d bytes but got %d bytes", len_Data, len(t.union84_.(*union_91_t).Data))
+		if len(t.union89_.(*union_96_t).Data) != len_Data {
+			return fmt.Errorf("encode Data: expect %d bytes but got %d bytes", len_Data, len(t.union89_.(*union_96_t).Data))
 		}
-		if n, err := w.Write(t.union84_.(*union_91_t).Data); err != nil || n != len(t.union84_.(*union_91_t).Data) {
+		if n, err := w.Write(t.union89_.(*union_96_t).Data); err != nil || n != len(t.union89_.(*union_96_t).Data) {
 			return fmt.Errorf("encode Data: %w", err)
 		}
 	}
@@ -4367,7 +4709,7 @@ func (t *Ndpoption) Read(r io.Reader) (err error) {
 	t.Length = uint8(tmpLength[0])
 	switch {
 	case (NdpoptionType(t.Type) == NdpoptionType_SourceLinkLayerAddress):
-		t.union84_ = &union_86_t{}
+		t.union89_ = &union_91_t{}
 		len_LinkLayerAddress := int(((t.Length * 8) - 2))
 		if len_LinkLayerAddress != 0 {
 			tmpLinkLayerAddress := make([]byte, len_LinkLayerAddress)
@@ -4375,12 +4717,12 @@ func (t *Ndpoption) Read(r io.Reader) (err error) {
 			if err != nil {
 				return fmt.Errorf("read LinkLayerAddress: expect %d bytes but read %d bytes: %w", len_LinkLayerAddress, n_LinkLayerAddress, err)
 			}
-			t.union84_.(*union_86_t).LinkLayerAddress = tmpLinkLayerAddress[:]
+			t.union89_.(*union_91_t).LinkLayerAddress = tmpLinkLayerAddress[:]
 		} else {
-			t.union84_.(*union_86_t).LinkLayerAddress = nil
+			t.union89_.(*union_91_t).LinkLayerAddress = nil
 		}
 	case (NdpoptionType(t.Type) == NdpoptionType_TargetLinkLayerAddress):
-		t.union84_ = &union_87_t{}
+		t.union89_ = &union_92_t{}
 		len_LinkLayerAddress := int(((t.Length * 8) - 2))
 		if len_LinkLayerAddress != 0 {
 			tmpLinkLayerAddress := make([]byte, len_LinkLayerAddress)
@@ -4388,51 +4730,51 @@ func (t *Ndpoption) Read(r io.Reader) (err error) {
 			if err != nil {
 				return fmt.Errorf("read LinkLayerAddress: expect %d bytes but read %d bytes: %w", len_LinkLayerAddress, n_LinkLayerAddress, err)
 			}
-			t.union84_.(*union_87_t).LinkLayerAddress = tmpLinkLayerAddress[:]
+			t.union89_.(*union_92_t).LinkLayerAddress = tmpLinkLayerAddress[:]
 		} else {
-			t.union84_.(*union_87_t).LinkLayerAddress = nil
+			t.union89_.(*union_92_t).LinkLayerAddress = nil
 		}
 	case (NdpoptionType(t.Type) == NdpoptionType_PrefixInformation):
-		t.union84_ = &union_88_t{}
+		t.union89_ = &union_93_t{}
 		sub_byte_len_PrefixInformation := int64(((t.Length * 8) - 2))
 		sub_byte_r_PrefixInformation := io.LimitReader(r, int64(sub_byte_len_PrefixInformation))
-		tmp_old_r_PrefixInformation_95 := r
+		tmp_old_r_PrefixInformation_100 := r
 		r = sub_byte_r_PrefixInformation
-		if err := t.union84_.(*union_88_t).PrefixInformation.Read(r); err != nil {
+		if err := t.union89_.(*union_93_t).PrefixInformation.Read(r); err != nil {
 			return fmt.Errorf("read PrefixInformation: %w", err)
 		}
 		if sub_byte_r_PrefixInformation.(*io.LimitedReader).N != 0 {
 			return fmt.Errorf("read PrefixInformation: expect %d bytes but got %d bytes", sub_byte_len_PrefixInformation, sub_byte_len_PrefixInformation-sub_byte_r_PrefixInformation.(*io.LimitedReader).N)
 		}
-		r = tmp_old_r_PrefixInformation_95
+		r = tmp_old_r_PrefixInformation_100
 	case (NdpoptionType(t.Type) == NdpoptionType_RedirectHeader):
-		t.union84_ = &union_89_t{}
+		t.union89_ = &union_94_t{}
 		sub_byte_len_RedirectHeader := int64(((t.Length * 8) - 2))
 		sub_byte_r_RedirectHeader := io.LimitReader(r, int64(sub_byte_len_RedirectHeader))
-		tmp_old_r_RedirectHeader_96 := r
+		tmp_old_r_RedirectHeader_101 := r
 		r = sub_byte_r_RedirectHeader
-		if err := t.union84_.(*union_89_t).RedirectHeader.Read(r); err != nil {
+		if err := t.union89_.(*union_94_t).RedirectHeader.Read(r); err != nil {
 			return fmt.Errorf("read RedirectHeader: %w", err)
 		}
 		if sub_byte_r_RedirectHeader.(*io.LimitedReader).N != 0 {
 			return fmt.Errorf("read RedirectHeader: expect %d bytes but got %d bytes", sub_byte_len_RedirectHeader, sub_byte_len_RedirectHeader-sub_byte_r_RedirectHeader.(*io.LimitedReader).N)
 		}
-		r = tmp_old_r_RedirectHeader_96
+		r = tmp_old_r_RedirectHeader_101
 	case (NdpoptionType(t.Type) == NdpoptionType_Mtu):
-		t.union84_ = &union_90_t{}
+		t.union89_ = &union_95_t{}
 		sub_byte_len_Mtu := int64(((t.Length * 8) - 2))
 		sub_byte_r_Mtu := io.LimitReader(r, int64(sub_byte_len_Mtu))
-		tmp_old_r_Mtu_97 := r
+		tmp_old_r_Mtu_102 := r
 		r = sub_byte_r_Mtu
-		if err := t.union84_.(*union_90_t).Mtu.Read(r); err != nil {
+		if err := t.union89_.(*union_95_t).Mtu.Read(r); err != nil {
 			return fmt.Errorf("read Mtu: %w", err)
 		}
 		if sub_byte_r_Mtu.(*io.LimitedReader).N != 0 {
 			return fmt.Errorf("read Mtu: expect %d bytes but got %d bytes", sub_byte_len_Mtu, sub_byte_len_Mtu-sub_byte_r_Mtu.(*io.LimitedReader).N)
 		}
-		r = tmp_old_r_Mtu_97
+		r = tmp_old_r_Mtu_102
 	default:
-		t.union84_ = &union_91_t{}
+		t.union89_ = &union_96_t{}
 		len_Data := int(((t.Length * 8) - 2))
 		if len_Data != 0 {
 			tmpData := make([]byte, len_Data)
@@ -4440,9 +4782,9 @@ func (t *Ndpoption) Read(r io.Reader) (err error) {
 			if err != nil {
 				return fmt.Errorf("read Data: expect %d bytes but read %d bytes: %w", len_Data, n_Data, err)
 			}
-			t.union84_.(*union_91_t).Data = tmpData[:]
+			t.union89_.(*union_96_t).Data = tmpData[:]
 		} else {
-			t.union84_.(*union_91_t).Data = nil
+			t.union89_.(*union_96_t).Data = nil
 		}
 	}
 	return nil
@@ -4469,9 +4811,9 @@ func (t *NdprouterSolicitation) MarshalJSON() ([]byte, error) {
 	return json.Marshal(VisitorKEYKWToMap(t))
 }
 func (t *NdprouterSolicitation) Write(w io.Writer) (err error) {
-	tmp98 := [4]byte{}
-	binary.BigEndian.PutUint32(tmp98[:], uint32(t.Reserved))
-	if n, err := w.Write(tmp98[:]); err != nil || n != 4 {
+	tmp103 := [4]byte{}
+	binary.BigEndian.PutUint32(tmp103[:], uint32(t.Reserved))
+	if n, err := w.Write(tmp103[:]); err != nil || n != 4 {
 		return fmt.Errorf("encode t.Reserved: %w", err)
 	}
 	for _, v := range t.Options {
@@ -4502,25 +4844,25 @@ func (t *NdprouterSolicitation) Read(r io.Reader) (err error) {
 		return fmt.Errorf("read Reserved: expect 4 bytes but read %d bytes: %w", n_Reserved, err)
 	}
 	t.Reserved = uint32(binary.BigEndian.Uint32(tmpReserved[:]))
-	tmp_byte_scanner99_ := bufio.NewReaderSize(r, 1)
+	tmp_byte_scanner104_ := bufio.NewReaderSize(r, 1)
 	old_r_Options := r
-	r = tmp_byte_scanner99_
+	r = tmp_byte_scanner104_
 	for {
-		_, err := tmp_byte_scanner99_.ReadByte()
+		_, err := tmp_byte_scanner104_.ReadByte()
 		if err != nil {
 			if err != io.EOF {
 				return fmt.Errorf("read Options: %w", err)
 			}
 			break
 		}
-		if err := tmp_byte_scanner99_.UnreadByte(); err != nil {
+		if err := tmp_byte_scanner104_.UnreadByte(); err != nil {
 			return fmt.Errorf("read Options: unexpected unread error: %w", err)
 		}
-		var tmp100_ Ndpoption
-		if err := tmp100_.Read(r); err != nil {
+		var tmp105_ Ndpoption
+		if err := tmp105_.Read(r); err != nil {
 			return fmt.Errorf("read Options: %w", err)
 		}
-		t.Options = append(t.Options, tmp100_)
+		t.Options = append(t.Options, tmp105_)
 	}
 	r = old_r_Options
 	return nil
@@ -4540,33 +4882,33 @@ func (t *NdprouterSolicitation) DecodeExact(d []byte) error {
 	return nil
 }
 func (t *NdprouterAdvertisement) ManagedAddrConfig() bool {
-	return ((t.flags101 & 0x80) >> 7) == 1
+	return ((t.flags106 & 0x80) >> 7) == 1
 }
 func (t *NdprouterAdvertisement) SetManagedAddrConfig(v bool) {
 	if v {
-		t.flags101 |= uint8(0x80)
+		t.flags106 |= uint8(0x80)
 	} else {
-		t.flags101 &= ^uint8(0x80)
+		t.flags106 &= ^uint8(0x80)
 	}
 }
 func (t *NdprouterAdvertisement) OtherStatefulConfig() bool {
-	return ((t.flags101 & 0x40) >> 6) == 1
+	return ((t.flags106 & 0x40) >> 6) == 1
 }
 func (t *NdprouterAdvertisement) SetOtherStatefulConfig(v bool) {
 	if v {
-		t.flags101 |= uint8(0x40)
+		t.flags106 |= uint8(0x40)
 	} else {
-		t.flags101 &= ^uint8(0x40)
+		t.flags106 &= ^uint8(0x40)
 	}
 }
 func (t *NdprouterAdvertisement) Reserved() uint8 {
-	return ((t.flags101 & 0x3f) >> 0)
+	return ((t.flags106 & 0x3f) >> 0)
 }
 func (t *NdprouterAdvertisement) SetReserved(v uint8) bool {
 	if v > 63 {
 		return false
 	}
-	t.flags101 = (t.flags101 & ^uint8(0x3f)) | ((v & 0x3f) << 0)
+	t.flags106 = (t.flags106 & ^uint8(0x3f)) | ((v & 0x3f) << 0)
 	return true
 }
 func (t *NdprouterAdvertisement) Visit(v VisitorKEYKW) {
@@ -4598,22 +4940,22 @@ func (t *NdprouterAdvertisement) Write(w io.Writer) (err error) {
 	if n, err := w.Write([]byte{byte(t.CurHopLimit)}); err != nil || n != 1 {
 		return fmt.Errorf("encode t.CurHopLimit: %w", err)
 	}
-	if n, err := w.Write([]byte{byte(t.flags101)}); err != nil || n != 1 {
-		return fmt.Errorf("encode t.flags101: %w", err)
+	if n, err := w.Write([]byte{byte(t.flags106)}); err != nil || n != 1 {
+		return fmt.Errorf("encode t.flags106: %w", err)
 	}
-	tmp102 := [2]byte{}
-	binary.BigEndian.PutUint16(tmp102[:], uint16(t.RouterLifetime))
-	if n, err := w.Write(tmp102[:]); err != nil || n != 2 {
+	tmp107 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp107[:], uint16(t.RouterLifetime))
+	if n, err := w.Write(tmp107[:]); err != nil || n != 2 {
 		return fmt.Errorf("encode t.RouterLifetime: %w", err)
 	}
-	tmp103 := [4]byte{}
-	binary.BigEndian.PutUint32(tmp103[:], uint32(t.ReachableTime))
-	if n, err := w.Write(tmp103[:]); err != nil || n != 4 {
+	tmp108 := [4]byte{}
+	binary.BigEndian.PutUint32(tmp108[:], uint32(t.ReachableTime))
+	if n, err := w.Write(tmp108[:]); err != nil || n != 4 {
 		return fmt.Errorf("encode t.ReachableTime: %w", err)
 	}
-	tmp104 := [4]byte{}
-	binary.BigEndian.PutUint32(tmp104[:], uint32(t.RetransTimer))
-	if n, err := w.Write(tmp104[:]); err != nil || n != 4 {
+	tmp109 := [4]byte{}
+	binary.BigEndian.PutUint32(tmp109[:], uint32(t.RetransTimer))
+	if n, err := w.Write(tmp109[:]); err != nil || n != 4 {
 		return fmt.Errorf("encode t.RetransTimer: %w", err)
 	}
 	for _, v := range t.Options {
@@ -4644,12 +4986,12 @@ func (t *NdprouterAdvertisement) Read(r io.Reader) (err error) {
 		return fmt.Errorf("read CurHopLimit: expect 1 byte but read %d bytes: %w", n_CurHopLimit, err)
 	}
 	t.CurHopLimit = uint8(tmpCurHopLimit[0])
-	tmpflags101 := [1]byte{}
-	n_flags101, err := io.ReadFull(r, tmpflags101[:])
+	tmpflags106 := [1]byte{}
+	n_flags106, err := io.ReadFull(r, tmpflags106[:])
 	if err != nil {
-		return fmt.Errorf("read flags101: expect 1 byte but read %d bytes: %w", n_flags101, err)
+		return fmt.Errorf("read flags106: expect 1 byte but read %d bytes: %w", n_flags106, err)
 	}
-	t.flags101 = uint8(tmpflags101[0])
+	t.flags106 = uint8(tmpflags106[0])
 	tmpRouterLifetime := [2]byte{}
 	n_RouterLifetime, err := io.ReadFull(r, tmpRouterLifetime[:])
 	if err != nil {
@@ -4668,25 +5010,25 @@ func (t *NdprouterAdvertisement) Read(r io.Reader) (err error) {
 		return fmt.Errorf("read RetransTimer: expect 4 bytes but read %d bytes: %w", n_RetransTimer, err)
 	}
 	t.RetransTimer = uint32(binary.BigEndian.Uint32(tmpRetransTimer[:]))
-	tmp_byte_scanner105_ := bufio.NewReaderSize(r, 1)
+	tmp_byte_scanner110_ := bufio.NewReaderSize(r, 1)
 	old_r_Options := r
-	r = tmp_byte_scanner105_
+	r = tmp_byte_scanner110_
 	for {
-		_, err := tmp_byte_scanner105_.ReadByte()
+		_, err := tmp_byte_scanner110_.ReadByte()
 		if err != nil {
 			if err != io.EOF {
 				return fmt.Errorf("read Options: %w", err)
 			}
 			break
 		}
-		if err := tmp_byte_scanner105_.UnreadByte(); err != nil {
+		if err := tmp_byte_scanner110_.UnreadByte(); err != nil {
 			return fmt.Errorf("read Options: unexpected unread error: %w", err)
 		}
-		var tmp106_ Ndpoption
-		if err := tmp106_.Read(r); err != nil {
+		var tmp111_ Ndpoption
+		if err := tmp111_.Read(r); err != nil {
 			return fmt.Errorf("read Options: %w", err)
 		}
-		t.Options = append(t.Options, tmp106_)
+		t.Options = append(t.Options, tmp111_)
 	}
 	r = old_r_Options
 	return nil
@@ -4714,9 +5056,9 @@ func (t *NdpneighborSolicitation) MarshalJSON() ([]byte, error) {
 	return json.Marshal(VisitorKEYKWToMap(t))
 }
 func (t *NdpneighborSolicitation) Write(w io.Writer) (err error) {
-	tmp107 := [4]byte{}
-	binary.BigEndian.PutUint32(tmp107[:], uint32(t.Reserved))
-	if n, err := w.Write(tmp107[:]); err != nil || n != 4 {
+	tmp112 := [4]byte{}
+	binary.BigEndian.PutUint32(tmp112[:], uint32(t.Reserved))
+	if n, err := w.Write(tmp112[:]); err != nil || n != 4 {
 		return fmt.Errorf("encode t.Reserved: %w", err)
 	}
 	if n, err := w.Write(t.TargetAddr[:]); err != nil || n != len(t.TargetAddr) {
@@ -4754,25 +5096,25 @@ func (t *NdpneighborSolicitation) Read(r io.Reader) (err error) {
 	if err != nil {
 		return fmt.Errorf("read TargetAddr: expect %d bytes but read %d bytes: %w", 16, n_TargetAddr, err)
 	}
-	tmp_byte_scanner108_ := bufio.NewReaderSize(r, 1)
+	tmp_byte_scanner113_ := bufio.NewReaderSize(r, 1)
 	old_r_Options := r
-	r = tmp_byte_scanner108_
+	r = tmp_byte_scanner113_
 	for {
-		_, err := tmp_byte_scanner108_.ReadByte()
+		_, err := tmp_byte_scanner113_.ReadByte()
 		if err != nil {
 			if err != io.EOF {
 				return fmt.Errorf("read Options: %w", err)
 			}
 			break
 		}
-		if err := tmp_byte_scanner108_.UnreadByte(); err != nil {
+		if err := tmp_byte_scanner113_.UnreadByte(); err != nil {
 			return fmt.Errorf("read Options: unexpected unread error: %w", err)
 		}
-		var tmp109_ Ndpoption
-		if err := tmp109_.Read(r); err != nil {
+		var tmp114_ Ndpoption
+		if err := tmp114_.Read(r); err != nil {
 			return fmt.Errorf("read Options: %w", err)
 		}
-		t.Options = append(t.Options, tmp109_)
+		t.Options = append(t.Options, tmp114_)
 	}
 	r = old_r_Options
 	return nil
@@ -4792,43 +5134,43 @@ func (t *NdpneighborSolicitation) DecodeExact(d []byte) error {
 	return nil
 }
 func (t *NdpneighborAdvertisement) Router() bool {
-	return ((t.flags110 & 0x80000000) >> 31) == 1
+	return ((t.flags115 & 0x80000000) >> 31) == 1
 }
 func (t *NdpneighborAdvertisement) SetRouter(v bool) {
 	if v {
-		t.flags110 |= uint32(0x80000000)
+		t.flags115 |= uint32(0x80000000)
 	} else {
-		t.flags110 &= ^uint32(0x80000000)
+		t.flags115 &= ^uint32(0x80000000)
 	}
 }
 func (t *NdpneighborAdvertisement) Solicited() bool {
-	return ((t.flags110 & 0x40000000) >> 30) == 1
+	return ((t.flags115 & 0x40000000) >> 30) == 1
 }
 func (t *NdpneighborAdvertisement) SetSolicited(v bool) {
 	if v {
-		t.flags110 |= uint32(0x40000000)
+		t.flags115 |= uint32(0x40000000)
 	} else {
-		t.flags110 &= ^uint32(0x40000000)
+		t.flags115 &= ^uint32(0x40000000)
 	}
 }
 func (t *NdpneighborAdvertisement) Override() bool {
-	return ((t.flags110 & 0x20000000) >> 29) == 1
+	return ((t.flags115 & 0x20000000) >> 29) == 1
 }
 func (t *NdpneighborAdvertisement) SetOverride(v bool) {
 	if v {
-		t.flags110 |= uint32(0x20000000)
+		t.flags115 |= uint32(0x20000000)
 	} else {
-		t.flags110 &= ^uint32(0x20000000)
+		t.flags115 &= ^uint32(0x20000000)
 	}
 }
 func (t *NdpneighborAdvertisement) Flags() uint32 {
-	return ((t.flags110 & 0x1fffffff) >> 0)
+	return ((t.flags115 & 0x1fffffff) >> 0)
 }
 func (t *NdpneighborAdvertisement) SetFlags(v uint32) bool {
 	if v > 536870911 {
 		return false
 	}
-	t.flags110 = (t.flags110 & ^uint32(0x1fffffff)) | ((v & 0x1fffffff) << 0)
+	t.flags115 = (t.flags115 & ^uint32(0x1fffffff)) | ((v & 0x1fffffff) << 0)
 	return true
 }
 func (t *NdpneighborAdvertisement) Visit(v VisitorKEYKW) {
@@ -4861,10 +5203,10 @@ func (t *NdpneighborAdvertisement) MarshalJSON() ([]byte, error) {
 	return json.Marshal(VisitorKEYKWToMap(t))
 }
 func (t *NdpneighborAdvertisement) Write(w io.Writer) (err error) {
-	tmp111 := [4]byte{}
-	binary.BigEndian.PutUint32(tmp111[:], uint32(t.flags110))
-	if n, err := w.Write(tmp111[:]); err != nil || n != 4 {
-		return fmt.Errorf("encode t.flags110: %w", err)
+	tmp116 := [4]byte{}
+	binary.BigEndian.PutUint32(tmp116[:], uint32(t.flags115))
+	if n, err := w.Write(tmp116[:]); err != nil || n != 4 {
+		return fmt.Errorf("encode t.flags115: %w", err)
 	}
 	if n, err := w.Write(t.TargetAddr[:]); err != nil || n != len(t.TargetAddr) {
 		return fmt.Errorf("encode TargetAddr: %w", err)
@@ -4891,35 +5233,35 @@ func (t *NdpneighborAdvertisement) MustEncode() []byte {
 	return buf
 }
 func (t *NdpneighborAdvertisement) Read(r io.Reader) (err error) {
-	tmpflags110 := [4]byte{}
-	n_flags110, err := io.ReadFull(r, tmpflags110[:])
+	tmpflags115 := [4]byte{}
+	n_flags115, err := io.ReadFull(r, tmpflags115[:])
 	if err != nil {
-		return fmt.Errorf("read flags110: expect 4 bytes but read %d bytes: %w", n_flags110, err)
+		return fmt.Errorf("read flags115: expect 4 bytes but read %d bytes: %w", n_flags115, err)
 	}
-	t.flags110 = uint32(binary.BigEndian.Uint32(tmpflags110[:]))
+	t.flags115 = uint32(binary.BigEndian.Uint32(tmpflags115[:]))
 	n_TargetAddr, err := io.ReadFull(r, t.TargetAddr[:])
 	if err != nil {
 		return fmt.Errorf("read TargetAddr: expect %d bytes but read %d bytes: %w", 16, n_TargetAddr, err)
 	}
-	tmp_byte_scanner112_ := bufio.NewReaderSize(r, 1)
+	tmp_byte_scanner117_ := bufio.NewReaderSize(r, 1)
 	old_r_Options := r
-	r = tmp_byte_scanner112_
+	r = tmp_byte_scanner117_
 	for {
-		_, err := tmp_byte_scanner112_.ReadByte()
+		_, err := tmp_byte_scanner117_.ReadByte()
 		if err != nil {
 			if err != io.EOF {
 				return fmt.Errorf("read Options: %w", err)
 			}
 			break
 		}
-		if err := tmp_byte_scanner112_.UnreadByte(); err != nil {
+		if err := tmp_byte_scanner117_.UnreadByte(); err != nil {
 			return fmt.Errorf("read Options: unexpected unread error: %w", err)
 		}
-		var tmp113_ Ndpoption
-		if err := tmp113_.Read(r); err != nil {
+		var tmp118_ Ndpoption
+		if err := tmp118_.Read(r); err != nil {
 			return fmt.Errorf("read Options: %w", err)
 		}
-		t.Options = append(t.Options, tmp113_)
+		t.Options = append(t.Options, tmp118_)
 	}
 	r = old_r_Options
 	return nil
@@ -4983,25 +5325,25 @@ func (t *NdpredirectMessage) Read(r io.Reader) (err error) {
 	if err != nil {
 		return fmt.Errorf("read DestAddr: expect %d bytes but read %d bytes: %w", 16, n_DestAddr, err)
 	}
-	tmp_byte_scanner114_ := bufio.NewReaderSize(r, 1)
+	tmp_byte_scanner119_ := bufio.NewReaderSize(r, 1)
 	old_r_Options := r
-	r = tmp_byte_scanner114_
+	r = tmp_byte_scanner119_
 	for {
-		_, err := tmp_byte_scanner114_.ReadByte()
+		_, err := tmp_byte_scanner119_.ReadByte()
 		if err != nil {
 			if err != io.EOF {
 				return fmt.Errorf("read Options: %w", err)
 			}
 			break
 		}
-		if err := tmp_byte_scanner114_.UnreadByte(); err != nil {
+		if err := tmp_byte_scanner119_.UnreadByte(); err != nil {
 			return fmt.Errorf("read Options: unexpected unread error: %w", err)
 		}
-		var tmp115_ Ndpoption
-		if err := tmp115_.Read(r); err != nil {
+		var tmp120_ Ndpoption
+		if err := tmp120_.Read(r); err != nil {
 			return fmt.Errorf("read Options: %w", err)
 		}
-		t.Options = append(t.Options, tmp115_)
+		t.Options = append(t.Options, tmp120_)
 	}
 	r = old_r_Options
 	return nil
@@ -5037,14 +5379,14 @@ func (t *V2MulticastListernerReport) MarshalJSON() ([]byte, error) {
 	return json.Marshal(VisitorKEYKWToMap(t))
 }
 func (t *V2MulticastListernerReport) Write(w io.Writer) (err error) {
-	tmp116 := [2]byte{}
-	binary.BigEndian.PutUint16(tmp116[:], uint16(t.Reserved1))
-	if n, err := w.Write(tmp116[:]); err != nil || n != 2 {
+	tmp121 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp121[:], uint16(t.Reserved1))
+	if n, err := w.Write(tmp121[:]); err != nil || n != 2 {
 		return fmt.Errorf("encode t.Reserved1: %w", err)
 	}
-	tmp117 := [2]byte{}
-	binary.BigEndian.PutUint16(tmp117[:], uint16(t.NumberOfRecords))
-	if n, err := w.Write(tmp117[:]); err != nil || n != 2 {
+	tmp122 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp122[:], uint16(t.NumberOfRecords))
+	if n, err := w.Write(tmp122[:]); err != nil || n != 2 {
 		return fmt.Errorf("encode t.NumberOfRecords: %w", err)
 	}
 	len_Records := int(t.NumberOfRecords)
@@ -5086,12 +5428,12 @@ func (t *V2MulticastListernerReport) Read(r io.Reader) (err error) {
 	}
 	t.NumberOfRecords = uint16(binary.BigEndian.Uint16(tmpNumberOfRecords[:]))
 	len_Records := int(t.NumberOfRecords)
-	for i_118 := 0; i_118 < len_Records; i_118++ {
-		var tmp119_ MulticastAddressRecord
-		if err := tmp119_.Read(r); err != nil {
+	for i_123 := 0; i_123 < len_Records; i_123++ {
+		var tmp124_ MulticastAddressRecord
+		if err := tmp124_.Read(r); err != nil {
 			return fmt.Errorf("read Records: %w", err)
 		}
-		t.Records = append(t.Records, tmp119_)
+		t.Records = append(t.Records, tmp124_)
 	}
 	return nil
 }
@@ -5106,6 +5448,75 @@ func (t *V2MulticastListernerReport) DecodeExact(d []byte) error {
 		return err
 	} else if n != len(d) {
 		return fmt.Errorf("decode V2MulticastListernerReport: expect %d bytes but got %d bytes", len(d), n)
+	}
+	return nil
+}
+func (t *Udpdatagram) SetData(v []uint8) bool {
+	t.Data = v
+	return true
+}
+func (t *Udpdatagram) Visit(v VisitorKEYKW) {
+	v.Visit(v, "Header", &t.Header)
+	v.Visit(v, "Data", &t.Data)
+}
+func (t *Udpdatagram) MarshalJSON() ([]byte, error) {
+	return json.Marshal(VisitorKEYKWToMap(t))
+}
+func (t *Udpdatagram) Write(w io.Writer) (err error) {
+	if err := t.Header.Write(w); err != nil {
+		return fmt.Errorf("encode Header: %w", err)
+	}
+	len_Data := int((t.Header.Length - 8))
+	if len(t.Data) != len_Data {
+		return fmt.Errorf("encode Data: expect %d bytes but got %d bytes", len_Data, len(t.Data))
+	}
+	if n, err := w.Write(t.Data); err != nil || n != len(t.Data) {
+		return fmt.Errorf("encode Data: %w", err)
+	}
+	return nil
+}
+func (t *Udpdatagram) Encode() ([]byte, error) {
+	w := bytes.NewBuffer(make([]byte, 0, 8))
+	if err := t.Write(w); err != nil {
+		return nil, err
+	}
+	return w.Bytes(), nil
+}
+func (t *Udpdatagram) MustEncode() []byte {
+	buf, err := t.Encode()
+	if err != nil {
+		panic(err)
+	}
+	return buf
+}
+func (t *Udpdatagram) Read(r io.Reader) (err error) {
+	if err := t.Header.Read(r); err != nil {
+		return fmt.Errorf("read Header: %w", err)
+	}
+	len_Data := int((t.Header.Length - 8))
+	if len_Data != 0 {
+		tmpData := make([]byte, len_Data)
+		n_Data, err := io.ReadFull(r, tmpData[:])
+		if err != nil {
+			return fmt.Errorf("read Data: expect %d bytes but read %d bytes: %w", len_Data, n_Data, err)
+		}
+		t.Data = tmpData[:]
+	} else {
+		t.Data = nil
+	}
+	return nil
+}
+
+func (t *Udpdatagram) Decode(d []byte) (int, error) {
+	r := bytes.NewReader(d)
+	err := t.Read(r)
+	return int(int(r.Size()) - r.Len()), err
+}
+func (t *Udpdatagram) DecodeExact(d []byte) error {
+	if n, err := t.Decode(d); err != nil {
+		return err
+	} else if n != len(d) {
+		return fmt.Errorf("decode Udpdatagram: expect %d bytes but got %d bytes", len(d), n)
 	}
 	return nil
 }
@@ -5142,9 +5553,9 @@ func (t *SegmentRouting) Write(w io.Writer) (err error) {
 	if n, err := w.Write([]byte{byte(t.Flags)}); err != nil || n != 1 {
 		return fmt.Errorf("encode t.Flags: %w", err)
 	}
-	tmp120 := [2]byte{}
-	binary.BigEndian.PutUint16(tmp120[:], uint16(t.Tag))
-	if n, err := w.Write(tmp120[:]); err != nil || n != 2 {
+	tmp125 := [2]byte{}
+	binary.BigEndian.PutUint16(tmp125[:], uint16(t.Tag))
+	if n, err := w.Write(tmp125[:]); err != nil || n != 2 {
 		return fmt.Errorf("encode t.Tag: %w", err)
 	}
 	len_SegmentList := int((t.LastEntry + 1))
@@ -5157,22 +5568,22 @@ func (t *SegmentRouting) Write(w io.Writer) (err error) {
 		}
 	}
 	RemainingInByte := ((uint16(t.Header.HdrExtLen) * 8) - ((uint16(t.LastEntry) + 1) * 16))
-	new_buf_121 := bytes.NewBuffer(nil)
-	old_buf_121_w := w
-	w = new_buf_121
+	new_buf_126 := bytes.NewBuffer(nil)
+	old_buf_126_w := w
+	w = new_buf_126
 	for _, v := range t.Options {
 		if err := v.Write(w); err != nil {
 			return fmt.Errorf("encode Options: %w", err)
 		}
 	}
-	if new_buf_121.Len() != int(RemainingInByte) {
-		return fmt.Errorf("encode Options: expect %d bytes but got %d bytes", new_buf_121.Len(), int(RemainingInByte))
+	if new_buf_126.Len() != int(RemainingInByte) {
+		return fmt.Errorf("encode Options: expect %d bytes but got %d bytes", new_buf_126.Len(), int(RemainingInByte))
 	}
-	_, err = new_buf_121.WriteTo(old_buf_121_w)
+	_, err = new_buf_126.WriteTo(old_buf_126_w)
 	if err != nil {
 		return err
 	}
-	w = old_buf_121_w
+	w = old_buf_126_w
 	return nil
 }
 func (t *SegmentRouting) Encode() ([]byte, error) {
@@ -5224,18 +5635,18 @@ func (t *SegmentRouting) Read(r io.Reader) (err error) {
 	}
 	t.Tag = uint16(binary.BigEndian.Uint16(tmpTag[:]))
 	len_SegmentList := int((t.LastEntry + 1))
-	for i_122 := 0; i_122 < len_SegmentList; i_122++ {
-		var tmp123_ [16]uint8
-		n_SegmentList, err := io.ReadFull(r, tmp123_[:])
+	for i_127 := 0; i_127 < len_SegmentList; i_127++ {
+		var tmp128_ [16]uint8
+		n_SegmentList, err := io.ReadFull(r, tmp128_[:])
 		if err != nil {
 			return fmt.Errorf("read SegmentList: expect %d bytes but read %d bytes: %w", 16, n_SegmentList, err)
 		}
-		t.SegmentList = append(t.SegmentList, tmp123_)
+		t.SegmentList = append(t.SegmentList, tmp128_)
 	}
 	RemainingInByte := ((uint16(t.Header.HdrExtLen) * 8) - ((uint16(t.LastEntry) + 1) * 16))
 	sub_byte_len_Options := int64(RemainingInByte)
 	sub_byte_r_Options := io.LimitReader(r, int64(sub_byte_len_Options))
-	tmp_old_r_Options_124 := r
+	tmp_old_r_Options_129 := r
 	r = sub_byte_r_Options
 	len_Options := int(r.(*io.LimitedReader).N)
 	tmpOptions := make([]byte, len_Options)
@@ -5247,17 +5658,17 @@ func (t *SegmentRouting) Read(r io.Reader) (err error) {
 	tmp_old_r_Options := r
 	r = range_tmp_Options
 	for range_tmp_Options.Len() > 0 {
-		var tmp125_ SegmentRoutingTlv
-		if err := tmp125_.Read(r); err != nil {
+		var tmp130_ SegmentRoutingTlv
+		if err := tmp130_.Read(r); err != nil {
 			return fmt.Errorf("read Options: %w", err)
 		}
-		t.Options = append(t.Options, tmp125_)
+		t.Options = append(t.Options, tmp130_)
 	}
 	r = tmp_old_r_Options
 	if sub_byte_r_Options.(*io.LimitedReader).N != 0 {
 		return fmt.Errorf("read Options: expect %d bytes but got %d bytes", sub_byte_len_Options, sub_byte_len_Options-sub_byte_r_Options.(*io.LimitedReader).N)
 	}
-	r = tmp_old_r_Options_124
+	r = tmp_old_r_Options_129
 	return nil
 }
 
@@ -5274,20 +5685,20 @@ func (t *SegmentRouting) DecodeExact(d []byte) error {
 	}
 	return nil
 }
-func (t *union_128_t) isunion126_() {}
-func (t *union_129_t) isunion126_() {}
-func (t *union_130_t) isunion126_() {}
-func (t *union_131_t) isunion126_() {}
-func (t *union_132_t) isunion126_() {}
-func (t *union_133_t) isunion126_() {}
-func (t *union_134_t) isunion126_() {}
-func (t *union_135_t) isunion126_() {}
-func (t *union_136_t) isunion126_() {}
-func (t *union_137_t) isunion126_() {}
-func (t *union_138_t) isunion126_() {}
-func (t *union_139_t) isunion126_() {}
-func (t *union_140_t) isunion126_() {}
-func (t *union_141_t) isunion126_() {}
+func (t *union_133_t) isunion131_() {}
+func (t *union_134_t) isunion131_() {}
+func (t *union_135_t) isunion131_() {}
+func (t *union_136_t) isunion131_() {}
+func (t *union_137_t) isunion131_() {}
+func (t *union_138_t) isunion131_() {}
+func (t *union_139_t) isunion131_() {}
+func (t *union_140_t) isunion131_() {}
+func (t *union_141_t) isunion131_() {}
+func (t *union_142_t) isunion131_() {}
+func (t *union_143_t) isunion131_() {}
+func (t *union_144_t) isunion131_() {}
+func (t *union_145_t) isunion131_() {}
+func (t *union_146_t) isunion131_() {}
 func (t *Icmpv6Packet) Data() *[]uint8 {
 	if Icmpv6Type(t.Header.Type) == Icmpv6Type_EchoRequest {
 		return nil
@@ -5316,10 +5727,10 @@ func (t *Icmpv6Packet) Data() *[]uint8 {
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_V2MulticastListenerReport {
 		return nil
 	} else if true {
-		if _, ok := t.union126_.(*union_141_t); !ok {
+		if _, ok := t.union131_.(*union_146_t); !ok {
 			return nil // not set
 		}
-		tmp := []uint8(t.union126_.(*union_141_t).Data)
+		tmp := []uint8(t.union131_.(*union_146_t).Data)
 		return &tmp
 	}
 	return nil
@@ -5352,10 +5763,10 @@ func (t *Icmpv6Packet) SetData(v []uint8) bool {
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_V2MulticastListenerReport {
 		return false
 	} else if true {
-		if _, ok := t.union126_.(*union_141_t); !ok {
-			t.union126_ = &union_141_t{}
+		if _, ok := t.union131_.(*union_146_t); !ok {
+			t.union131_ = &union_146_t{}
 		}
-		t.union126_.(*union_141_t).Data = []uint8(v)
+		t.union131_.(*union_146_t).Data = []uint8(v)
 		return true
 	}
 	return false
@@ -5372,10 +5783,10 @@ func (t *Icmpv6Packet) DestinationUnreachable() *IcmpdestinationUnreachable {
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_ParameterProblem {
 		return nil
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_DestinationUnreachable {
-		if _, ok := t.union126_.(*union_133_t); !ok {
+		if _, ok := t.union131_.(*union_138_t); !ok {
 			return nil // not set
 		}
-		tmp := IcmpdestinationUnreachable(t.union126_.(*union_133_t).DestinationUnreachable)
+		tmp := IcmpdestinationUnreachable(t.union131_.(*union_138_t).DestinationUnreachable)
 		return &tmp
 	}
 	return nil
@@ -5392,10 +5803,10 @@ func (t *Icmpv6Packet) SetDestinationUnreachable(v IcmpdestinationUnreachable) b
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_ParameterProblem {
 		return false
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_DestinationUnreachable {
-		if _, ok := t.union126_.(*union_133_t); !ok {
-			t.union126_ = &union_133_t{}
+		if _, ok := t.union131_.(*union_138_t); !ok {
+			t.union131_ = &union_138_t{}
 		}
-		t.union126_.(*union_133_t).DestinationUnreachable = IcmpdestinationUnreachable(v)
+		t.union131_.(*union_138_t).DestinationUnreachable = IcmpdestinationUnreachable(v)
 		return true
 	}
 	return false
@@ -5404,10 +5815,10 @@ func (t *Icmpv6Packet) EchoReply() *Icmpecho {
 	if Icmpv6Type(t.Header.Type) == Icmpv6Type_EchoRequest {
 		return nil
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_EchoReply {
-		if _, ok := t.union126_.(*union_129_t); !ok {
+		if _, ok := t.union131_.(*union_134_t); !ok {
 			return nil // not set
 		}
-		tmp := Icmpecho(t.union126_.(*union_129_t).EchoReply)
+		tmp := Icmpecho(t.union131_.(*union_134_t).EchoReply)
 		return &tmp
 	}
 	return nil
@@ -5416,30 +5827,30 @@ func (t *Icmpv6Packet) SetEchoReply(v Icmpecho) bool {
 	if Icmpv6Type(t.Header.Type) == Icmpv6Type_EchoRequest {
 		return false
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_EchoReply {
-		if _, ok := t.union126_.(*union_129_t); !ok {
-			t.union126_ = &union_129_t{}
+		if _, ok := t.union131_.(*union_134_t); !ok {
+			t.union131_ = &union_134_t{}
 		}
-		t.union126_.(*union_129_t).EchoReply = Icmpecho(v)
+		t.union131_.(*union_134_t).EchoReply = Icmpecho(v)
 		return true
 	}
 	return false
 }
 func (t *Icmpv6Packet) EchoRequest() *Icmpecho {
 	if Icmpv6Type(t.Header.Type) == Icmpv6Type_EchoRequest {
-		if _, ok := t.union126_.(*union_128_t); !ok {
+		if _, ok := t.union131_.(*union_133_t); !ok {
 			return nil // not set
 		}
-		tmp := Icmpecho(t.union126_.(*union_128_t).EchoRequest)
+		tmp := Icmpecho(t.union131_.(*union_133_t).EchoRequest)
 		return &tmp
 	}
 	return nil
 }
 func (t *Icmpv6Packet) SetEchoRequest(v Icmpecho) bool {
 	if Icmpv6Type(t.Header.Type) == Icmpv6Type_EchoRequest {
-		if _, ok := t.union126_.(*union_128_t); !ok {
-			t.union126_ = &union_128_t{}
+		if _, ok := t.union131_.(*union_133_t); !ok {
+			t.union131_ = &union_133_t{}
 		}
-		t.union126_.(*union_128_t).EchoRequest = Icmpecho(v)
+		t.union131_.(*union_133_t).EchoRequest = Icmpecho(v)
 		return true
 	}
 	return false
@@ -5468,10 +5879,10 @@ func (t *Icmpv6Packet) MulticastListenerQuery() *MulticastListenerQuery {
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_RedirectMessage {
 		return nil
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_MulticastListenerQuery {
-		if _, ok := t.union126_.(*union_139_t); !ok {
+		if _, ok := t.union131_.(*union_144_t); !ok {
 			return nil // not set
 		}
-		tmp := MulticastListenerQuery(t.union126_.(*union_139_t).MulticastListenerQuery)
+		tmp := MulticastListenerQuery(t.union131_.(*union_144_t).MulticastListenerQuery)
 		return &tmp
 	}
 	return nil
@@ -5500,10 +5911,10 @@ func (t *Icmpv6Packet) SetMulticastListenerQuery(v MulticastListenerQuery) bool 
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_RedirectMessage {
 		return false
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_MulticastListenerQuery {
-		if _, ok := t.union126_.(*union_139_t); !ok {
-			t.union126_ = &union_139_t{}
+		if _, ok := t.union131_.(*union_144_t); !ok {
+			t.union131_ = &union_144_t{}
 		}
-		t.union126_.(*union_139_t).MulticastListenerQuery = MulticastListenerQuery(v)
+		t.union131_.(*union_144_t).MulticastListenerQuery = MulticastListenerQuery(v)
 		return true
 	}
 	return false
@@ -5528,10 +5939,10 @@ func (t *Icmpv6Packet) NeighborAdvertisement() *NdpneighborAdvertisement {
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_NeighborSolicitation {
 		return nil
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_NeighborAdvertisement {
-		if _, ok := t.union126_.(*union_137_t); !ok {
+		if _, ok := t.union131_.(*union_142_t); !ok {
 			return nil // not set
 		}
-		tmp := NdpneighborAdvertisement(t.union126_.(*union_137_t).NeighborAdvertisement)
+		tmp := NdpneighborAdvertisement(t.union131_.(*union_142_t).NeighborAdvertisement)
 		return &tmp
 	}
 	return nil
@@ -5556,10 +5967,10 @@ func (t *Icmpv6Packet) SetNeighborAdvertisement(v NdpneighborAdvertisement) bool
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_NeighborSolicitation {
 		return false
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_NeighborAdvertisement {
-		if _, ok := t.union126_.(*union_137_t); !ok {
-			t.union126_ = &union_137_t{}
+		if _, ok := t.union131_.(*union_142_t); !ok {
+			t.union131_ = &union_142_t{}
 		}
-		t.union126_.(*union_137_t).NeighborAdvertisement = NdpneighborAdvertisement(v)
+		t.union131_.(*union_142_t).NeighborAdvertisement = NdpneighborAdvertisement(v)
 		return true
 	}
 	return false
@@ -5582,10 +5993,10 @@ func (t *Icmpv6Packet) NeighborSolicitation() *NdpneighborSolicitation {
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_RouterAdvertisement {
 		return nil
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_NeighborSolicitation {
-		if _, ok := t.union126_.(*union_136_t); !ok {
+		if _, ok := t.union131_.(*union_141_t); !ok {
 			return nil // not set
 		}
-		tmp := NdpneighborSolicitation(t.union126_.(*union_136_t).NeighborSolicitation)
+		tmp := NdpneighborSolicitation(t.union131_.(*union_141_t).NeighborSolicitation)
 		return &tmp
 	}
 	return nil
@@ -5608,10 +6019,10 @@ func (t *Icmpv6Packet) SetNeighborSolicitation(v NdpneighborSolicitation) bool {
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_RouterAdvertisement {
 		return false
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_NeighborSolicitation {
-		if _, ok := t.union126_.(*union_136_t); !ok {
-			t.union126_ = &union_136_t{}
+		if _, ok := t.union131_.(*union_141_t); !ok {
+			t.union131_ = &union_141_t{}
 		}
-		t.union126_.(*union_136_t).NeighborSolicitation = NdpneighborSolicitation(v)
+		t.union131_.(*union_141_t).NeighborSolicitation = NdpneighborSolicitation(v)
 		return true
 	}
 	return false
@@ -5624,10 +6035,10 @@ func (t *Icmpv6Packet) PacketTooBig() *IcmppacketTooBig {
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_TimeExceeded {
 		return nil
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_PacketTooBig {
-		if _, ok := t.union126_.(*union_131_t); !ok {
+		if _, ok := t.union131_.(*union_136_t); !ok {
 			return nil // not set
 		}
-		tmp := IcmppacketTooBig(t.union126_.(*union_131_t).PacketTooBig)
+		tmp := IcmppacketTooBig(t.union131_.(*union_136_t).PacketTooBig)
 		return &tmp
 	}
 	return nil
@@ -5640,10 +6051,10 @@ func (t *Icmpv6Packet) SetPacketTooBig(v IcmppacketTooBig) bool {
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_TimeExceeded {
 		return false
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_PacketTooBig {
-		if _, ok := t.union126_.(*union_131_t); !ok {
-			t.union126_ = &union_131_t{}
+		if _, ok := t.union131_.(*union_136_t); !ok {
+			t.union131_ = &union_136_t{}
 		}
-		t.union126_.(*union_131_t).PacketTooBig = IcmppacketTooBig(v)
+		t.union131_.(*union_136_t).PacketTooBig = IcmppacketTooBig(v)
 		return true
 	}
 	return false
@@ -5658,10 +6069,10 @@ func (t *Icmpv6Packet) ParameterProblem() *Icmpv6ParameterProblem {
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_PacketTooBig {
 		return nil
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_ParameterProblem {
-		if _, ok := t.union126_.(*union_132_t); !ok {
+		if _, ok := t.union131_.(*union_137_t); !ok {
 			return nil // not set
 		}
-		tmp := Icmpv6ParameterProblem(t.union126_.(*union_132_t).ParameterProblem)
+		tmp := Icmpv6ParameterProblem(t.union131_.(*union_137_t).ParameterProblem)
 		return &tmp
 	}
 	return nil
@@ -5676,10 +6087,10 @@ func (t *Icmpv6Packet) SetParameterProblem(v Icmpv6ParameterProblem) bool {
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_PacketTooBig {
 		return false
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_ParameterProblem {
-		if _, ok := t.union126_.(*union_132_t); !ok {
-			t.union126_ = &union_132_t{}
+		if _, ok := t.union131_.(*union_137_t); !ok {
+			t.union131_ = &union_137_t{}
 		}
-		t.union126_.(*union_132_t).ParameterProblem = Icmpv6ParameterProblem(v)
+		t.union131_.(*union_137_t).ParameterProblem = Icmpv6ParameterProblem(v)
 		return true
 	}
 	return false
@@ -5706,10 +6117,10 @@ func (t *Icmpv6Packet) RedirectMessage() *NdpredirectMessage {
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_NeighborAdvertisement {
 		return nil
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_RedirectMessage {
-		if _, ok := t.union126_.(*union_138_t); !ok {
+		if _, ok := t.union131_.(*union_143_t); !ok {
 			return nil // not set
 		}
-		tmp := NdpredirectMessage(t.union126_.(*union_138_t).RedirectMessage)
+		tmp := NdpredirectMessage(t.union131_.(*union_143_t).RedirectMessage)
 		return &tmp
 	}
 	return nil
@@ -5736,10 +6147,10 @@ func (t *Icmpv6Packet) SetRedirectMessage(v NdpredirectMessage) bool {
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_NeighborAdvertisement {
 		return false
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_RedirectMessage {
-		if _, ok := t.union126_.(*union_138_t); !ok {
-			t.union126_ = &union_138_t{}
+		if _, ok := t.union131_.(*union_143_t); !ok {
+			t.union131_ = &union_143_t{}
 		}
-		t.union126_.(*union_138_t).RedirectMessage = NdpredirectMessage(v)
+		t.union131_.(*union_143_t).RedirectMessage = NdpredirectMessage(v)
 		return true
 	}
 	return false
@@ -5760,10 +6171,10 @@ func (t *Icmpv6Packet) RouterAdvertisement() *NdprouterAdvertisement {
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_RouterSolicitation {
 		return nil
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_RouterAdvertisement {
-		if _, ok := t.union126_.(*union_135_t); !ok {
+		if _, ok := t.union131_.(*union_140_t); !ok {
 			return nil // not set
 		}
-		tmp := NdprouterAdvertisement(t.union126_.(*union_135_t).RouterAdvertisement)
+		tmp := NdprouterAdvertisement(t.union131_.(*union_140_t).RouterAdvertisement)
 		return &tmp
 	}
 	return nil
@@ -5784,10 +6195,10 @@ func (t *Icmpv6Packet) SetRouterAdvertisement(v NdprouterAdvertisement) bool {
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_RouterSolicitation {
 		return false
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_RouterAdvertisement {
-		if _, ok := t.union126_.(*union_135_t); !ok {
-			t.union126_ = &union_135_t{}
+		if _, ok := t.union131_.(*union_140_t); !ok {
+			t.union131_ = &union_140_t{}
 		}
-		t.union126_.(*union_135_t).RouterAdvertisement = NdprouterAdvertisement(v)
+		t.union131_.(*union_140_t).RouterAdvertisement = NdprouterAdvertisement(v)
 		return true
 	}
 	return false
@@ -5806,10 +6217,10 @@ func (t *Icmpv6Packet) RouterSolicitation() *NdprouterSolicitation {
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_DestinationUnreachable {
 		return nil
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_RouterSolicitation {
-		if _, ok := t.union126_.(*union_134_t); !ok {
+		if _, ok := t.union131_.(*union_139_t); !ok {
 			return nil // not set
 		}
-		tmp := NdprouterSolicitation(t.union126_.(*union_134_t).RouterSolicitation)
+		tmp := NdprouterSolicitation(t.union131_.(*union_139_t).RouterSolicitation)
 		return &tmp
 	}
 	return nil
@@ -5828,10 +6239,10 @@ func (t *Icmpv6Packet) SetRouterSolicitation(v NdprouterSolicitation) bool {
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_DestinationUnreachable {
 		return false
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_RouterSolicitation {
-		if _, ok := t.union126_.(*union_134_t); !ok {
-			t.union126_ = &union_134_t{}
+		if _, ok := t.union131_.(*union_139_t); !ok {
+			t.union131_ = &union_139_t{}
 		}
-		t.union126_.(*union_134_t).RouterSolicitation = NdprouterSolicitation(v)
+		t.union131_.(*union_139_t).RouterSolicitation = NdprouterSolicitation(v)
 		return true
 	}
 	return false
@@ -5842,10 +6253,10 @@ func (t *Icmpv6Packet) TimeExceeded() *Icmpv6ParameterProblem {
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_EchoReply {
 		return nil
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_TimeExceeded {
-		if _, ok := t.union126_.(*union_130_t); !ok {
+		if _, ok := t.union131_.(*union_135_t); !ok {
 			return nil // not set
 		}
-		tmp := Icmpv6ParameterProblem(t.union126_.(*union_130_t).TimeExceeded)
+		tmp := Icmpv6ParameterProblem(t.union131_.(*union_135_t).TimeExceeded)
 		return &tmp
 	}
 	return nil
@@ -5856,10 +6267,10 @@ func (t *Icmpv6Packet) SetTimeExceeded(v Icmpv6ParameterProblem) bool {
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_EchoReply {
 		return false
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_TimeExceeded {
-		if _, ok := t.union126_.(*union_130_t); !ok {
-			t.union126_ = &union_130_t{}
+		if _, ok := t.union131_.(*union_135_t); !ok {
+			t.union131_ = &union_135_t{}
 		}
-		t.union126_.(*union_130_t).TimeExceeded = Icmpv6ParameterProblem(v)
+		t.union131_.(*union_135_t).TimeExceeded = Icmpv6ParameterProblem(v)
 		return true
 	}
 	return false
@@ -5890,10 +6301,10 @@ func (t *Icmpv6Packet) V2MulticastListenerReport() *V2MulticastListernerReport {
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_MulticastListenerQuery {
 		return nil
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_V2MulticastListenerReport {
-		if _, ok := t.union126_.(*union_140_t); !ok {
+		if _, ok := t.union131_.(*union_145_t); !ok {
 			return nil // not set
 		}
-		tmp := V2MulticastListernerReport(t.union126_.(*union_140_t).V2MulticastListenerReport)
+		tmp := V2MulticastListernerReport(t.union131_.(*union_145_t).V2MulticastListenerReport)
 		return &tmp
 	}
 	return nil
@@ -5924,10 +6335,10 @@ func (t *Icmpv6Packet) SetV2MulticastListenerReport(v V2MulticastListernerReport
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_MulticastListenerQuery {
 		return false
 	} else if Icmpv6Type(t.Header.Type) == Icmpv6Type_V2MulticastListenerReport {
-		if _, ok := t.union126_.(*union_140_t); !ok {
-			t.union126_ = &union_140_t{}
+		if _, ok := t.union131_.(*union_145_t); !ok {
+			t.union131_ = &union_145_t{}
 		}
-		t.union126_.(*union_140_t).V2MulticastListenerReport = V2MulticastListernerReport(v)
+		t.union131_.(*union_145_t).V2MulticastListenerReport = V2MulticastListernerReport(v)
 		return true
 	}
 	return false
@@ -5958,101 +6369,101 @@ func (t *Icmpv6Packet) Write(w io.Writer) (err error) {
 	}
 	switch {
 	case (Icmpv6Type(t.Header.Type) == Icmpv6Type_EchoRequest):
-		if _, ok := t.union126_.(*union_128_t); !ok {
-			return fmt.Errorf("encode t.union126_: union is not set to union_128_t")
+		if _, ok := t.union131_.(*union_133_t); !ok {
+			return fmt.Errorf("encode t.union131_: union is not set to union_133_t")
 		}
-		if err := t.union126_.(*union_128_t).EchoRequest.Write(w); err != nil {
+		if err := t.union131_.(*union_133_t).EchoRequest.Write(w); err != nil {
 			return fmt.Errorf("encode EchoRequest: %w", err)
 		}
 	case (Icmpv6Type(t.Header.Type) == Icmpv6Type_EchoReply):
-		if _, ok := t.union126_.(*union_129_t); !ok {
-			return fmt.Errorf("encode t.union126_: union is not set to union_129_t")
+		if _, ok := t.union131_.(*union_134_t); !ok {
+			return fmt.Errorf("encode t.union131_: union is not set to union_134_t")
 		}
-		if err := t.union126_.(*union_129_t).EchoReply.Write(w); err != nil {
+		if err := t.union131_.(*union_134_t).EchoReply.Write(w); err != nil {
 			return fmt.Errorf("encode EchoReply: %w", err)
 		}
 	case (Icmpv6Type(t.Header.Type) == Icmpv6Type_TimeExceeded):
-		if _, ok := t.union126_.(*union_130_t); !ok {
-			return fmt.Errorf("encode t.union126_: union is not set to union_130_t")
+		if _, ok := t.union131_.(*union_135_t); !ok {
+			return fmt.Errorf("encode t.union131_: union is not set to union_135_t")
 		}
-		if err := t.union126_.(*union_130_t).TimeExceeded.Write(w); err != nil {
+		if err := t.union131_.(*union_135_t).TimeExceeded.Write(w); err != nil {
 			return fmt.Errorf("encode TimeExceeded: %w", err)
 		}
 	case (Icmpv6Type(t.Header.Type) == Icmpv6Type_PacketTooBig):
-		if _, ok := t.union126_.(*union_131_t); !ok {
-			return fmt.Errorf("encode t.union126_: union is not set to union_131_t")
+		if _, ok := t.union131_.(*union_136_t); !ok {
+			return fmt.Errorf("encode t.union131_: union is not set to union_136_t")
 		}
-		if err := t.union126_.(*union_131_t).PacketTooBig.Write(w); err != nil {
+		if err := t.union131_.(*union_136_t).PacketTooBig.Write(w); err != nil {
 			return fmt.Errorf("encode PacketTooBig: %w", err)
 		}
 	case (Icmpv6Type(t.Header.Type) == Icmpv6Type_ParameterProblem):
-		if _, ok := t.union126_.(*union_132_t); !ok {
-			return fmt.Errorf("encode t.union126_: union is not set to union_132_t")
+		if _, ok := t.union131_.(*union_137_t); !ok {
+			return fmt.Errorf("encode t.union131_: union is not set to union_137_t")
 		}
-		if err := t.union126_.(*union_132_t).ParameterProblem.Write(w); err != nil {
+		if err := t.union131_.(*union_137_t).ParameterProblem.Write(w); err != nil {
 			return fmt.Errorf("encode ParameterProblem: %w", err)
 		}
 	case (Icmpv6Type(t.Header.Type) == Icmpv6Type_DestinationUnreachable):
-		if _, ok := t.union126_.(*union_133_t); !ok {
-			return fmt.Errorf("encode t.union126_: union is not set to union_133_t")
+		if _, ok := t.union131_.(*union_138_t); !ok {
+			return fmt.Errorf("encode t.union131_: union is not set to union_138_t")
 		}
-		if err := t.union126_.(*union_133_t).DestinationUnreachable.Write(w); err != nil {
+		if err := t.union131_.(*union_138_t).DestinationUnreachable.Write(w); err != nil {
 			return fmt.Errorf("encode DestinationUnreachable: %w", err)
 		}
 	case (Icmpv6Type(t.Header.Type) == Icmpv6Type_RouterSolicitation):
-		if _, ok := t.union126_.(*union_134_t); !ok {
-			return fmt.Errorf("encode t.union126_: union is not set to union_134_t")
+		if _, ok := t.union131_.(*union_139_t); !ok {
+			return fmt.Errorf("encode t.union131_: union is not set to union_139_t")
 		}
-		if err := t.union126_.(*union_134_t).RouterSolicitation.Write(w); err != nil {
+		if err := t.union131_.(*union_139_t).RouterSolicitation.Write(w); err != nil {
 			return fmt.Errorf("encode RouterSolicitation: %w", err)
 		}
 	case (Icmpv6Type(t.Header.Type) == Icmpv6Type_RouterAdvertisement):
-		if _, ok := t.union126_.(*union_135_t); !ok {
-			return fmt.Errorf("encode t.union126_: union is not set to union_135_t")
+		if _, ok := t.union131_.(*union_140_t); !ok {
+			return fmt.Errorf("encode t.union131_: union is not set to union_140_t")
 		}
-		if err := t.union126_.(*union_135_t).RouterAdvertisement.Write(w); err != nil {
+		if err := t.union131_.(*union_140_t).RouterAdvertisement.Write(w); err != nil {
 			return fmt.Errorf("encode RouterAdvertisement: %w", err)
 		}
 	case (Icmpv6Type(t.Header.Type) == Icmpv6Type_NeighborSolicitation):
-		if _, ok := t.union126_.(*union_136_t); !ok {
-			return fmt.Errorf("encode t.union126_: union is not set to union_136_t")
+		if _, ok := t.union131_.(*union_141_t); !ok {
+			return fmt.Errorf("encode t.union131_: union is not set to union_141_t")
 		}
-		if err := t.union126_.(*union_136_t).NeighborSolicitation.Write(w); err != nil {
+		if err := t.union131_.(*union_141_t).NeighborSolicitation.Write(w); err != nil {
 			return fmt.Errorf("encode NeighborSolicitation: %w", err)
 		}
 	case (Icmpv6Type(t.Header.Type) == Icmpv6Type_NeighborAdvertisement):
-		if _, ok := t.union126_.(*union_137_t); !ok {
-			return fmt.Errorf("encode t.union126_: union is not set to union_137_t")
+		if _, ok := t.union131_.(*union_142_t); !ok {
+			return fmt.Errorf("encode t.union131_: union is not set to union_142_t")
 		}
-		if err := t.union126_.(*union_137_t).NeighborAdvertisement.Write(w); err != nil {
+		if err := t.union131_.(*union_142_t).NeighborAdvertisement.Write(w); err != nil {
 			return fmt.Errorf("encode NeighborAdvertisement: %w", err)
 		}
 	case (Icmpv6Type(t.Header.Type) == Icmpv6Type_RedirectMessage):
-		if _, ok := t.union126_.(*union_138_t); !ok {
-			return fmt.Errorf("encode t.union126_: union is not set to union_138_t")
+		if _, ok := t.union131_.(*union_143_t); !ok {
+			return fmt.Errorf("encode t.union131_: union is not set to union_143_t")
 		}
-		if err := t.union126_.(*union_138_t).RedirectMessage.Write(w); err != nil {
+		if err := t.union131_.(*union_143_t).RedirectMessage.Write(w); err != nil {
 			return fmt.Errorf("encode RedirectMessage: %w", err)
 		}
 	case (Icmpv6Type(t.Header.Type) == Icmpv6Type_MulticastListenerQuery):
-		if _, ok := t.union126_.(*union_139_t); !ok {
-			return fmt.Errorf("encode t.union126_: union is not set to union_139_t")
+		if _, ok := t.union131_.(*union_144_t); !ok {
+			return fmt.Errorf("encode t.union131_: union is not set to union_144_t")
 		}
-		if err := t.union126_.(*union_139_t).MulticastListenerQuery.Write(w); err != nil {
+		if err := t.union131_.(*union_144_t).MulticastListenerQuery.Write(w); err != nil {
 			return fmt.Errorf("encode MulticastListenerQuery: %w", err)
 		}
 	case (Icmpv6Type(t.Header.Type) == Icmpv6Type_V2MulticastListenerReport):
-		if _, ok := t.union126_.(*union_140_t); !ok {
-			return fmt.Errorf("encode t.union126_: union is not set to union_140_t")
+		if _, ok := t.union131_.(*union_145_t); !ok {
+			return fmt.Errorf("encode t.union131_: union is not set to union_145_t")
 		}
-		if err := t.union126_.(*union_140_t).V2MulticastListenerReport.Write(w); err != nil {
+		if err := t.union131_.(*union_145_t).V2MulticastListenerReport.Write(w); err != nil {
 			return fmt.Errorf("encode V2MulticastListenerReport: %w", err)
 		}
 	default:
-		if _, ok := t.union126_.(*union_141_t); !ok {
-			return fmt.Errorf("encode t.union126_: union is not set to union_141_t")
+		if _, ok := t.union131_.(*union_146_t); !ok {
+			return fmt.Errorf("encode t.union131_: union is not set to union_146_t")
 		}
-		if n, err := w.Write(t.union126_.(*union_141_t).Data); err != nil || n != len(t.union126_.(*union_141_t).Data) {
+		if n, err := w.Write(t.union131_.(*union_146_t).Data); err != nil || n != len(t.union131_.(*union_146_t).Data) {
 			return fmt.Errorf("encode Data: %w", err)
 		}
 	}
@@ -6078,77 +6489,77 @@ func (t *Icmpv6Packet) Read(r io.Reader) (err error) {
 	}
 	switch {
 	case (Icmpv6Type(t.Header.Type) == Icmpv6Type_EchoRequest):
-		t.union126_ = &union_128_t{}
-		if err := t.union126_.(*union_128_t).EchoRequest.Read(r); err != nil {
+		t.union131_ = &union_133_t{}
+		if err := t.union131_.(*union_133_t).EchoRequest.Read(r); err != nil {
 			return fmt.Errorf("read EchoRequest: %w", err)
 		}
 	case (Icmpv6Type(t.Header.Type) == Icmpv6Type_EchoReply):
-		t.union126_ = &union_129_t{}
-		if err := t.union126_.(*union_129_t).EchoReply.Read(r); err != nil {
+		t.union131_ = &union_134_t{}
+		if err := t.union131_.(*union_134_t).EchoReply.Read(r); err != nil {
 			return fmt.Errorf("read EchoReply: %w", err)
 		}
 	case (Icmpv6Type(t.Header.Type) == Icmpv6Type_TimeExceeded):
-		t.union126_ = &union_130_t{}
-		if err := t.union126_.(*union_130_t).TimeExceeded.Read(r); err != nil {
+		t.union131_ = &union_135_t{}
+		if err := t.union131_.(*union_135_t).TimeExceeded.Read(r); err != nil {
 			return fmt.Errorf("read TimeExceeded: %w", err)
 		}
 	case (Icmpv6Type(t.Header.Type) == Icmpv6Type_PacketTooBig):
-		t.union126_ = &union_131_t{}
-		if err := t.union126_.(*union_131_t).PacketTooBig.Read(r); err != nil {
+		t.union131_ = &union_136_t{}
+		if err := t.union131_.(*union_136_t).PacketTooBig.Read(r); err != nil {
 			return fmt.Errorf("read PacketTooBig: %w", err)
 		}
 	case (Icmpv6Type(t.Header.Type) == Icmpv6Type_ParameterProblem):
-		t.union126_ = &union_132_t{}
-		if err := t.union126_.(*union_132_t).ParameterProblem.Read(r); err != nil {
+		t.union131_ = &union_137_t{}
+		if err := t.union131_.(*union_137_t).ParameterProblem.Read(r); err != nil {
 			return fmt.Errorf("read ParameterProblem: %w", err)
 		}
 	case (Icmpv6Type(t.Header.Type) == Icmpv6Type_DestinationUnreachable):
-		t.union126_ = &union_133_t{}
-		if err := t.union126_.(*union_133_t).DestinationUnreachable.Read(r); err != nil {
+		t.union131_ = &union_138_t{}
+		if err := t.union131_.(*union_138_t).DestinationUnreachable.Read(r); err != nil {
 			return fmt.Errorf("read DestinationUnreachable: %w", err)
 		}
 	case (Icmpv6Type(t.Header.Type) == Icmpv6Type_RouterSolicitation):
-		t.union126_ = &union_134_t{}
-		if err := t.union126_.(*union_134_t).RouterSolicitation.Read(r); err != nil {
+		t.union131_ = &union_139_t{}
+		if err := t.union131_.(*union_139_t).RouterSolicitation.Read(r); err != nil {
 			return fmt.Errorf("read RouterSolicitation: %w", err)
 		}
 	case (Icmpv6Type(t.Header.Type) == Icmpv6Type_RouterAdvertisement):
-		t.union126_ = &union_135_t{}
-		if err := t.union126_.(*union_135_t).RouterAdvertisement.Read(r); err != nil {
+		t.union131_ = &union_140_t{}
+		if err := t.union131_.(*union_140_t).RouterAdvertisement.Read(r); err != nil {
 			return fmt.Errorf("read RouterAdvertisement: %w", err)
 		}
 	case (Icmpv6Type(t.Header.Type) == Icmpv6Type_NeighborSolicitation):
-		t.union126_ = &union_136_t{}
-		if err := t.union126_.(*union_136_t).NeighborSolicitation.Read(r); err != nil {
+		t.union131_ = &union_141_t{}
+		if err := t.union131_.(*union_141_t).NeighborSolicitation.Read(r); err != nil {
 			return fmt.Errorf("read NeighborSolicitation: %w", err)
 		}
 	case (Icmpv6Type(t.Header.Type) == Icmpv6Type_NeighborAdvertisement):
-		t.union126_ = &union_137_t{}
-		if err := t.union126_.(*union_137_t).NeighborAdvertisement.Read(r); err != nil {
+		t.union131_ = &union_142_t{}
+		if err := t.union131_.(*union_142_t).NeighborAdvertisement.Read(r); err != nil {
 			return fmt.Errorf("read NeighborAdvertisement: %w", err)
 		}
 	case (Icmpv6Type(t.Header.Type) == Icmpv6Type_RedirectMessage):
-		t.union126_ = &union_138_t{}
-		if err := t.union126_.(*union_138_t).RedirectMessage.Read(r); err != nil {
+		t.union131_ = &union_143_t{}
+		if err := t.union131_.(*union_143_t).RedirectMessage.Read(r); err != nil {
 			return fmt.Errorf("read RedirectMessage: %w", err)
 		}
 	case (Icmpv6Type(t.Header.Type) == Icmpv6Type_MulticastListenerQuery):
-		t.union126_ = &union_139_t{}
-		if err := t.union126_.(*union_139_t).MulticastListenerQuery.Read(r); err != nil {
+		t.union131_ = &union_144_t{}
+		if err := t.union131_.(*union_144_t).MulticastListenerQuery.Read(r); err != nil {
 			return fmt.Errorf("read MulticastListenerQuery: %w", err)
 		}
 	case (Icmpv6Type(t.Header.Type) == Icmpv6Type_V2MulticastListenerReport):
-		t.union126_ = &union_140_t{}
-		if err := t.union126_.(*union_140_t).V2MulticastListenerReport.Read(r); err != nil {
+		t.union131_ = &union_145_t{}
+		if err := t.union131_.(*union_145_t).V2MulticastListenerReport.Read(r); err != nil {
 			return fmt.Errorf("read V2MulticastListenerReport: %w", err)
 		}
 	default:
-		t.union126_ = &union_141_t{}
+		t.union131_ = &union_146_t{}
 		bytes_buf_Data := &bytes.Buffer{}
 		if _, err := io.Copy(bytes_buf_Data, r); err != nil {
 			return err
 		}
-		t.union126_.(*union_141_t).Data = bytes_buf_Data.Bytes()
+		t.union131_.(*union_146_t).Data = bytes_buf_Data.Bytes()
 	}
 	return nil
 }

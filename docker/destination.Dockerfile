@@ -4,14 +4,16 @@ WORKDIR /app
 
 COPY go.mod go.sum ./gobgp/go.mod ./gobgp/go.sum ./
 
-RUN go mod download
+RUN --mount=type=cache,target=/go/pkg/mod \
+     go mod download
 
 COPY . .
 
-RUN CGO_ENABLED=0 go build -o /app/destination ./client/router
+RUN --mount=type=cache,target=/go/pkg/mod\
+     CGO_ENABLED=0 go build -o /app/destination ./client/router
 
 FROM alpine:3.21.2 AS final
 
 COPY --from=builder /app/destination /app/destination
 
-CMD ["/app/destination"]
+CMD ["/app/destination","-mode","dst"]
