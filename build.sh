@@ -11,10 +11,11 @@ then
 fi
 
 # use builder
+TARGET_PATH=./frr-compose.yaml
 
 # build docker image
 if ! docker buildx bake\
-        -f ./compose.yaml\
+        -f $TARGET_PATH\
         --builder "$CREATED_BUILDER"\
         --load \
         --progress=plain \
@@ -29,7 +30,7 @@ fi
 # remove builder
 docker buildx rm "$CREATED_BUILDER" 
 
-docker compose create --remove-orphans --force-recreate
-docker compose start
+docker compose -f $TARGET_PATH create --remove-orphans --force-recreate
+docker compose -f $TARGET_PATH start
 
 docker compose logs -f

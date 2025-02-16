@@ -328,12 +328,25 @@ func bgpListen(addr netip.Addr, _ uint16) error {
 									switch n := n.(type) {
 									case *apipb.FlowSpecComponent:
 										log.Println(n)
+										filter := createFilter(n)
 									case *apipb.FlowSpecIPPrefix:
 										log.Println(n)
 									case *apipb.FlowSpecMAC:
 										log.Println(n)
 									}
 								}
+							}
+						}
+					case *apipb.ExtendedCommunitiesAttribute:
+						for _, ec := range v.Communities {
+							val, err := ec.UnmarshalNew()
+							if err != nil {
+								log.Println(err)
+								continue
+							}
+							switch v := val.(type) {
+							case *apipb.ColorExtended:
+								log.Println(v)
 							}
 						}
 					}

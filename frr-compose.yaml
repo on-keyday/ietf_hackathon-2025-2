@@ -1,0 +1,104 @@
+networks:
+  host1_net:
+    driver: bridge
+    enable_ipv6: true
+    ipam:
+      config:
+        - subnet: 10.0.1.0/24
+          gateway: 10.0.1.2
+        - subnet: 2001:db8:0:1::/64
+          gateway: 2001:db8:0:1::2
+  host2_net:
+    driver: bridge
+    enable_ipv6: true
+    ipam:
+      config:
+        - subnet: 10.0.2.0/24
+          gateway: 10.0.2.2
+        - subnet: 2001:db8:0:2::/64
+          gateway: 2001:db8:0:2::2
+  frr_net:
+    driver: bridge
+    enable_ipv6: true
+    ipam:
+      config:
+        - subnet: 10.0.3.0/24
+          gateway: 10.0.3.3
+        - subnet: 2001:db8:0:3::/64
+          gateway: 2001:db8:0:3::3
+services:
+  host1:
+    container_name: host1
+    image: alpine
+    cap_add:
+      - CAP_NET_RAW
+      - NET_ADMIN
+    command: /bin/sh -c "ip route add default via 10.0.1.1 && ip route add default via 2001:db8:0:1::1 && tail -f /dev/null"
+    networks:
+      host1_net:
+        ipv4_address: 10.0.1.11
+        ipv6_address: 2001:db8:0:1::11
+  host2:
+    container_name: host2
+    image: alpine
+    cap_add:
+      - CAP_NET_RAW
+      - NET_ADMIN
+    command: /bin/sh -c "ip route add default via 10.0.2.1 && ip route add default via 2001:db8:0:2::1 && tail -f /dev/null"
+    networks:
+      host2_net:
+        ipv4_address: 10.0.2.11
+        ipv6_address: 2001:db8:0:2::11
+
+  frr-base:
+    build:
+      context: ./frr/docker/debian/
+      dockerfile: Dockerfile
+    image: frr-base:latest
+    profiles:
+      - base
+  
+  frr1:
+    container_name: frr1
+    image: frr-base:latest
+    cap_add:
+      - CAP_NET_RAW
+      - NET_ADMIN
+      - SYS_ADMIN
+    volumes:
+      - ./config/frr1/daemons:/etc/frr/daemons
+      - ./config/frr1/frr.conf:/etc/frr/frr.conf
+      - ./config/frr1/vtysh.conf:/etc/frr/vtysh.conf
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv6.conf.all.forwarding=1
+    networks:
+      frr_net:
+        ipv4_address: 10.0.3.1
+        ipv6_address: 2001:db8:0:3::1
+      host1_net:
+        ipv4_address: 10.0.1.1
+        ipv6_address: 2001:db8:0:1::1
+
+  frr2:
+    container_name: frr2
+    image: frr-base:latest
+    cap_add:
+      - CAP_NET_RAW
+      - NET_ADMIN
+      - SYS_ADMIN
+    volumes:
+      - ./config/frr2/daemons:/etc/frr/daemons
+      - ./config/frr2/frr.conf:/etc/frr/frr.conf
+      - ./config/frr2/vtysh.conf:/etc/frr/vtysh.conf
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv6.conf.all.forwarding=1
+      - net.ipv6.conf.all.seg6_enabled=1
+    networks:
+      frr_net:
+        ipv4_address: 10.0.3.2
+        ipv6_address: 2001:db8:0:3::2
+      host2_net:
+        ipv4_address: 10.0.2.1
+        ipv6_address: 2001:db8:0:2::1

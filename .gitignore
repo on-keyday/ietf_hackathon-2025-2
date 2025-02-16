@@ -4,3 +4,4 @@ gobgp
 *.o
 *.gz
 libnl
+frr

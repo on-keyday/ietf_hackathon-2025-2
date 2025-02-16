@@ -1,5 +1,35 @@
 
 services:
+  client:
+    build:
+      context: .
+      dockerfile: ./docker/client.Dockerfile
+      target: final
+      tags:
+        - ietf_hackathon-client:latest
+    networks:
+      source:
+        ipv6_address: 2001:db8:0:1::11
+    cap_add:
+      - BPF
+      - NET_ADMIN
+      - PERFMON
+
+  server:
+    build:
+      context: .
+      dockerfile: ./docker/server.Dockerfile
+      target: final
+      tags:
+        - ietf_hackathon-server:latest
+    networks:
+      destination:
+        ipv6_address: 2001:db8:0:2::5
+    cap_add:
+      - BPF
+      - NET_ADMIN
+      - PERFMON
+
   source:
     build:
       context: .

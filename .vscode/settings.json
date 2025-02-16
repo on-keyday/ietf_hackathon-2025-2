@@ -12,6 +12,7 @@
         "ptrace.h": "c",
         "xt_bpf.h": "c",
         "vmlinux.h": "c",
-        "if_ether.h": "c"
+        "if_ether.h": "c",
+        "lookup.h": "c"
     }
 }

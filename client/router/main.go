@@ -519,6 +519,7 @@ func (h *Handler) segmentRouting(next routing.ProtocolNumber) {
 	r.SegmentList = [][16]byte{
 		{},
 	}
+	r.SetOam(false)
 }
 
 func (h *Handler) writeIP(srcDev *Device, src, dst netip.Addr, proto routing.ProtocolNumber, data []byte) {
