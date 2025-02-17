@@ -9,7 +9,7 @@ RUN --mount=type=cache,target=/go/pkg/mod \
 
 COPY ./gobgp .
 
-COPY ./docker/gobgpd.yml /app/gobgpd.yml
+COPY ./docker/gobgpd_ctrl.yml /app/gobgpd.yml
 COPY ./docker/runbgp.sh /app/runbgp.sh
 RUN chmod +x /app/runbgp.sh
 
@@ -21,7 +21,7 @@ RUN --mount=type=cache,target=/go/pkg/mod\
 FROM alpine:3.21.2 AS final
 
 # add tcpdump
-RUN apk add --no-cache tcpdump
+RUN apk add --no-cache tcpdump iproute2
 
 COPY --from=builder /app/gobgp /app/gobgp
 COPY --from=builder /app/gobgpd /app/gobgpd

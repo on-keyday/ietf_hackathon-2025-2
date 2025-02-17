@@ -30,42 +30,52 @@ services:
       - NET_ADMIN
       - PERFMON
 
-  source:
-    build:
+  endp:
+    build: 
       context: .
-      dockerfile: ./docker/source.Dockerfile
+      dockerfile: ./docker/endp.Dockerfile
       target: final
       tags:
-        - ietf_hackathon-source:latest
+        - ietf_hackathon-endp:latest
+    profiles:
+      - base
+
+  source:
+    image: ietf_hackathon-endp:latest
+    environment:
+      - MODE=src
     networks:
       source:
         ipv6_address: 2001:db8:0:1::2
 
       control:
         ipv6_address: 2001:db8:0:5::9
+    sysctls:
+      - net.ipv6.conf.all.seg6_enabled=1
+      - net.ipv6.conf.all.forwarding=1
     cap_add:
       - BPF
       - NET_ADMIN
       - PERFMON
 
   destination:
-    build:
-      context: .
-      dockerfile: ./docker/destination.Dockerfile
-      target: final
-      tags:
-        - ietf_hackathon-destination:latest
+    image: ietf_hackathon-endp:latest
+    environment:
+      - MODE=dst
     networks:
       destination:
         ipv6_address: 2001:db8:0:2::2
 
       control:
         ipv6_address: 2001:db8:0:5::3
-
+    sysctls:
+      - net.ipv6.conf.all.seg6_enabled=1
+      - net.ipv6.conf.all.forwarding=1
     cap_add:
       - BPF
       - NET_ADMIN
       - PERFMON
+
   middle-base:
     build:
       context: .
@@ -84,13 +94,14 @@ services:
         ipv6_address: 2001:db8:0:3::2
       source:
         ipv6_address: 2001:db8:0:1::3
-
-      control:
-        ipv6_address: 2001:db8:0:5::4
+    sysctls:
+      - net.ipv6.conf.all.seg6_enabled=1
+      - net.ipv6.conf.all.forwarding=1
     cap_add:
       - BPF    
       - NET_ADMIN
       - PERFMON
+
   middle2:
     image: ietf_hackathon-middle-base:latest
     networks:
@@ -98,9 +109,9 @@ services:
         ipv6_address: 2001:db8:0:4::2
       source:
         ipv6_address: 2001:db8:0:1::4
-      
-      control:
-        ipv6_address: 2001:db8:0:5::5
+    sysctls:
+      - net.ipv6.conf.all.seg6_enabled=1
+      - net.ipv6.conf.all.forwarding=1  
     cap_add:
       - BPF
       - NET_ADMIN
@@ -111,9 +122,9 @@ services:
     networks:
       middle1:
         ipv6_address: 2001:db8:0:3::3
-
-      control:
-        ipv6_address: 2001:db8:0:5::6
+    sysctls:
+      - net.ipv6.conf.all.seg6_enabled=1
+      - net.ipv6.conf.all.forwarding=1
     cap_add:
       - BPF
       - NET_ADMIN
@@ -128,13 +139,14 @@ services:
         ipv6_address: 2001:db8:0:4::4
       destination:
         ipv6_address: 2001:db8:0:2::3
-
-      control:
-        ipv6_address: 2001:db8:0:5::7
+    sysctls:
+      - net.ipv6.conf.all.seg6_enabled=1
+      - net.ipv6.conf.all.forwarding=1
     cap_add:
       - BPF 
       - NET_ADMIN 
       - PERFMON
+
   middle5:
     image: ietf_hackathon-middle-base:latest
     networks:
@@ -142,9 +154,9 @@ services:
         ipv6_address: 2001:db8:0:4::5
       destination:
         ipv6_address: 2001:db8:0:2::4
-
-      control:
-        ipv6_address: 2001:db8:0:5::8
+    sysctls:
+      - net.ipv6.conf.all.seg6_enabled=1
+      - net.ipv6.conf.all.forwarding=1
     cap_add:
       - BPF
       - NET_ADMIN

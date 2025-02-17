@@ -4,4 +4,9 @@ gobgp
 *.o
 *.gz
 libnl
+libmnl
 frr
+pola
+*.bz2
+iproute2
+nftables

@@ -1,0 +1,6 @@
+
+format SID:
+    locator_block :[4]u8
+    locator_node :[4]u8
+    function  :u16
+    args :[6]u8

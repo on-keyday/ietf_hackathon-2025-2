@@ -13,6 +13,8 @@
         "xt_bpf.h": "c",
         "vmlinux.h": "c",
         "if_ether.h": "c",
-        "lookup.h": "c"
+        "lookup.h": "c",
+        "types.h": "c",
+        "route.h": "c"
     }
 }

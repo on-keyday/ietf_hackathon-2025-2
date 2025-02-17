@@ -130,6 +130,174 @@ func Compare(op routing.FlowSpecOp, got uint64, expected uint64) bool {
 type andT struct{}
 type orT struct{}
 
+func mapKind(t routing.BgpflowSpecType) BgpflowSpecTypeAndOp {
+	switch t {
+	case routing.BgpflowSpecType_Port:
+		return BgpflowSpecTypeAndOp_Port
+	case routing.BgpflowSpecType_DstPort:
+		return BgpflowSpecTypeAndOp_DstPort
+	case routing.BgpflowSpecType_SrcPort:
+		return BgpflowSpecTypeAndOp_SrcPort
+	case routing.BgpflowSpecType_IcmpType:
+		return BgpflowSpecTypeAndOp_IcmpType
+	case routing.BgpflowSpecType_IcmpCode:
+		return BgpflowSpecTypeAndOp_IcmpCode
+	case routing.BgpflowSpecType_TcpFlag:
+		return BgpflowSpecTypeAndOp_TcpFlag
+	case routing.BgpflowSpecType_PktLen:
+		return BgpflowSpecTypeAndOp_PktLen
+	case routing.BgpflowSpecType_IpProto:
+		return BgpflowSpecTypeAndOp_IpProto
+	default:
+		return BgpflowSpecTypeAndOp_Unknown
+	}
+}
+
+func mapOp(t routing.FlowSpecOp) BgpflowSpecTypeAndOp {
+	switch t {
+	case routing.FlowSpecOp_Equal:
+		return BgpflowSpecTypeAndOp_Eq
+	case routing.FlowSpecOp_NotEqual:
+		return BgpflowSpecTypeAndOp_Neq
+	case routing.FlowSpecOp_Less:
+		return BgpflowSpecTypeAndOp_Ls
+	case routing.FlowSpecOp_LessEqual:
+		return BgpflowSpecTypeAndOp_Lse
+	case routing.FlowSpecOp_Greater:
+		return BgpflowSpecTypeAndOp_Gt
+	case routing.FlowSpecOp_GreaterEqual:
+		return BgpflowSpecTypeAndOp_Gte
+	default:
+		return BgpflowSpecTypeAndOp_Unknown
+	}
+}
+
+func createPrefixFilter(component *apipb.FlowSpecIPPrefix) []*Code {
+	var filters []*Code
+	switch routing.BgpflowSpecType(component.Type) {
+	case routing.BgpflowSpecType_DstPrefix:
+		addr, err := netip.ParseAddr(component.Prefix)
+		if err != nil {
+			log.Println(err)
+			return nil
+		}
+		prefixed := netip.PrefixFrom(addr, int(component.PrefixLen))
+		requireLen := (component.PrefixLen + 7) / 8
+		filters = append(filters, &Code{Code: BgpflowSpecTypeAndOp_DstPrefix})
+		filters = append(filters, &Code{Code: BgpflowSpecTypeAndOp_Eq}) // this means, prefix match, not strict equal
+		code := &Code{Code: BgpflowSpecTypeAndOp_PrefixValue}
+		code.SetPrefixValue(PrefixValue{PrefixLen: uint8(component.PrefixLen), Prefix: prefixed.Addr().AsSlice()[:requireLen]})
+		filters = append(filters, code)
+	case routing.BgpflowSpecType_SrcPrefix:
+		addr, err := netip.ParseAddr(component.Prefix)
+		if err != nil {
+			log.Println(err)
+			return nil
+		}
+		prefixed := netip.PrefixFrom(addr, int(component.PrefixLen))
+		requireLen := (component.PrefixLen + 7) / 8
+		filters = append(filters, &Code{Code: BgpflowSpecTypeAndOp_SrcPrefix})
+		filters = append(filters, &Code{Code: BgpflowSpecTypeAndOp_Eq}) // this means, prefix match, not strict equal
+		code := &Code{Code: BgpflowSpecTypeAndOp_PrefixValue}
+		code.SetPrefixValue(PrefixValue{PrefixLen: uint8(component.PrefixLen), Prefix: prefixed.Addr().AsSlice()[:requireLen]})
+		filters = append(filters, code)
+	default:
+		return nil
+	}
+	return filters
+}
+
+func createFilterCode(component *apipb.FlowSpecComponent) []*Code {
+	var filters []*Code
+	for _, item := range component.Items {
+		op := &routing.FlowSpecOpByte{}
+		op.Decode([]byte{byte(item.Op)})
+		if len(filters) != 0 {
+			if op.AndBit() {
+				filters = append(filters, &Code{Code: BgpflowSpecTypeAndOp_And})
+			} else {
+				filters = append(filters, &Code{Code: BgpflowSpecTypeAndOp_Or})
+			}
+		}
+		if op.Op() == routing.FlowSpecOp_TrueValue {
+			filters = append(filters, &Code{Code: BgpflowSpecTypeAndOp_True})
+		} else if op.Op() == routing.FlowSpecOp_FalseValue {
+			filters = append(filters, &Code{Code: BgpflowSpecTypeAndOp_False})
+		} else {
+			val := &Code{Code: BgpflowSpecTypeAndOp_Value}
+			val.SetValue(Value{Value: uint16(item.Value)})
+			filters = append(filters, val)
+			filters = append(filters, &Code{Code: mapOp(op.Op())})
+			filters = append(filters, &Code{Code: mapKind(routing.BgpflowSpecType(component.Type))})
+		}
+	}
+	// 前置記法に変換
+	type flowDepth struct {
+		left  []*Code
+		op    *Code
+		depth int
+	}
+	var stack []*flowDepth
+	depth := 0
+	// 0: value
+	// 1: eq, neq, ls, lse, gt, gte
+	// 2: and
+	// 3: or
+	var current []*Code
+	for depth < 4 {
+		if len(stack) > 0 {
+			if stack[len(stack)-1].depth == depth {
+				left := stack[len(stack)-1].left
+				op := stack[len(stack)-1].op
+				stack = stack[:len(stack)-1]
+				newCurrent := append([]*Code{op}, left...)
+				newCurrent = append(newCurrent, current...)
+				current = newCurrent
+			}
+		}
+		if depth == 0 {
+			if len(filters) == 0 {
+				return nil // invalid
+			}
+			current = append(current, filters[0])
+			filters = filters[1:]
+		} else if depth == 1 {
+			if len(filters) > 0 {
+				if filters[0].Code == BgpflowSpecTypeAndOp_Eq || filters[0].Code == BgpflowSpecTypeAndOp_Neq ||
+					filters[0].Code == BgpflowSpecTypeAndOp_Ls || filters[0].Code == BgpflowSpecTypeAndOp_Lse ||
+					filters[0].Code == BgpflowSpecTypeAndOp_Gt || filters[0].Code == BgpflowSpecTypeAndOp_Gte {
+					stack = append(stack, &flowDepth{left: current, op: filters[0], depth: depth})
+					filters = filters[1:]
+					depth = 0
+					continue
+				}
+			}
+		} else if depth == 2 {
+			if len(filters) > 0 {
+				if filters[0].Code == BgpflowSpecTypeAndOp_And {
+					stack = append(stack, &flowDepth{left: current, op: filters[0], depth: depth})
+					filters = filters[1:]
+					depth = 0
+					continue
+				}
+			}
+		} else if depth == 3 {
+			if len(filters) > 0 {
+				if filters[0].Code == BgpflowSpecTypeAndOp_Or {
+					stack = append(stack, &flowDepth{left: current, op: filters[0], depth: depth})
+					filters = filters[1:]
+					depth = 0
+					continue
+				}
+			}
+		}
+	}
+	if len(stack) != 0 || len(filters) != 0 {
+		return nil // invalid
+	}
+	return current
+}
+
 func createFilter(component *apipb.FlowSpecComponent) FlowSpecFilter {
 	var filters []any
 	for _, item := range component.Items {
@@ -275,8 +443,21 @@ func createFilter(component *apipb.FlowSpecComponent) FlowSpecFilter {
 	return filter
 }
 
-func bgpListen(addr netip.Addr, _ uint16) error {
-	conn, err := grpc.NewClient(netip.AddrPortFrom(addr, 50051).String(), grpc.WithTransportCredentials(insecure.NewCredentials()))
+type SID struct {
+	SID    *Sid
+	Behave routing.EndpointBehavior
+}
+
+type SRPolicyFilter struct {
+	Rule     FlowSpecFilter
+	RuleCode []*Code
+	SIDs     []*SID
+	TailEnd  netip.Addr
+	Color    uint32
+}
+
+func bgpListen(_ netip.Addr, _ uint16, addRoutingInfo func(client apipb.GobgpApiClient), applyFilter func([]*SRPolicyFilter)) error {
+	conn, err := grpc.NewClient(netip.AddrPortFrom(netip.IPv6Loopback(), 50051).String(), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Println(err)
 		return err
@@ -284,6 +465,7 @@ func bgpListen(addr netip.Addr, _ uint16) error {
 	defer conn.Close()
 	client := apipb.NewGobgpApiClient(conn)
 	for {
+		addRoutingInfo(client)
 		list, err := client.ListPath(context.Background(), &apipb.ListPathRequest{
 			TableType: apipb.TableType_GLOBAL,
 			Family:    &apipb.Family{Afi: apipb.Family_AFI_IP6, Safi: apipb.Family_SAFI_UNICAST},
@@ -301,8 +483,14 @@ func bgpListen(addr netip.Addr, _ uint16) error {
 				log.Println(err)
 				break
 			}
+			log.Printf("%+v\n", resp)
+			var filters []*SRPolicyFilter
 			for _, p := range resp.Destination.Paths {
 				attrs := p.GetPattrs()
+				if p.Family.Afi != apipb.Family_AFI_IP6 || p.Family.Safi != apipb.Family_SAFI_FLOW_SPEC_UNICAST {
+					continue
+				}
+				f := &SRPolicyFilter{}
 				for _, a := range attrs {
 					val, err := a.UnmarshalNew()
 					if err != nil {
@@ -317,7 +505,10 @@ func bgpListen(addr netip.Addr, _ uint16) error {
 								log.Println(err)
 								continue
 							}
+							var filter FlowSpecFilter
+							var filterCode []*Code
 							switch v := val.(type) {
+							case *apipb.SRPolicyNLRI:
 							case *apipb.FlowSpecNLRI:
 								for _, r := range v.Rules {
 									n, err := r.UnmarshalNew()
@@ -327,15 +518,87 @@ func bgpListen(addr netip.Addr, _ uint16) error {
 									}
 									switch n := n.(type) {
 									case *apipb.FlowSpecComponent:
-										log.Println(n)
-										filter := createFilter(n)
+										newFilter := createFilter(n)
+										if filter == nil {
+											filter = newFilter
+										} else {
+											oldFilter := filter
+											filter = func(ctx *FilterContext) bool {
+												return oldFilter(ctx) && newFilter(ctx)
+											}
+										}
+										code := createFilterCode(n)
+										if code != nil {
+											if len(filterCode) == 0 {
+												filterCode = code
+											} else {
+												newFilter := append([]*Code{{Code: BgpflowSpecTypeAndOp_And}}, filterCode...)
+												newFilter = append(newFilter, code...)
+												filterCode = newFilter
+											}
+										}
 									case *apipb.FlowSpecIPPrefix:
-										log.Println(n)
+										var newFilter FlowSpecFilter
+										switch routing.BgpflowSpecType(n.Type) {
+										case routing.BgpflowSpecType_DstPrefix:
+											addr, err := netip.ParseAddr(n.Prefix)
+											if err != nil {
+												log.Println(err)
+												continue
+											}
+											prefixed := netip.PrefixFrom(addr, int(n.PrefixLen))
+											newFilter = func(ctx *FilterContext) bool {
+												return prefixed.Contains(netip.AddrFrom16(ctx.Pkt.DstAddr))
+											}
+											code := createPrefixFilter(n)
+											if code != nil {
+												if len(filterCode) == 0 {
+													filterCode = code
+												} else {
+													newFilter := append([]*Code{{Code: BgpflowSpecTypeAndOp_And}}, filterCode...)
+													newFilter = append(newFilter, code...)
+													filterCode = newFilter
+												}
+											}
+										case routing.BgpflowSpecType_SrcPrefix:
+											addr, err := netip.ParseAddr(n.Prefix)
+											if err != nil {
+												log.Println(err)
+												continue
+											}
+											prefixed := netip.PrefixFrom(addr, int(n.PrefixLen))
+											newFilter = func(ctx *FilterContext) bool {
+												return prefixed.Contains(netip.AddrFrom16(ctx.Pkt.SrcAddr))
+											}
+											code := createPrefixFilter(n)
+											if code != nil {
+												if len(filterCode) == 0 {
+													filterCode = code
+												} else {
+													newFilter := append([]*Code{{Code: BgpflowSpecTypeAndOp_And}}, filterCode...)
+													newFilter = append(newFilter, code...)
+													filterCode = newFilter
+												}
+											}
+										default:
+											log.Println(n)
+											continue
+										}
+										if filter == nil {
+											filter = newFilter
+										} else {
+											oldFilter := filter
+											filter = func(ctx *FilterContext) bool {
+												return oldFilter(ctx) && newFilter(ctx)
+											}
+										}
 									case *apipb.FlowSpecMAC:
 										log.Println(n)
 									}
 								}
 							}
+							f.Rule = filter
+							f.RuleCode = filterCode
 						}
 					case *apipb.ExtendedCommunitiesAttribute:
 						for _, ec := range v.Communities {
@@ -346,12 +609,51 @@ func bgpListen(addr netip.Addr, _ uint16) error {
 							}
 							switch v := val.(type) {
 							case *apipb.ColorExtended:
-								log.Println(v)
+								f.Color = v.Color
+							}
+						}
+					case *apipb.RedirectIPv6AddressSpecificExtended:
+						addr, err := netip.ParseAddr(v.Address)
+						if err != nil {
+							log.Println(err)
+							continue
+						}
+						f.TailEnd = addr
+					case *apipb.PrefixSID:
+						for _, tlv := range v.Tlvs {
+							n, err := tlv.UnmarshalNew()
+							if err != nil {
+								log.Println(err)
+								continue
+							}
+							switch n := n.(type) {
+							case *apipb.SRv6L3ServiceTLV:
+								for _, s := range n.SubTlvs {
+									var sids []*SID
+									for _, tlv := range s.Tlv {
+										n, err := tlv.UnmarshalNew()
+										if err != nil {
+											log.Println(err)
+											continue
+										}
+										switch n := n.(type) {
+										case *apipb.SRv6InformationSubTLV:
+											log.Println(n)
+											behave := routing.EndpointBehavior(n.EndpointBehavior)
+											sid := &Sid{}
+											sid.DecodeExact(n.Sid)
+											sids = append(sids, &SID{SID: sid, Behave: behave})
+										}
+									}
+									f.SIDs = sids
+								}
 							}
 						}
 					}
 				}
+				filters = append(filters, f)
 			}
+			applyFilter(filters)
 		}
 	}
 }

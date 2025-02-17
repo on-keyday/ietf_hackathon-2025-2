@@ -11,7 +11,7 @@ then
 fi
 
 # use builder
-TARGET_PATH=./frr-compose.yaml
+TARGET_PATH=./compose.yaml
 
 # build docker image
 if ! docker buildx bake\

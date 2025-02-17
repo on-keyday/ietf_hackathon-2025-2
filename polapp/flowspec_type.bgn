@@ -1,0 +1,55 @@
+enum BGPFlowSpecTypeAndOp:
+    :u8 
+    UNKNOWN = 0
+    DST_PREFIX = 1
+    SRC_PREFIX = 2
+    IP_PROTO = 3
+    PORT = 4
+    DST_PORT = 5
+    SRC_PORT = 6
+    ICMP_TYPE = 7
+    ICMP_CODE = 8
+    TCP_FLAG = 9
+    PKT_LEN = 10
+    DSCP = 11
+    IP_FRAGMENT = 12
+    FLOW_LABEL = 13
+    # ETHERNET_TYPE = 14
+    # SRC_MAC = 15
+    # DST_MAC = 16
+    # LLC_DSAP = 17
+    # LLC_SSAP = 18
+    # LLC_CONTROL = 19
+    # SNAP = 20
+    # VID = 21
+    # COS = 22
+    # INNER_VID = 23
+    # INNER_COS = 24
+
+    AND = 0xf0
+    OR = 0xf1
+    EQ = 0xf2
+    NEQ = 0xf3
+    GT = 0xf4
+    GTE = 0xf5
+    LS = 0xf6
+    LSE = 0xf7
+    TRUE = 0xf8
+    FALSE = 0xf9
+
+    PREFIX_VALUE = 0xfa
+    VALUE = 0xfb
+
+format PrefixValue:
+    prefix_len :u8 # in bits
+    prefix_len_in_bytes := (prefix_len + 7)/8
+    prefix :[prefix_len_in_bytes]u8
+
+format Value:
+    value :u16
+
+format Code:
+    code :BGPFlowSpecTypeAndOp
+    match code:
+        BGPFlowSpecTypeAndOp.PREFIX_VALUE => prefix_value :PrefixValue
+        BGPFlowSpecTypeAndOp.VALUE => value :Value

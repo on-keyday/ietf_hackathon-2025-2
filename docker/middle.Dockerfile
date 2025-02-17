@@ -15,6 +15,6 @@ RUN --mount=type=cache,target=/go/pkg/mod\
 FROM alpine:3.21.2 AS final
 
 COPY --from=builder /app/router /app/router
-
+RUN apk add --no-cache tcpdump iproute2
 
 CMD ["/app/router","-mode","router"]

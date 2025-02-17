@@ -1,0 +1,20 @@
+global:
+    config:
+        as: 64512
+        router-id: 192.168.1.1
+
+neighbors:
+    - config:
+        peer-as: 64513
+        neighbor-address: 2001:db8:0:5::9
+      transport:
+        config:
+            passive-mode: true
+    - config:
+        peer-as: 64514
+        neighbor-address: 2001:db8:0:5::3
+      transport:
+        config:
+            passive-mode: true
+
+

@@ -467,6 +467,143 @@ func (t BgpflowSpecType) String() string {
 	return fmt.Sprintf("BgpflowSpecType(%d)", t)
 }
 
+type EndpointBehavior uint16
+
+const (
+	EndpointBehavior_Reserved                   EndpointBehavior = 0
+	EndpointBehavior_End                        EndpointBehavior = 1
+	EndpointBehavior_EndWithPsp                 EndpointBehavior = 2
+	EndpointBehavior_EndWithUsp                 EndpointBehavior = 3
+	EndpointBehavior_EndWithPspAndUsp           EndpointBehavior = 4
+	EndpointBehavior_EndX                       EndpointBehavior = 5
+	EndpointBehavior_EndXwithPsp                EndpointBehavior = 6
+	EndpointBehavior_EndXwithUsp                EndpointBehavior = 7
+	EndpointBehavior_EndXwithPspAndUsp          EndpointBehavior = 8
+	EndpointBehavior_EndT                       EndpointBehavior = 9
+	EndpointBehavior_EndTwithPsp                EndpointBehavior = 10
+	EndpointBehavior_EndTwithUsp                EndpointBehavior = 11
+	EndpointBehavior_EndTwithPspAndUsp          EndpointBehavior = 12
+	EndpointBehavior_Unassigned                 EndpointBehavior = 13
+	EndpointBehavior_EndB6Encaps                EndpointBehavior = 14
+	EndpointBehavior_EndBm                      EndpointBehavior = 15
+	EndpointBehavior_EndDx6                     EndpointBehavior = 16
+	EndpointBehavior_EndDx4                     EndpointBehavior = 17
+	EndpointBehavior_EndDt6                     EndpointBehavior = 18
+	EndpointBehavior_EndDt4                     EndpointBehavior = 19
+	EndpointBehavior_EndDt46                    EndpointBehavior = 20
+	EndpointBehavior_EndDx2                     EndpointBehavior = 21
+	EndpointBehavior_EndDx2V                    EndpointBehavior = 22
+	EndpointBehavior_EndDx2U                    EndpointBehavior = 23
+	EndpointBehavior_EndDx2M                    EndpointBehavior = 24
+	EndpointBehavior_Reserved2                  EndpointBehavior = 25
+	EndpointBehavior_Unassigned2                EndpointBehavior = 26
+	EndpointBehavior_EndB6EncapsRed             EndpointBehavior = 27
+	EndpointBehavior_EndWithUsd                 EndpointBehavior = 28
+	EndpointBehavior_EndWithPspAndUsd           EndpointBehavior = 29
+	EndpointBehavior_EndWithUspAndUsd           EndpointBehavior = 30
+	EndpointBehavior_EndXwithUsd                EndpointBehavior = 31
+	EndpointBehavior_EndXwithPspAndUsd          EndpointBehavior = 32
+	EndpointBehavior_EndXwithUspAndUsd          EndpointBehavior = 33
+	EndpointBehavior_EndXwithPspUspAndUsd       EndpointBehavior = 34
+	EndpointBehavior_EndTwithPspAndUsd          EndpointBehavior = 35
+	EndpointBehavior_EndTwithUspAndUsd          EndpointBehavior = 36
+	EndpointBehavior_EndTwithPspUspAndUsd       EndpointBehavior = 37
+	EndpointBehavior_SidDefinedInRfc8754        EndpointBehavior = 0x7fff
+	EndpointBehavior_ReservedForPrivateUseBegin EndpointBehavior = 0x8000
+	EndpointBehavior_ReservedForPrivateUseEnd   EndpointBehavior = 0xfffe
+	EndpointBehavior_Opaque                     EndpointBehavior = 0xffff
+)
+
+func (t EndpointBehavior) String() string {
+	switch t {
+	case EndpointBehavior_Reserved:
+		return "Reserved"
+	case EndpointBehavior_End:
+		return "End"
+	case EndpointBehavior_EndWithPsp:
+		return "EndWithPsp"
+	case EndpointBehavior_EndWithUsp:
+		return "EndWithUsp"
+	case EndpointBehavior_EndWithPspAndUsp:
+		return "EndWithPspAndUsp"
+	case EndpointBehavior_EndX:
+		return "EndX"
+	case EndpointBehavior_EndXwithPsp:
+		return "EndXwithPsp"
+	case EndpointBehavior_EndXwithUsp:
+		return "EndXwithUsp"
+	case EndpointBehavior_EndXwithPspAndUsp:
+		return "EndXwithPspAndUsp"
+	case EndpointBehavior_EndT:
+		return "EndT"
+	case EndpointBehavior_EndTwithPsp:
+		return "EndTwithPsp"
+	case EndpointBehavior_EndTwithUsp:
+		return "EndTwithUsp"
+	case EndpointBehavior_EndTwithPspAndUsp:
+		return "EndTwithPspAndUsp"
+	case EndpointBehavior_Unassigned:
+		return "Unassigned"
+	case EndpointBehavior_EndB6Encaps:
+		return "EndB6Encaps"
+	case EndpointBehavior_EndBm:
+		return "EndBm"
+	case EndpointBehavior_EndDx6:
+		return "EndDx6"
+	case EndpointBehavior_EndDx4:
+		return "EndDx4"
+	case EndpointBehavior_EndDt6:
+		return "EndDt6"
+	case EndpointBehavior_EndDt4:
+		return "EndDt4"
+	case EndpointBehavior_EndDt46:
+		return "EndDt46"
+	case EndpointBehavior_EndDx2:
+		return "EndDx2"
+	case EndpointBehavior_EndDx2V:
+		return "EndDx2V"
+	case EndpointBehavior_EndDx2U:
+		return "EndDx2U"
+	case EndpointBehavior_EndDx2M:
+		return "EndDx2M"
+	case EndpointBehavior_Reserved2:
+		return "Reserved2"
+	case EndpointBehavior_Unassigned2:
+		return "Unassigned2"
+	case EndpointBehavior_EndB6EncapsRed:
+		return "EndB6EncapsRed"
+	case EndpointBehavior_EndWithUsd:
+		return "EndWithUsd"
+	case EndpointBehavior_EndWithPspAndUsd:
+		return "EndWithPspAndUsd"
+	case EndpointBehavior_EndWithUspAndUsd:
+		return "EndWithUspAndUsd"
+	case EndpointBehavior_EndXwithUsd:
+		return "EndXwithUsd"
+	case EndpointBehavior_EndXwithPspAndUsd:
+		return "EndXwithPspAndUsd"
+	case EndpointBehavior_EndXwithUspAndUsd:
+		return "EndXwithUspAndUsd"
+	case EndpointBehavior_EndXwithPspUspAndUsd:
+		return "EndXwithPspUspAndUsd"
+	case EndpointBehavior_EndTwithPspAndUsd:
+		return "EndTwithPspAndUsd"
+	case EndpointBehavior_EndTwithUspAndUsd:
+		return "EndTwithUspAndUsd"
+	case EndpointBehavior_EndTwithPspUspAndUsd:
+		return "EndTwithPspUspAndUsd"
+	case EndpointBehavior_SidDefinedInRfc8754:
+		return "SidDefinedInRfc8754"
+	case EndpointBehavior_ReservedForPrivateUseBegin:
+		return "ReservedForPrivateUseBegin"
+	case EndpointBehavior_ReservedForPrivateUseEnd:
+		return "ReservedForPrivateUseEnd"
+	case EndpointBehavior_Opaque:
+		return "Opaque"
+	}
+	return fmt.Sprintf("EndpointBehavior(%d)", t)
+}
+
 type union2_SegmentRoutingTlv interface {
 	isunion1_()
 }
