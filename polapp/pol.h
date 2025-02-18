@@ -26,6 +26,22 @@ typedef struct {
 } Code;
 */
 
+typedef struct Operand {
+    uint8_t and;
+    BGPFlowSpecType type; // operator
+    union {
+        PrefixValue prefix_value;
+        Value value;
+    } data;
+} Operand;
+
+
+typedef struct FilterNode {
+    BGPFlowSpecType type; // field
+    size_t n_operands;
+    Operand *operands;
+}FilterNode;
+
 /* ASTノードの種類 */
 typedef enum {
     AST_NODE_FIELD,

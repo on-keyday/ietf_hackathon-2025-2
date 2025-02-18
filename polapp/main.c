@@ -22,6 +22,9 @@
 #include <linux/netfilter/nf_tables.h>
 #include <netlink/route/nexthop.h>
 #include"pol.h"
+#include <linux/seg6.h>
+#include<linux/seg6_iptunnel.h>
+
 
 #ifndef RTA_ENCAP
 #define RTA_ENCAP 22
@@ -29,8 +32,6 @@
 
 
 
-/* 拡張属性としてFlowSpec条件を設定する際の属性番号（例示） */
-#define FLOW_SPEC_ATTR_FILTER 100
 
 /* SRv6エンキャップ用属性・モード（実際はincludeファイル等で定義される） */
 
@@ -278,21 +279,10 @@ int setup_srv6_encap_filter(FlowSpecSRv6Policy* policy)
 
 
     int err = 0;
-    /* ネットリンクソケット作成 */
-    struct nl_sock *sock = nl_socket_alloc();
-    if (!sock) {
-        return -ENOMEM;
-    }
-    if ((err = nl_connect(sock, NETLINK_ROUTE)) < 0) {
-        fprintf(stderr, "nl_connect error: %s\n", nl_geterror(err));
-        nl_socket_free(sock);
-        return err;
-    }
 
     /* ルートオブジェクト作成（SRv6はIPv6ルートとする） */
     struct rtnl_route *route = rtnl_route_alloc();
     if (!route) {
-        nl_socket_free(sock);
         return -ENOMEM;
     }
     rtnl_route_set_family(route, AF_INET6);
@@ -304,17 +294,26 @@ int setup_srv6_encap_filter(FlowSpecSRv6Policy* policy)
     if((err = nl_addr_set_binary_addr(dst,policy->redirect_to,16)) < 0) {
         fprintf(stderr, "nl_addr_set_binary_addr error: %s\n", nl_geterror(err));
         rtnl_route_put(route);
-        nl_socket_free(sock);
         return err;
     }
     rtnl_route_set_dst(route, dst);
     nl_addr_put(dst);
-
-    struct nl_nexthop *nh = rtnl_route_nh_alloc();
     
+    size_t srhlen = sizeof(struct ipv6_sr_hdr) + policy->sid_len * 16;
+    
+    struct ipv6_sr_hdr *srh = malloc(srhlen);
 
+    srh->first_segment = policy->sid_len - 1;
+    srh->segments_left = policy->sid_len - 1;
+    srh->hdrlen = (srhlen >> 3) - 1;
+	srh->type = 4;
 
-    rtnl_route_add_nexthop(route, nh);
+    for(int i=0;i<policy->sid_len;i++) {
+        memcpy(&srh->segments[i], policy->sid_list[i], 16);
+    }
+
+ 
+
     /* seg6 mode: encap */
     /* SIDリストを追加 */
 
@@ -325,7 +324,6 @@ int setup_srv6_encap_filter(FlowSpecSRv6Policy* policy)
     struct nl_msg *msg = nlmsg_alloc();
     if (!msg) {
         rtnl_route_put(route);
-        nl_socket_free(sock);
         return -ENOMEM;
     }
     /* RTM_NEWROUTEメッセージとして構築 */
@@ -333,6 +331,27 @@ int setup_srv6_encap_filter(FlowSpecSRv6Policy* policy)
         fprintf(stderr, "rtnl_route_build_msg error: %s\n", nl_geterror(err));
         nlmsg_free(msg);
         rtnl_route_put(route);
+        return err;
+    }
+    struct nlattr *encap = nla_nest_start(msg, RTA_ENCAP);
+
+    if((err = nla_put(msg, SEG6_IPTUNNEL_SRH, srhlen, srh)) < 0) {
+        fprintf(stderr, "nla_put error: %s\n", nl_geterror(err));
+        nlmsg_free(msg);
+        rtnl_route_put(route);
+        return err;
+    }
+
+    nla_nest_end(msg, encap);
+
+
+    /* ネットリンクソケット作成 */
+    struct nl_sock *sock = nl_socket_alloc();
+    if (!sock) {
+        return -ENOMEM;
+    }
+    if ((err = nl_connect(sock, NETLINK_ROUTE)) < 0) {
+        fprintf(stderr, "nl_connect error: %s\n", nl_geterror(err));
         nl_socket_free(sock);
         return err;
     }

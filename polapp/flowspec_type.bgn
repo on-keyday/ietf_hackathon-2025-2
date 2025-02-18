@@ -1,4 +1,4 @@
-enum BGPFlowSpecTypeAndOp:
+enum BGPFlowSpecType:
     :u8 
     UNKNOWN = 0
     DST_PREFIX = 1
@@ -49,13 +49,26 @@ format Value:
     value :u16
 
 format Code:
-    code :BGPFlowSpecTypeAndOp # 1 byte
+    code :BGPFlowSpecType # 1 byte
     match code:
-        BGPFlowSpecTypeAndOp.PREFIX_VALUE => prefix_value :PrefixValue
-        BGPFlowSpecTypeAndOp.VALUE => value :Value
+        BGPFlowSpecType.PREFIX_VALUE => prefix_value :PrefixValue
+        BGPFlowSpecType.VALUE => value :Value
 
 format FlowSpecSRv6Policy:
     sid_len :u8
     sid_list :[sid_len][16]u8
     redirect_to :[16]u8
     filter :[..]Code
+
+
+format FlowSpecFilter:
+    type :BGPFlowSpecType
+    n_operand :u16
+    operands :[n_operand]Operand 
+
+format Operand:
+    and :u8
+    op :BGPFlowSpecType
+    match op:
+        BGPFlowSpecType.PREFIX_VALUE => prefix_value :PrefixValue
+        BGPFlowSpecType.VALUE => value :Value
