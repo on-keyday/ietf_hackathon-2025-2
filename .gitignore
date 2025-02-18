@@ -3,10 +3,10 @@ gobgp
 .buildx-cache
 *.o
 *.gz
-libnl
-libmnl
+lib*
 frr
 pola
 *.bz2
 iproute2
 nftables
+ignore

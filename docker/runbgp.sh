@@ -2,4 +2,4 @@
 
 # Run BGP daemon
 echo "Starting BGP daemon..."
-/app/gobgpd -f /app/gobgpd.yml 
+/app/gobgpd -f /app/gobgpd.yml  --log-level=debug

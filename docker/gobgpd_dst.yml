@@ -10,7 +10,12 @@ neighbors:
       transport:
           config:
               passive-mode: true
+      afi-safis:
+        - config:
+            afi-safi-name: ipv6-flowspec
     - config:
         peer-as: 64512
         neighbor-address: 2001:db8:0:5::2
-
+      afi-safis:
+        - config:
+            afi-safi-name: ipv6-flowspec

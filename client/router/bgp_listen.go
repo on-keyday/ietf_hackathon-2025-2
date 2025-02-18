@@ -10,6 +10,7 @@ import (
 	apipb "github.com/osrg/gobgp/v3/api"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 /*
@@ -209,6 +210,7 @@ func createPrefixFilter(component *apipb.FlowSpecIPPrefix) []*Code {
 
 func createFilterCode(component *apipb.FlowSpecComponent) []*Code {
 	var filters []*Code
+	filters = append(filters, &Code{Code: mapKind(routing.BgpflowSpecType(component.Type))}) // kind
 	for _, item := range component.Items {
 		op := &routing.FlowSpecOpByte{}
 		op.Decode([]byte{byte(item.Op)})
@@ -216,7 +218,6 @@ func createFilterCode(component *apipb.FlowSpecComponent) []*Code {
 			if op.AndBit() {
 				filters = append(filters, &Code{Code: BgpflowSpecTypeAndOp_And})
 			} else {
-				filters = append(filters, &Code{Code: BgpflowSpecTypeAndOp_Or})
 			}
 		}
 		if op.Op() == routing.FlowSpecOp_TrueValue {
@@ -226,9 +227,8 @@ func createFilterCode(component *apipb.FlowSpecComponent) []*Code {
 		} else {
 			val := &Code{Code: BgpflowSpecTypeAndOp_Value}
 			val.SetValue(Value{Value: uint16(item.Value)})
-			filters = append(filters, val)
-			filters = append(filters, &Code{Code: mapOp(op.Op())})
-			filters = append(filters, &Code{Code: mapKind(routing.BgpflowSpecType(component.Type))})
+			filters = append(filters, &Code{Code: mapOp(op.Op())}) // relation
+			filters = append(filters, val)                         // value
 		}
 	}
 	// 前置記法に変換
@@ -456,7 +456,143 @@ type SRPolicyFilter struct {
 	Color    uint32
 }
 
-func bgpListen(_ netip.Addr, _ uint16, addRoutingInfo func(client apipb.GobgpApiClient), applyFilter func([]*SRPolicyFilter)) error {
+const PolicyTest = 1
+const TestColor = 1
+
+func makeFlowSpecOp(and bool, op routing.FlowSpecOp, val uint64) *apipb.FlowSpecComponentItem {
+	b := routing.FlowSpecOpByte{}
+	b.SetAndBit(and)
+	b.SetOp(op)
+	b.SetLen(8)
+	return &apipb.FlowSpecComponentItem{
+		Op:    uint32(b.MustEncode()[0]),
+		Value: val,
+	}
+}
+
+func addRoutingInfo(client apipb.GobgpApiClient) {
+	c, err := client.AddPathStream(context.Background())
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+	log.Println("adding path")
+	err = c.Send(&apipb.AddPathStreamRequest{
+		Paths: []*apipb.Path{
+			{
+				Family: &apipb.Family{Afi: apipb.Family_AFI_IP6, Safi: apipb.Family_SAFI_FLOW_SPEC_UNICAST},
+				/*
+					Nlri: mustAny(&apipb.SRPolicyNLRI{
+						Distinguisher: PolicyTest,
+						Color:         1,
+						Length:        64,
+						Endpoint:      netip.MustParseAddr("2001:db8:0:1::3").AsSlice(),
+					}),
+				*/
+				/*
+					Nlri: mustAny(
+						&apipb.MpReachNLRIAttribute{
+							Family: &apipb.Family{Afi: apipb.Family_AFI_IP6, Safi: apipb.Family_SAFI_FLOW_SPEC_UNICAST},
+							Nlris: []*anypb.Any{
+								mustAny(&apipb.FlowSpecNLRI{
+									Rules: []*anypb.Any{
+										mustAny(&apipb.FlowSpecComponent{
+											Type: uint32(routing.BgpflowSpecType_DstPort),
+											Items: []*apipb.FlowSpecComponentItem{
+												makeFlowSpecOp(false, routing.FlowSpecOp_Equal, 8080),
+											},
+										}),
+										mustAny(&apipb.FlowSpecIPPrefix{
+											Type:      uint32(routing.BgpflowSpecType_DstPrefix),
+											Prefix:    "2001:db8:0:2::",
+											PrefixLen: 64,
+										}),
+									},
+								}),
+							},
+						},
+					),
+				*/
+				Nlri: mustAny(&apipb.FlowSpecNLRI{
+					Rules: []*anypb.Any{
+						mustAny(&apipb.FlowSpecComponent{
+							Type: uint32(routing.BgpflowSpecType_DstPort),
+							Items: []*apipb.FlowSpecComponentItem{
+								makeFlowSpecOp(false, routing.FlowSpecOp_Equal, 8080),
+							},
+						}),
+						mustAny(&apipb.FlowSpecIPPrefix{
+							Type:      uint32(routing.BgpflowSpecType_DstPrefix),
+							Prefix:    "2001:db8:0:2::",
+							PrefixLen: 64,
+						}),
+					},
+				}),
+				Pattrs: []*anypb.Any{
+					mustAny(&apipb.PrefixSID{
+						Tlvs: []*anypb.Any{
+							mustAny(&apipb.SRv6L3ServiceTLV{
+								SubTlvs: map[uint32]*apipb.SRv6TLV{
+									1: {
+										Tlv: []*anypb.Any{
+											mustAny(
+												&apipb.SRv6InformationSubTLV{
+													Sid:              []byte{0, 0, 0, 0, 0, 0, 0, 1},
+													EndpointBehavior: uint32(apipb.SRv6Behavior_END),
+													SubSubTlvs: map[uint32]*apipb.SRv6TLV{
+														1: {
+															Tlv: []*anypb.Any{
+																mustAny(&apipb.SRv6StructureSubSubTLV{
+																	LocatorBlockLength: 32,
+																	LocatorNodeLength:  32,
+																	FunctionLength:     16,
+																	ArgumentLength:     48,
+																}),
+															},
+														},
+													},
+												}),
+										},
+									},
+								},
+							}),
+						},
+					}),
+					mustAny(&apipb.ExtendedCommunitiesAttribute{
+						Communities: []*anypb.Any{
+							mustAny(&apipb.ColorExtended{
+								Color: TestColor,
+							}),
+						},
+					}),
+					mustAny(&apipb.OriginAttribute{
+						Origin: uint32(apipb.RouteOriginType_ORIGIN_IGP),
+					}),
+					mustAny(&apipb.NextHopAttribute{
+						NextHop: "2001:db8:0:1::3",
+					}),
+					mustAny(&apipb.IP6ExtendedCommunitiesAttribute{
+						Communities: []*anypb.Any{
+							mustAny(&apipb.RedirectIPv6AddressSpecificExtended{
+								Address: "2001:db8:0:1::3",
+							}),
+						},
+					}),
+				},
+			},
+		},
+	})
+	if err != nil {
+		log.Fatal("add path fail", err)
+		return
+	}
+	_, err = c.CloseAndRecv()
+	if err != nil {
+		log.Fatal("close fail", err)
+	}
+}
+
+func bgpListen(_ netip.Addr, _ uint16, applyFilter func([]*SRPolicyFilter)) error {
 	conn, err := grpc.NewClient(netip.AddrPortFrom(netip.IPv6Loopback(), 50051).String(), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Println(err)
@@ -464,11 +600,14 @@ func bgpListen(_ netip.Addr, _ uint16, addRoutingInfo func(client apipb.GobgpApi
 	}
 	defer conn.Close()
 	client := apipb.NewGobgpApiClient(conn)
-	for {
+	log.Println("connected")
+	if *mode == "src" {
 		addRoutingInfo(client)
+	}
+	for {
 		list, err := client.ListPath(context.Background(), &apipb.ListPathRequest{
 			TableType: apipb.TableType_GLOBAL,
-			Family:    &apipb.Family{Afi: apipb.Family_AFI_IP6, Safi: apipb.Family_SAFI_UNICAST},
+			Family:    &apipb.Family{Afi: apipb.Family_AFI_IP6, Safi: apipb.Family_SAFI_FLOW_SPEC_UNICAST},
 		})
 		if err != nil {
 			log.Println(err)
@@ -653,6 +792,7 @@ func bgpListen(_ netip.Addr, _ uint16, addRoutingInfo func(client apipb.GobgpApi
 				}
 				filters = append(filters, f)
 			}
+			// log.Printf("%+v", filters[0].RuleCode)
 			applyFilter(filters)
 		}
 	}

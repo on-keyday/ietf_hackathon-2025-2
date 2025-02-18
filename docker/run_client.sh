@@ -6,7 +6,7 @@ ping $SERVER &
 
 # sending tcp message to server
 while true; do
-    echo "Hello, World!" | nc -6 $SERVER 8080
+    echo "Hello, World!" | nc $SERVER 8080
     sleep 1
 done
 

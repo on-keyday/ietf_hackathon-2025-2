@@ -976,7 +976,7 @@ func (h *Handler) AddRoutingInfo(client apipb.GobgpApiClient) {
 }
 
 func (h *Handler) ApplyFilter(sr []*SRPolicyFilter) {
-	log.Println("applying filter", sr)
+	// log.Println("applying filter", sr)
 }
 
 type Device struct {
@@ -1099,7 +1099,7 @@ OUTER:
 		asNumber := 64511 + uint16(controlAddr.As16()[15])
 		log.Printf("AS number: %d\n", asNumber)
 		handler.asNumber = asNumber
-		go bgpListen(controlPlane.Addr(), asNumber, handler.AddRoutingInfo, handler.ApplyFilter)
+		go bgpListen(controlPlane.Addr(), asNumber, handler.ApplyFilter)
 	}
 	go func() {
 		time.Sleep(1 * time.Second)

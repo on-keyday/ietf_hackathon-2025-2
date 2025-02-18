@@ -16,69 +16,18 @@
 #include<sys/socket.h>
 #include <netlink/route/link.h>
 #include<netlink/attr.h>
+#include"flowspec_type.h"
+#include <libnftnl/expr.h>
+#include <libnftnl/rule.h>
+#include <linux/netfilter/nf_tables.h>
+#include <netlink/route/nexthop.h>
+#include"pol.h"
 
 #ifndef RTA_ENCAP
 #define RTA_ENCAP 22
 #endif
 
-/* --- 定数・型定義 --- */
 
-/* BGP FlowSpecの各トークン（例示） */
-typedef enum BGPFlowSpecType {
-    BGPFlowSpecType_UNKNOWN      = 0,
-    BGPFlowSpecType_DST_PREFIX   = 1,
-    BGPFlowSpecType_SRC_PREFIX   = 2,
-    BGPFlowSpecType_IP_PROTO     = 3,
-    BGPFlowSpecType_PORT         = 4,
-    BGPFlowSpecType_DST_PORT     = 5,
-    BGPFlowSpecType_SRC_PORT     = 6,
-    BGPFlowSpecType_ICMP_TYPE    = 7,
-    BGPFlowSpecType_ICMP_CODE    = 8,
-    BGPFlowSpecType_TCP_FLAG     = 9,
-    BGPFlowSpecType_PKT_LEN      = 10,
-    BGPFlowSpecType_DSCP         = 11,
-    BGPFlowSpecType_IP_FRAGMENT  = 12,
-    BGPFlowSpecType_FLOW_LABEL   = 13,
-    /* 演算子 */
-    BGPFlowSpecType_AND          = 0xf0,
-    BGPFlowSpecType_OR           = 0xf1,
-    BGPFlowSpecType_EQ           = 0xf2,
-    BGPFlowSpecType_NEQ          = 0xf3,
-    BGPFlowSpecType_GT           = 0xf4,
-    BGPFlowSpecType_GTE          = 0xf5,
-    BGPFlowSpecType_LS           = 0xf6,
-    BGPFlowSpecType_LSE          = 0xf7,
-    /* 値 */
-    BGPFlowSpecType_TRUE         = 0xf8,
-    BGPFlowSpecType_FALSE        = 0xf9,
-    BGPFlowSpecType_PREFIX_VALUE = 0xfa,
-    BGPFlowSpecType_VALUE        = 0xfb,
-} BGPFlowSpecType;
-
-/* ASTノードの種類 */
-typedef enum {
-    AST_NODE_FIELD,
-    AST_NODE_VALUE,
-    AST_NODE_OPERATOR,
-} ASTNodeKind;
-
-/* ASTノードの構造体 */
-typedef struct ASTNode {
-    ASTNodeKind kind;
-    BGPFlowSpecType type;
-    /* operatorの場合は左右の子を持つ */
-    struct ASTNode *left;
-    struct ASTNode *right;
-    union {
-        /* VALUEの場合（BGPFlowSpecType_VALUE） */
-        uint16_t value;
-        /* PREFIX_VALUEの場合 */
-        struct {
-            uint8_t prefix_len;
-            uint8_t *prefix; /* 動的に確保 */
-        } prefix;
-    } data;
-} ASTNode;
 
 /* 拡張属性としてFlowSpec条件を設定する際の属性番号（例示） */
 #define FLOW_SPEC_ATTR_FILTER 100
@@ -86,202 +35,216 @@ typedef struct ASTNode {
 /* SRv6エンキャップ用属性・モード（実際はincludeファイル等で定義される） */
 
 
-/* --- AST構築用関数 --- */
-void free_ast(ASTNode *node);
-
-/*
- * 再帰的にフィルターバイト列からASTを構築する。
- * 前置記法を想定し、各トークンは1バイト（値トークンの場合は後続バイトあり）とする。
- */
-ASTNode *parse_ast(const unsigned char *filter, size_t len, size_t *offset)
-{
-    if (*offset >= len) {
-        fprintf(stderr, "parse_ast: unexpected end of filter\n");
-        return NULL;
-    }
-
-    uint8_t token = filter[*offset];
-    (*offset)++;
-
-    /* Fieldノード：値が1～13 */
-    if (token >= BGPFlowSpecType_DST_PREFIX && token <= BGPFlowSpecType_FLOW_LABEL) {
-        ASTNode *node = malloc(sizeof(ASTNode));
-        if (!node) return NULL;
-        node->kind = AST_NODE_FIELD;
-        node->type = (BGPFlowSpecType)token;
-        node->left = node->right = NULL;
-        return node;
-    }
-    /* 演算子ノード：AND～LSE（0xf0～0xf7） */
-    else if (token >= BGPFlowSpecType_AND && token <= BGPFlowSpecType_LSE) {
-        ASTNode *node = malloc(sizeof(ASTNode));
-        if (!node) return NULL;
-        node->kind = AST_NODE_OPERATOR;
-        node->type = (BGPFlowSpecType)token;
-        /* 左右のオペランドを再帰的にパース */
-        node->left = parse_ast(filter, len, offset);
-        if (!node->left) { free(node); return NULL; }
-        node->right = parse_ast(filter, len, offset);
-        if (!node->right) { free_ast(node->left); free(node); return NULL; }
-        return node;
-    }
-    /* 値ノード：TRUE/FALSE（0xf8/0xf9） */
-    else if (token == BGPFlowSpecType_TRUE || token == BGPFlowSpecType_FALSE) {
-        ASTNode *node = malloc(sizeof(ASTNode));
-        if (!node) return NULL;
-        node->kind = AST_NODE_VALUE;
-        node->type = (BGPFlowSpecType)token;
-        node->left = node->right = NULL;
-        return node;
-    }
-    /* PREFIX_VALUE（0xfa）：後続にu8:prefix_lenおよびprefix */
-    else if (token == BGPFlowSpecType_PREFIX_VALUE) {
-        if (*offset >= len) {
-            fprintf(stderr, "parse_ast: no prefix length\n");
-            return NULL;
-        }
-        uint8_t prefix_len = filter[*offset];
-        (*offset)++;
-        size_t prefix_bytes = (prefix_len + 7) / 8;
-        if (*offset + prefix_bytes > len) {
-            fprintf(stderr, "parse_ast: not enough bytes for prefix\n");
-            return NULL;
-        }
-        ASTNode *node = malloc(sizeof(ASTNode));
-        if (!node) return NULL;
-        node->kind = AST_NODE_VALUE;
-        node->type = (BGPFlowSpecType)token;
-        node->left = node->right = NULL;
-        node->data.prefix.prefix_len = prefix_len;
-        node->data.prefix.prefix = malloc(prefix_bytes);
-        if (!node->data.prefix.prefix) { free(node); return NULL; }
-        memcpy(node->data.prefix.prefix, filter + *offset, prefix_bytes);
-        *offset += prefix_bytes;
-        return node;
-    }
-    /* VALUE（0xfb）：後続にu16の値 */
-    else if (token == BGPFlowSpecType_VALUE) {
-        if (*offset + 2 > len) {
-            fprintf(stderr, "parse_ast: not enough bytes for VALUE\n");
-            return NULL;
-        }
-        uint16_t val = (filter[*offset] << 8) | filter[*offset + 1];
-        *offset += 2;
-        ASTNode *node = malloc(sizeof(ASTNode));
-        if (!node) return NULL;
-        node->kind = AST_NODE_VALUE;
-        node->type = (BGPFlowSpecType)token;
-        node->left = node->right = NULL;
-        node->data.value = val;
-        return node;
-    }
-    else {
-        fprintf(stderr, "parse_ast: unknown token 0x%x\n", token);
-        return NULL;
-    }
-}
-
-/* ASTノードの解放 */
-void free_ast(ASTNode *node)
-{
-    if (!node) return;
-    if (node->kind == AST_NODE_OPERATOR) {
-        free_ast(node->left);
-        free_ast(node->right);
-    } else if (node->kind == AST_NODE_VALUE && node->type == BGPFlowSpecType_PREFIX_VALUE) {
-        free(node->data.prefix.prefix);
-    }
-    free(node);
-}
-
-/*
- * ASTを文字列化する（デバッグ用）。
- * ここでは再帰的に各ノードを文字列にして結合する。
- * （※asprintfはGNU拡張です）
- */
-char *ast_to_string(ASTNode *node)
-{
-    if (!node)
-        return strdup("NULL");
-    char *result = NULL;
-    switch (node->kind) {
-    case AST_NODE_FIELD: {
-        const char *s = NULL;
-        switch (node->type) {
-        case BGPFlowSpecType_DST_PREFIX:   s = "DST_PREFIX"; break;
-        case BGPFlowSpecType_SRC_PREFIX:   s = "SRC_PREFIX"; break;
-        case BGPFlowSpecType_IP_PROTO:     s = "IP_PROTO"; break;
-        case BGPFlowSpecType_PORT:         s = "PORT"; break;
-        case BGPFlowSpecType_DST_PORT:     s = "DST_PORT"; break;
-        case BGPFlowSpecType_SRC_PORT:     s = "SRC_PORT"; break;
-        case BGPFlowSpecType_ICMP_TYPE:    s = "ICMP_TYPE"; break;
-        case BGPFlowSpecType_ICMP_CODE:    s = "ICMP_CODE"; break;
-        case BGPFlowSpecType_TCP_FLAG:     s = "TCP_FLAG"; break;
-        case BGPFlowSpecType_PKT_LEN:      s = "PKT_LEN"; break;
-        case BGPFlowSpecType_DSCP:         s = "DSCP"; break;
-        case BGPFlowSpecType_IP_FRAGMENT:  s = "IP_FRAGMENT"; break;
-        case BGPFlowSpecType_FLOW_LABEL:   s = "FLOW_LABEL"; break;
-        default: s = "UNKNOWN_FIELD"; break;
-        }
-        result = strdup(s);
-        break;
-    }
-    case AST_NODE_OPERATOR: {
-        char *lstr = ast_to_string(node->left);
-        char *rstr = ast_to_string(node->right);
-        const char *op = NULL;
-        switch (node->type) {
-        case BGPFlowSpecType_AND: op = "AND"; break;
-        case BGPFlowSpecType_OR:  op = "OR"; break;
-        case BGPFlowSpecType_EQ:  op = "EQ"; break;
-        case BGPFlowSpecType_NEQ: op = "NEQ"; break;
-        case BGPFlowSpecType_GT:  op = "GT"; break;
-        case BGPFlowSpecType_GTE: op = "GTE"; break;
-        case BGPFlowSpecType_LS:  op = "LS"; break;
-        case BGPFlowSpecType_LSE: op = "LSE"; break;
-        default: op = "UNKNOWN_OP"; break;
-        }
-        asprintf(&result, "(%s %s %s)", lstr, op, rstr);
-        free(lstr);
-        free(rstr);
-        break;
-    }
-    case AST_NODE_VALUE: {
-        if (node->type == BGPFlowSpecType_TRUE)
-            result = strdup("TRUE");
-        else if (node->type == BGPFlowSpecType_FALSE)
-            result = strdup("FALSE");
-        else if (node->type == BGPFlowSpecType_VALUE)
-            asprintf(&result, "VALUE(%u)", node->data.value);
-        else if (node->type == BGPFlowSpecType_PREFIX_VALUE) {
-            size_t prefix_bytes = (node->data.prefix.prefix_len + 7) / 8;
-            char *hex = malloc(prefix_bytes * 3);
-            if (!hex)
-                result = strdup("PREFIX_VALUE(error)");
-            else {
-                hex[0] = '\0';
-                for (size_t i = 0; i < prefix_bytes; i++) {
-                    char buf[4];
-                    snprintf(buf, sizeof(buf), "%02x", node->data.prefix.prefix[i]);
-                    strcat(hex, buf);
-                    if (i < prefix_bytes - 1)
-                        strcat(hex, ":");
-                }
-                asprintf(&result, "PREFIX_VALUE(len=%u, %s)", node->data.prefix.prefix_len, hex);
-                free(hex);
-            }
-        } else
-            result = strdup("UNKNOWN_VALUE");
-        break;
-    }
-    default:
-        result = strdup("UNKNOWN_NODE");
-        break;
-    }
-    return result;
-}
 
 /* --- SRv6エンキャップ付きルート作成用関数 --- */
+
+// copy from nft-rule-add.c
+struct nftnl_expr* add_payload(uint32_t base, uint32_t dreg,  uint32_t offset, uint32_t len)
+{
+    struct nftnl_expr *e;
+
+    e = nftnl_expr_alloc("payload");
+    if (e == NULL) {
+        perror("expr payload oom");
+        exit(EXIT_FAILURE);
+    }
+
+    nftnl_expr_set_u32(e, NFTNL_EXPR_PAYLOAD_BASE, base);
+    nftnl_expr_set_u32(e, NFTNL_EXPR_PAYLOAD_DREG, dreg);
+    nftnl_expr_set_u32(e, NFTNL_EXPR_PAYLOAD_OFFSET, offset);
+    nftnl_expr_set_u32(e, NFTNL_EXPR_PAYLOAD_LEN, len);
+
+    return e;
+}
+
+int get_field(ASTNode* node,size_t* len) {
+    if(!node||node->kind!=AST_NODE_FIELD) {
+        fprintf(stderr, "Invalid node\n");
+        return -EINVAL;
+    }
+    switch(node->type){
+        case BGPFlowSpecType_DST_PORT: {
+            struct nftnl_expr * expr = add_payload(NFT_PAYLOAD_TRANSPORT_HEADER, NFT_REG_1,
+                2 /*offset of dst port*/, sizeof(uint16_t));
+            if (!expr) {
+                fprintf(stderr, "Failed to add payload expr\n");
+                return -ENOMEM;
+            }
+            *len=sizeof(uint16_t);
+            return NFT_REG_1;
+        }
+        case BGPFlowSpecType_SRC_PORT: {
+            struct nftnl_expr * expr = add_payload(NFT_PAYLOAD_TRANSPORT_HEADER, NFT_REG_1,
+                0 /*offset of src port*/, sizeof(uint16_t));
+            if (!expr) {
+                fprintf(stderr, "Failed to add payload expr\n");
+                return -ENOMEM;
+            }
+            *len=sizeof(uint16_t);
+            return NFT_REG_1;
+        }
+        case BGPFlowSpecType_IP_PROTO: {
+            struct nftnl_expr * expr = add_payload(NFT_PAYLOAD_NETWORK_HEADER, NFT_REG_1,
+                6 /*offset of next header*/, sizeof(uint8_t));
+            if (!expr) {
+                fprintf(stderr, "Failed to add payload expr\n");
+                return -ENOMEM;
+            }
+            *len=sizeof(uint8_t);
+            return NFT_REG_1;
+        }
+        case BGPFlowSpecType_SRC_PREFIX: {
+            struct nftnl_expr * expr = add_payload(NFT_PAYLOAD_NETWORK_HEADER, NFT_REG32_00,
+                12 /*offset of src prefix*/, sizeof(uint32_t));
+            if (!expr) {
+                fprintf(stderr, "Failed to add payload expr\n");
+                return -ENOMEM;
+            }
+            *len=sizeof(uint32_t);
+            return NFT_REG_1;
+        }
+    }
+}
+
+int mapOp(BGPFlowSpecType t){
+    switch(t){
+        case BGPFlowSpecType_EQ:
+            return NFT_CMP_EQ;
+        case BGPFlowSpecType_NEQ:
+            return NFT_CMP_NEQ;
+        case BGPFlowSpecType_GT:
+            return NFT_CMP_GT;
+        case BGPFlowSpecType_LS:
+            return NFT_CMP_LT;
+        case BGPFlowSpecType_GTE:
+            return NFT_CMP_GTE;
+        case BGPFlowSpecType_LSE:
+            return NFT_CMP_LTE;
+        default:
+            return -EINVAL;
+    }
+}
+
+struct nftnl_expr* get_expr(ASTNode* node) {
+    switch(node->kind) {
+        case AST_NODE_OPERATOR: {
+            switch(node->type) {
+                case BGPFlowSpecType_EQ:
+                case BGPFlowSpecType_NEQ:
+                case BGPFlowSpecType_GT:
+                case BGPFlowSpecType_LS:
+                case BGPFlowSpecType_GTE:
+                case BGPFlowSpecType_LSE: {
+                    if(node->left->kind != AST_NODE_FIELD) {
+                        fprintf(stderr, "Left node is not field\n");
+                        return NULL;
+                    }
+                    size_t len;
+                    int sreg = get_field(node->left, &len);
+                    if(node->right->kind != AST_NODE_VALUE) {
+                        fprintf(stderr, "Right node is not value\n");
+                        return NULL;
+                    }
+                    if(node->right->type==BGPFlowSpecType_PREFIX_VALUE){}
+                    uint32_t value = node->right->data.value;
+                    struct nftnl_expr * expr = nftnl_expr_alloc("cmp");
+                    if (!expr) {
+                        fprintf(stderr, "Failed to alloc cmp expr\n");
+                        return NULL;
+                    }
+                    nftnl_expr_set_u32(expr, NFTNL_EXPR_CMP_SREG, sreg);
+                    nftnl_expr_set_u32(expr, NFTNL_EXPR_CMP_OP, mapOp(node->type));
+                    if(len==sizeof(uint8_t)) {
+                        nftnl_expr_set(expr, NFTNL_EXPR_CMP_DATA, &value, sizeof(uint8_t));
+                    } else if(len==sizeof(uint16_t)) {
+                        nftnl_expr_set(expr, NFTNL_EXPR_CMP_DATA, &value, sizeof(uint16_t));
+                    } else if(len==sizeof(uint32_t)) {
+                        nftnl_expr_set(expr, NFTNL_EXPR_CMP_DATA, &value, sizeof(uint32_t));
+                    }
+                    else{
+                        fprintf(stderr, "Unknown field length\n");
+                        return NULL;
+                    }
+                    return expr;
+                }
+                default: {
+                    fprintf(stderr, "Unknown operator type\n");
+                    return NULL;
+                }
+            }
+            break;
+        }
+        case AST_NODE_VALUE: {
+            fprintf(stderr, "Value node is not supported here\n");
+            return NULL;
+        }
+        case AST_NODE_FIELD: {
+            fprintf(stderr, "Field node is not supported here\n");
+            return NULL;
+        }
+    }
+}
+
+int apply_and_expr(struct nftnl_rule* rule,ASTNode* node) {
+    if (!node) return -EINVAL;
+    int err = 0;
+    switch(node->kind) {
+        case AST_NODE_OPERATOR: {
+            switch(node->type) {
+                case BGPFlowSpecType_AND: {
+                    if((err = apply_and_expr(rule, node->left)) < 0) {
+                        fprintf(stderr, "nftnl_rule_add_expr error: %s\n", nl_geterror(err));
+                        return err;
+                    }
+                    if((err = apply_and_expr(rule, node->right)) < 0) {
+                        fprintf(stderr, "nftnl_rule_add_expr error: %s\n", nl_geterror(err));
+                        return err;
+                    }
+                    break;
+                }
+                case BGPFlowSpecType_OR: {
+                    fprintf(stderr, "OR operator is not supported here\n");
+                    return -EINVAL;
+                }
+                default: {
+                    struct nftnl_expr* expr = get_expr(node);
+                    if (!expr) {
+                        fprintf(stderr, "Failed to get expr\n");
+                        return -ENOMEM;
+                    }
+                    nftnl_rule_add_expr(rule, expr);
+                    break;
+                }
+            }
+            break;
+        }
+        case AST_NODE_VALUE: {
+            if(node->type == BGPFlowSpecType_TRUE) {
+                return 0;
+            }
+            fprintf(stderr, "Value node is not supported here\n");
+            return -EINVAL;
+        }
+        case AST_NODE_FIELD: {
+            fprintf(stderr, "Field node is not supported here\n");
+            return -EINVAL;
+        }
+    }
+}
+
+int apply_ast_to_netfilter(struct nftnl_rule* rule, ASTNode* node){
+    if (!node) return -EINVAL;
+    int err = 0;
+    switch(node->kind) {
+        case AST_NODE_OPERATOR: {
+            switch(node->type) {
+                case BGPFlowSpecType_AND: {
+                    apply_and_expr(rule, node);
+                }
+            }
+        }
+    }
+}
 
 /*
  * 引数:
@@ -293,9 +256,9 @@ char *ast_to_string(ASTNode *node)
  * SRv6のencap（encap seg6 mode encap ...）を行うルートを
  * netlink経由でカーネルへ通知する。
  */
-int setup_srv6_encap_filter(const unsigned char *filter, size_t filter_len,
-                            const unsigned char **sids, size_t sid_count)
+int setup_srv6_encap_filter(FlowSpecSRv6Policy* policy)
 {
+    /*
     int err = 0;
     size_t offset = 0;
     ASTNode *ast = parse_ast(filter, filter_len, &offset);
@@ -310,21 +273,19 @@ int setup_srv6_encap_filter(const unsigned char *filter, size_t filter_len,
         return -ENOMEM;
     }
     printf("Parsed filter AST: %s\n", filter_str);
+    */
 
 
 
+    int err = 0;
     /* ネットリンクソケット作成 */
     struct nl_sock *sock = nl_socket_alloc();
     if (!sock) {
-        free(filter_str);
-        free_ast(ast);
         return -ENOMEM;
     }
     if ((err = nl_connect(sock, NETLINK_ROUTE)) < 0) {
         fprintf(stderr, "nl_connect error: %s\n", nl_geterror(err));
         nl_socket_free(sock);
-        free(filter_str);
-        free_ast(ast);
         return err;
     }
 
@@ -332,29 +293,28 @@ int setup_srv6_encap_filter(const unsigned char *filter, size_t filter_len,
     struct rtnl_route *route = rtnl_route_alloc();
     if (!route) {
         nl_socket_free(sock);
-        free(filter_str);
-        free_ast(ast);
         return -ENOMEM;
     }
     rtnl_route_set_family(route, AF_INET6);
-    rtnl_route_set_table(route, RT_TABLE_MAIN);
+    rtnl_route_set_table(route, 70); // 優先度高めで
     rtnl_route_set_protocol(route, RTPROT_STATIC);
     rtnl_route_set_scope(route, RT_SCOPE_UNIVERSE);
     /* ここでは例として全トラフィック対象（dst prefix ::/0）とする */
-    struct nl_addr *dst = NULL;
-    if ((err = nl_addr_parse("::/0", AF_INET6, &dst)) < 0) {
-        fprintf(stderr, "nl_addr_parse error: %s\n", nl_geterror(err));
+    struct nl_addr *dst = nl_addr_alloc(16);
+    if((err = nl_addr_set_binary_addr(dst,policy->redirect_to,16)) < 0) {
+        fprintf(stderr, "nl_addr_set_binary_addr error: %s\n", nl_geterror(err));
         rtnl_route_put(route);
         nl_socket_free(sock);
-        free(filter_str);
-        free_ast(ast);
         return err;
     }
     rtnl_route_set_dst(route, dst);
     nl_addr_put(dst);
 
-    rtnl_route_set_type(route,RTA_ENCAP);
+    struct nl_nexthop *nh = rtnl_route_nh_alloc();
     
+
+
+    rtnl_route_add_nexthop(route, nh);
     /* seg6 mode: encap */
     /* SIDリストを追加 */
 
@@ -366,8 +326,6 @@ int setup_srv6_encap_filter(const unsigned char *filter, size_t filter_len,
     if (!msg) {
         rtnl_route_put(route);
         nl_socket_free(sock);
-        free(filter_str);
-        free_ast(ast);
         return -ENOMEM;
     }
     /* RTM_NEWROUTEメッセージとして構築 */
@@ -376,8 +334,6 @@ int setup_srv6_encap_filter(const unsigned char *filter, size_t filter_len,
         nlmsg_free(msg);
         rtnl_route_put(route);
         nl_socket_free(sock);
-        free(filter_str);
-        free_ast(ast);
         return err;
     }
 
@@ -387,8 +343,6 @@ int setup_srv6_encap_filter(const unsigned char *filter, size_t filter_len,
         nlmsg_free(msg);
         rtnl_route_put(route);
         nl_socket_free(sock);
-        free(filter_str);
-        free_ast(ast);
         return err;
     }
 
@@ -396,14 +350,41 @@ int setup_srv6_encap_filter(const unsigned char *filter, size_t filter_len,
     nlmsg_free(msg);
     rtnl_route_put(route);
     nl_socket_free(sock);
-    free(filter_str);
-    free_ast(ast);
     return 0;
 }
 
 
-int main(void)
+int main(int argc, char *argv[])
 {
+
+    if (argc != 2) {
+        fprintf(stderr, "Usage: %s <input_file>\n", argv[0]);
+        return EXIT_FAILURE;
+    }
+    FILE *fp = fopen(argv[1], "rb");
+    if (!fp) {
+        perror("fopen");
+        return EXIT_FAILURE;
+    }
+
+    FlowSpecSRv6Policy *policy = readFlowSpecSRv6Policy(fp);
+    fclose(fp);
+    if (!policy) {
+        fprintf(stderr, "Failed to read FlowSpecSRv6Policy\n");
+        return EXIT_FAILURE;
+    }
+
+    printFlowSpecSRv6Policy(policy);
+
+    if(setup_srv6_encap_filter(policy) < 0){
+        fprintf(stderr, "setup_srv6_encap_filter failed\n");
+        freeFlowSpecSRv6Policy(policy);
+        return EXIT_FAILURE;
+    }
+
+    freeFlowSpecSRv6Policy(policy);
+    return EXIT_SUCCESS;
+    /*
     /* 例: フィルター = "DST_PREFIX EQ PREFIX_VALUE(...)" を前置記法で構築
      *
      * バイト列例（各トークンは1バイト）：
@@ -411,22 +392,22 @@ int main(void)
      *
      * ここでは、DST_PREFIX (0x01) EQ (0xf2) PREFIX_VALUE (0xfa),
      * prefix_len = 64, prefix = 0x20 0x01 0x0d 0xb8 ...（ここでは仮の値）
-     */
+     *
     unsigned char filter_example[] = {
         BGPFlowSpecType_DST_PREFIX,
         BGPFlowSpecType_EQ,
         BGPFlowSpecType_PREFIX_VALUE,
-        64, /* prefix length */
-        0x20, 0x01, 0x0d, 0xb8, 0x85, 0xa3, 0x00, 0x00  /* 8バイト分（(64+7)/8） */
+        64, /* prefix length *
+        0x20, 0x01, 0x0d, 0xb8, 0x85, 0xa3, 0x00, 0x00  /* 8バイト分（(64+7)/8） *
     };
     size_t filter_len = sizeof(filter_example);
 
-    /* 例: SIDリスト（2件）。各SIDは16バイト */
-    unsigned char sid1[16] = { /* SID1の16バイト値 */ 
+    /* 例: SIDリスト（2件）。各SIDは16バイト *
+    unsigned char sid1[16] = { /* SID1の16バイト値 *
         0x20,0x01,0x0d,0xb8,0x00,0x00,0x00,0x00,
         0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01
     };
-    unsigned char sid2[16] = { /* SID2の16バイト値 */
+    unsigned char sid2[16] = { /* SID2の16バイト値 *
         0x20,0x01,0x0d,0xb8,0x00,0x00,0x00,0x00,
         0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x02
     };
@@ -439,4 +420,5 @@ int main(void)
     }
     printf("SRv6 encap route successfully installed\n");
     return EXIT_SUCCESS;
+    */
 }
